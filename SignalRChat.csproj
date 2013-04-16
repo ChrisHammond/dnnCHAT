@@ -213,6 +213,7 @@
     <Content Include="View.ascx" />
     <Content Include="Data\00.00.05.sqldataprovider" />
     <None Include="Data\00.00.06.sqldataprovider" />
+    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SignalRChat.dnn" />
