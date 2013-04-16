@@ -1,6 +1,6 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="Christoc.Modules.SignalRChat.View" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="Christoc.Modules.DnnChat.View" %>
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
-<script src="/desktopmodules/SignalRChat/Scripts/jquery.signalR-1.0.1.min.js" type="text/javascript"></script>
+<script src="/desktopmodules/DnnChat/Scripts/jquery.signalR-1.0.1.min.js" type="text/javascript"></script>
 <script type="text/javascript" src='<%= ResolveClientUrl("~/signalr/hubs") %>'></script>
 
 <script type="text/javascript">

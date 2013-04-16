@@ -22,10 +22,10 @@ using System;
 using System.Web.Caching;
 using DotNetNuke.ComponentModel.DataAnnotations;
 
-namespace DotNetNuke.Modules.SignalRChat.Components
+namespace Christoc.Modules.DnnChat.Components
 {
 
-    [TableName("SignalRChat_ConnectionRecords")]
+    [TableName("DnnChat_ConnectionRecords")]
     //setup the primary key for table
     [PrimaryKey("ConnectionRecordId", AutoIncrement = true)]
     //configure caching using PetaPoco

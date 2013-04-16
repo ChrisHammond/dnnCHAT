@@ -1,4 +1,4 @@
-﻿<h3>SignalRChat</h3>
+﻿<h3>DnnChat</h3>
 <p class="Contributor">
 	Christoc.com Software Solutions <br />
 	<a href="mailto:modules@christoc.com">modules@christoc.com</a><br />
@@ -11,14 +11,14 @@
 </p>
 <hr/>
 <div class="License">
-	<h3>About the SignalRChat</h3>
+	<h3>About the dnnCHAT Module</h3>
 
 	<p class="Owner">
 		<b>Version 00.00.07</b><br /><br />
 	</p>
 	<p>	
 	<ul>
-		<li>Fixed anonymous issue with v00.00.07</li>
+		<li>Fixed anonymous issue with v00.00.06</li>
 		
 	</ul>
 	</p>

@@ -20,9 +20,9 @@
 
 using System.Web.Routing;
 using DotNetNuke.Web.Api;
-using Microsoft.AspNet.SignalR;
 
-namespace DotNetNuke.Modules.SignalRChat.Components
+
+namespace Christoc.Modules.DnnChat.Components
 {
     public class RouteMapper : IServiceRouteMapper
     {

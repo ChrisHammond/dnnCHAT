@@ -25,11 +25,11 @@ using System.Linq;
 using DotNetNuke.Data;
 using DotNetNuke.Framework.Providers;
 
-namespace DotNetNuke.Modules.SignalRChat.Components
+namespace Christoc.Modules.DnnChat.Components
 {
 
     /*
-     * This class provides the DAL2 access to the storing of Connections within the SignalRChat module
+     * This class provides the DAL2 access to the storing of Connections within the DnnChat module
      */
 
     public class ConnectionRecordController
@@ -109,7 +109,7 @@ namespace DotNetNuke.Modules.SignalRChat.Components
             {
                 var connections = ctx.ExecuteQuery<ConnectionRecord>(CommandType.Text,
                                                        string.Format(
-                                                           "select top 1 * from {0}{1}SignalRChat_ConnectionRecords where ConnectionId = '{2}'",
+                                                           "select top 1 * from {0}{1}DnnChat_ConnectionRecords where ConnectionId = '{2}'",
                                                            _databaseOwner,
                                                            _objectQualifier,
                                                           connectionId)).ToList();

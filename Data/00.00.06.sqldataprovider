@@ -1,17 +1,17 @@
 
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{objectQualifier}SignalRChat_Messages' AND COLUMN_NAME = 'ModuleId')
-ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages ADD
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{objectQualifier}DnnChat_Messages' AND COLUMN_NAME = 'ModuleId')
+ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Messages ADD
 	ModuleId int NULL
 GO
 
 
-UPDATE {databaseOwner}{objectQualifier}SignalRChat_Messages SET ModuleId = {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords.ModuleId
+UPDATE {databaseOwner}{objectQualifier}DnnChat_Messages SET ModuleId = {databaseOwner}{objectQualifier}DnnChat_ConnectionRecords.ModuleId
 
 FROM
-    {databaseOwner}{objectQualifier}SignalRChat_Messages
+    {databaseOwner}{objectQualifier}DnnChat_Messages
 INNER JOIN
-    {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords
+    {databaseOwner}{objectQualifier}DnnChat_ConnectionRecords
 ON
-    {databaseOwner}{objectQualifier}SignalRChat_Messages.ConnectionId = {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords.ConnectionId
+    {databaseOwner}{objectQualifier}DnnChat_Messages.ConnectionId = {databaseOwner}{objectQualifier}DnnChat_ConnectionRecords.ConnectionId
 
 GO

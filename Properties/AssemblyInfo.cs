@@ -24,11 +24,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SignalRChat")]
+[assembly: AssemblyTitle("dnnCHAT")]
 [assembly: AssemblyDescription("A simple DotNetNuke module utilizing SignalR to provide a chat interface for your website.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SignalRChat")]
+[assembly: AssemblyProduct("dnnCHAT")]
 [assembly: AssemblyCopyright("Copyright © Christoc.com 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -18,7 +18,7 @@
 ' 
 */
 
-namespace DotNetNuke.Modules.SignalRChat.Components
+namespace Christoc.Modules.DnnChat.Components
 {
     using System;
     using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace DotNetNuke.Modules.SignalRChat.Components
     using DotNetNuke.Data;
 
     /*
-     * This class provides the DAL2 access to the storing of Messages within the SignalRChat module
+     * This class provides the DAL2 access to the storing of Messages within the DnnChat module
      */
     public class MessageController
     {

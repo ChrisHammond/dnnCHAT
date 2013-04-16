@@ -18,13 +18,13 @@
 ' 
 */
 
-namespace DotNetNuke.Modules.SignalRChat.Components
+namespace Christoc.Modules.DnnChat.Components
 {
     using System;
 
     using DotNetNuke.ComponentModel.DataAnnotations;
 
-    [TableName("SignalRChat_Messages")]
+    [TableName("DnnChat_Messages")]
     
     // setup the primary key for table
     [PrimaryKey("MessageId", AutoIncrement = true)]

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ControlTitle_settings.Text" xml:space="preserve">
-    <value>SignalRChat Settings</value>
+    <value>DnnChat Settings</value>
   </data>
   <data name="lblStartMessage.Help" xml:space="preserve">
     <value>Put in the message that should be displayed when a user connects to the chat.</value>

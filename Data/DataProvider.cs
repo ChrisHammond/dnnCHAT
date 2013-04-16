@@ -16,7 +16,7 @@ using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.Providers;
 
 
-namespace Christoc.Modules.SignalRChat.Data
+namespace Christoc.Modules.DnnChat.Data
 {
 
     /// -----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ namespace Christoc.Modules.SignalRChat.Data
         {
             if (provider == null)
             {
-                const string assembly = "Christoc.Modules.SignalRChat.Data.SqlDataprovider,SignalRChat";
+                const string assembly = "Christoc.Modules.DnnChat.Data.SqlDataprovider,DnnChat";
                 Type objectType = Type.GetType(assembly, true, true);
 
                 provider = (DataProvider)Activator.CreateInstance(objectType);

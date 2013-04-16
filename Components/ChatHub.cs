@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 using DotNetNuke.Services.Localization;
 using Microsoft.AspNet.SignalR;
 
-namespace DotNetNuke.Modules.SignalRChat.Components
+namespace Christoc.Modules.DnnChat.Components
 {
     public class ChatHub : Hub
     {
@@ -76,8 +76,8 @@ namespace DotNetNuke.Modules.SignalRChat.Components
                                 {
                                     ConnectionId = Context.ConnectionId,
                                     MessageDate = DateTime.UtcNow,
-                                    MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile)
+                                    MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
                                 };
                     Clients.Caller.newMessage(m);
                 }
@@ -89,8 +89,8 @@ namespace DotNetNuke.Modules.SignalRChat.Components
                 {
                     ConnectionId = Context.ConnectionId,
                     MessageDate = DateTime.UtcNow,
-                    MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile)
+                    MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
                 };
                 Clients.Caller.newMessage(m);
             }
@@ -134,7 +134,7 @@ namespace DotNetNuke.Modules.SignalRChat.Components
                 cr.DisConnectedDate = DateTime.UtcNow;
                 crc.UpdateConnectionRecord(cr);
 
-                Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName) });
+                Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName) });
                 Clients.All.updateUserList(Users);
             }
         }
@@ -161,7 +161,7 @@ namespace DotNetNuke.Modules.SignalRChat.Components
             }
             catch (Exception ex)
             {
-                Services.Exceptions.Exceptions.LogException(ex);
+                DotNetNuke.Services.Exceptions.Exceptions.LogException(ex);
             }
         }
         
@@ -171,13 +171,13 @@ namespace DotNetNuke.Modules.SignalRChat.Components
 
             //if (string.IsNullOrEmpty(username))
             //{
-            //    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("BadConnection.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), "phantom") });
+            //    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("BadConnection.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), "phantom") });
             //    return new ConnectionRecord();
             //}
 
             if (username.Trim() == "phantom")
             {
-                username = string.Format(Localization.GetString("AnonymousUser.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), (Users.Count + 1));
+                username = string.Format(Localization.GetString("AnonymousUser.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), (Users.Count + 1));
             }
 
             Clients.Caller.username = username;
@@ -237,13 +237,13 @@ namespace DotNetNuke.Modules.SignalRChat.Components
                 
                 Clients.Caller.newMessageNoParse(new Message
                 {
-                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
                     ConnectionId = "0",
                     MessageDate = DateTime.UtcNow,
                     MessageId = -1,
                     MessageText = Clients.Caller.startMessage
                 });
-                Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName) });
+                Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName) });
             }
             
             return Clients.All.updateUserList(Users);
@@ -274,7 +274,7 @@ namespace DotNetNuke.Modules.SignalRChat.Components
                 crc.UpdateConnectionRecord(cr);
                 Users.Add(cr);
                 Clients.Caller.UpdateName(userName);
-                var nameChange = String.Format(Localization.GetString("NameChange.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), originalName,
+                var nameChange = String.Format(Localization.GetString("NameChange.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), originalName,
                            cr.UserName);
 
                 Clients.All.updateUserList(Users);
@@ -307,7 +307,7 @@ namespace DotNetNuke.Modules.SignalRChat.Components
                 string newName = message.Remove(0, 5);
                 if (newName.Length > 25)
                 {
-                    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("NameToolong.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile) });
+                    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("NameToolong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile) });
                     newName = newName.Remove(25);
                 }
 
@@ -316,9 +316,9 @@ namespace DotNetNuke.Modules.SignalRChat.Components
                     message = UpdateName(newName.Trim());
             }
 
-            if (message.ToLower().Trim() == Localization.GetString("Test.Text", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile))
+            if (message.ToLower().Trim() == Localization.GetString("Test.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile))
             {
-                message = Localization.GetString("Test.Response", "/desktopmodules/signalrchat/app_localresources/ " + Localization.LocalSharedResourceFile);
+                message = Localization.GetString("Test.Response", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile);
             }
 
             return message;

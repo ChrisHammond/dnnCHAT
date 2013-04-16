@@ -24,7 +24,7 @@ using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.Localization;
 
-namespace Christoc.Modules.SignalRChat
+namespace Christoc.Modules.DnnChat
 {
     /// -----------------------------------------------------------------------------
     /// <summary>
@@ -42,11 +42,11 @@ namespace Christoc.Modules.SignalRChat
     /// 
     /// Below we have some examples of how to access these settings but you will need to uncomment to use.
     /// 
-    /// Because the control inherits from SignalRChatSettingsBase you have access to any custom properties
+    /// Because the control inherits from DnnChatSettingsBase you have access to any custom properties
     /// defined there, as well as properties from DNN such as PortalId, ModuleId, TabId, UserId and many more.
     /// </summary>
     /// -----------------------------------------------------------------------------
-    public partial class Settings : SignalRChatModuleSettingsBase
+    public partial class Settings : DnnChatModuleSettingsBase
     {
         #region Base Method Implementations
 
@@ -64,7 +64,7 @@ namespace Christoc.Modules.SignalRChat
                     //Check for existing settings and use those on this page
                     //Settings["SettingName"]
                     
-                    txtStartMessage.Text = Settings.Contains("StartMessage") ? Settings["StartMessage"].ToString() : Localization.GetString("DefaultStartMessage", "/DesktopModules/SignalRChat/App_LocalResources/SharedResources.resx");
+                    txtStartMessage.Text = Settings.Contains("StartMessage") ? Settings["StartMessage"].ToString() : Localization.GetString("DefaultStartMessage", "/DesktopModules/DnnChat/App_LocalResources/SharedResources.resx");
                 }
             }
             catch (Exception exc) //Module failed to load

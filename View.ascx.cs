@@ -18,7 +18,7 @@
 ' 
 */
 
-namespace Christoc.Modules.SignalRChat
+namespace Christoc.Modules.DnnChat
 {
     using System;
 
@@ -36,12 +36,12 @@ namespace Christoc.Modules.SignalRChat
     /// 
     /// View may be the only control you have in your project depending on the complexity of your module
     /// 
-    /// Because the control inherits from SignalRChatModuleBase you have access to any custom properties
+    /// Because the control inherits from DnnChatModuleBase you have access to any custom properties
     /// defined there, as well as properties from DNN such as PortalId, ModuleId, TabId, UserId and many more.
     /// 
     /// </summary>
     /// -----------------------------------------------------------------------------
-    public partial class View : SignalRChatModuleBase, IActionable
+    public partial class View : DnnChatModuleBase, IActionable
     {
         public string StartMessage = string.Empty;
 
@@ -63,7 +63,7 @@ namespace Christoc.Modules.SignalRChat
         {
             DotNetNuke.Framework.jQuery.RequestUIRegistration();
             ClientResourceManager.RegisterScript(Parent.Page, "/Resources/Shared/scripts/knockout.js");
-            ClientResourceManager.RegisterScript(Parent.Page, "/desktopmodules/signalrchat/scripts/moment.min.js");
+            ClientResourceManager.RegisterScript(Parent.Page, "/desktopmodules/DnnChat/scripts/moment.min.js");
             base.OnInit(e);
         }
 

@@ -139,7 +139,7 @@
     <value>{0} has connected.</value>
   </data>
   <data name="DefaultStartMessage.Text" xml:space="preserve">
-    <value>&lt;em&gt;Welcome to the Chat powered by &lt;a href="http://www.christoc.com/Projects/SignalRChatModule.aspx" target="_blank"&gt;SignalRChat&lt;/a&gt;&lt;br/&gt; To change your name type &lt;strong&gt;/nick New Name Here&lt;/strong&gt; and hit enter.&lt;br /&gt;&lt;/em&gt;</value>
+    <value>&lt;em&gt;Welcome to the Chat powered by &lt;a href="http://www.christoc.com/Projects/DnnChatModule.aspx" target="_blank"&gt;DnnChat&lt;/a&gt;&lt;br/&gt; To change your name type &lt;strong&gt;/nick New Name Here&lt;/strong&gt; and hit enter.&lt;br /&gt;&lt;/em&gt;</value>
   </data>
   <data name="Disconnected.Text" xml:space="preserve">
     <value>{0} has disconnected.</value>

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Christoc.Modules.SignalRChat {
+namespace Christoc.Modules.DnnChat {
     
     
     public partial class Edit {
