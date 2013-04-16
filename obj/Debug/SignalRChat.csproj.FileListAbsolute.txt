@@ -1,0 +1,5 @@
+f:\websites\dnndev.me\bin\SignalRChat.dll
+f:\websites\dnndev.me\bin\SignalRChat.pdb
+f:\websites\dnndev.me\desktopmodules\SignalRChat\obj\Debug\SignalRChat.csprojResolveAssemblyReference.cache
+f:\websites\dnndev.me\desktopmodules\SignalRChat\obj\Debug\SignalRChat.dll
+f:\websites\dnndev.me\desktopmodules\SignalRChat\obj\Debug\SignalRChat.pdb
