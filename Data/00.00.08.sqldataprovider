@@ -1,0 +1,9 @@
+
+/* renaming the tables for dnnCHAT rebranding */
+EXEC sp_rename '{objectQualifier}SignalRChat_Messages', '{objectQualifier}DnnChat_Messages'
+
+GO
+
+EXEC sp_rename '{objectQualifier}SignalRChat_ConnectionRecords', '{objectQualifier}DnnChat_ConnectionRecords'
+
+GO

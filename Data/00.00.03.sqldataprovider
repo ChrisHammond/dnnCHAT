@@ -8,11 +8,11 @@
 /*****                                                  *****/
 /************************************************************/
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_ConnectionRecords]') AND type in (N'U'))
-DROP TABLE {databaseOwner}[{objectQualifier}DnnChat_ConnectionRecords]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_ConnectionRecords]') AND type in (N'U'))
+DROP TABLE {databaseOwner}[{objectQualifier}SignalRChat_ConnectionRecords]
 GO
 
-CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecords
+CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords
     (
     ConnectionRecordId int NOT NULL IDENTITY (1, 1),
     ConnectionId nvarchar(MAX) NOT NULL,
@@ -26,19 +26,19 @@ CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecords
 GO
 
 
-ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecords ADD CONSTRAINT
-    PK_{objectQualifier}DnnChat_ConnectionRecords PRIMARY KEY CLUSTERED 
+ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords ADD CONSTRAINT
+    PK_{objectQualifier}SignalRChat_ConnectionRecords PRIMARY KEY CLUSTERED 
     (
     ConnectionRecordId
     ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_Messages]') AND type in (N'U'))
-DROP TABLE {databaseOwner}[{objectQualifier}DnnChat_Messages]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_Messages]') AND type in (N'U'))
+DROP TABLE {databaseOwner}[{objectQualifier}SignalRChat_Messages]
 GO
 
-CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Messages
+CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages
     (
     MessageId int NOT NULL IDENTITY (1, 1),
     ConnectionId nvarchar(MAX) NOT NULL,
@@ -49,8 +49,8 @@ CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Messages
 GO
 
 
-ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Messages ADD CONSTRAINT
-    PK_{objectQualifier}DnnChat_Messages PRIMARY KEY CLUSTERED 
+ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages ADD CONSTRAINT
+    PK_{objectQualifier}SignalRChat_Messages PRIMARY KEY CLUSTERED 
     (
     MessageId
     ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]

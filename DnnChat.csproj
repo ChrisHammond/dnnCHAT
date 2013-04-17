@@ -119,7 +119,6 @@
     <Compile Include="Components\ConnectionRecord.cs" />
     <Compile Include="Components\Message.cs" />
     <Compile Include="Components\RouteMapper.cs" />
-    <Compile Include="Data\DataProvider.cs" />
     <Compile Include="DnnChatModuleBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -214,6 +213,7 @@
     <Content Include="Data\00.00.05.sqldataprovider" />
     <None Include="Data\00.00.06.sqldataprovider" />
     <Content Include="README.md" />
+    <Content Include="Data\00.00.08.sqldataprovider" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DnnChat.dnn" />

@@ -1,8 +1,8 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="DnnChat" type="Module" version="00.00.07">
+    <package name="DnnChat" type="Module" version="00.00.08">
       <friendlyName>DnnChat</friendlyName>
-      <description>A simple chat module for DotNetNuke using SignalR</description>
+      <description>A Chat module for DotNetNuke using SignalR</description>
       <iconFile>Images/icon_extensions.gif</iconFile>
       <owner>
         <name>Christoc.com Software Solutions</name>
@@ -34,10 +34,15 @@
               <name>00.00.06.SqlDataProvider</name>
               <version>00.00.06</version>
             </script>
+            <script type="Install">
+              <path>Data</path>
+              <name>00.00.08.SqlDataProvider</name>
+              <version>00.00.08</version>
+            </script>
             <script type="UnInstall">
               <path>Data</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>00.00.06</version>
+              <version>00.00.08</version>
             </script>
           </scripts>
         </component>
