@@ -7,3 +7,15 @@ GO
 EXEC sp_rename '{objectQualifier}SignalRChat_ConnectionRecords', '{objectQualifier}DnnChat_ConnectionRecords'
 
 GO
+
+
+/* renaming the tables for dnnCHAT rebranding */
+EXEC sp_rename 'PK_{objectQualifier}SignalRChat_Messages', 'PK_{objectQualifier}DnnChat_Messages'
+
+GO
+
+
+/* renaming the tables for dnnCHAT rebranding */
+EXEC sp_rename 'PK_{objectQualifier}SignalRChat_Messages', 'PK_{objectQualifier}DnnChat_Messages'
+
+GO

@@ -19,6 +19,7 @@
 	<p>	
 	<ul>
 		<li>Rebranded to dnnCHAT from SignalRChat. Namespace changes, SQL tables, etc.</li>
+		<li>Stopped autoscrolling if your Window is out of focus, or if you have scrolled up from the bottom of the window</li>
 	</ul>
 	</p>
 	<p class="Owner">

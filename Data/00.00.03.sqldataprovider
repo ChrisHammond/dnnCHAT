@@ -8,9 +8,7 @@
 /*****                                                  *****/
 /************************************************************/
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_ConnectionRecords]') AND type in (N'U'))
-DROP TABLE {databaseOwner}[{objectQualifier}SignalRChat_ConnectionRecords]
-GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_ConnectionRecords]') AND type in (N'U'))
 
 CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords
     (
@@ -25,6 +23,7 @@ CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords
      TEXTIMAGE_ON [PRIMARY]
 GO
 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}SignalRChat_ConnectionRecords' )
 
 ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords ADD CONSTRAINT
     PK_{objectQualifier}SignalRChat_ConnectionRecords PRIMARY KEY CLUSTERED 
@@ -34,9 +33,7 @@ ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords ADD CO
 
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_Messages]') AND type in (N'U'))
-DROP TABLE {databaseOwner}[{objectQualifier}SignalRChat_Messages]
-GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_Messages]') AND type in (N'U'))
 
 CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages
     (
@@ -48,7 +45,7 @@ CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages
      TEXTIMAGE_ON [PRIMARY]
 GO
 
-
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}SignalRChat_Messages' )
 ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages ADD CONSTRAINT
     PK_{objectQualifier}SignalRChat_Messages PRIMARY KEY CLUSTERED 
     (
@@ -61,3 +58,4 @@ GO
 /************************************************************/
 /*****              SqlDataProvider                     *****/
 /************************************************************/
+GO
