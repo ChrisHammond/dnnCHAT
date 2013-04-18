@@ -6,6 +6,6 @@ If you never had SignalRChat installed, you don't need to worry about this.
 
 */
 
-update {databaseOwner}{objectqualifier}tabmodules
-set moduleid = (select moduleid from {databaseOwner}{objectqualifier}modules where moduledefid=(select moduledefid from {databaseOwner}{objectqualifier}moduledefinitions where friendlyname like 'dnnchat%'))
-where ModuleId = (select moduleid from {databaseOwner}{objectqualifier}modules where moduledefid=(select moduledefid from {databaseOwner}{objectqualifier}moduledefinitions where friendlyname like 'signalrchat%'))
+update {databaseOwner}{objectQualifier}modules
+set ModuleDefId = (select moduledefid from {databaseOwner}{objectQualifier}moduledefinitions where friendlyname like 'dnnchat%')
+where ModuleDefId = (select moduledefid from {databaseOwner}{objectQualifier}moduledefinitions where friendlyname like 'signalrchat%')
