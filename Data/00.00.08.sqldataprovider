@@ -1,21 +1,25 @@
 
 /* renaming the tables for dnnCHAT rebranding */
+
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_Messages]') AND type in (N'U'))
 EXEC sp_rename '{objectQualifier}SignalRChat_Messages', '{objectQualifier}DnnChat_Messages'
 
 GO
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_ConnectionRecords]') AND type in (N'U'))
 EXEC sp_rename '{objectQualifier}SignalRChat_ConnectionRecords', '{objectQualifier}DnnChat_ConnectionRecords'
 
 GO
 
 
-/* renaming the tables for dnnCHAT rebranding */
-EXEC sp_rename 'PK_{objectQualifier}SignalRChat_Messages', 'PK_{objectQualifier}DnnChat_Messages'
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}DnnChat_ConnectionRecords' )
+EXEC sp_rename 'PK_{objectQualifier}SignalRChat_ConnectionRecords', 'PK_{objectQualifier}SignalRChat_ConnectionRecords'
 
 GO
 
 
-/* renaming the tables for dnnCHAT rebranding */
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}DnnChat_Messages' )
 EXEC sp_rename 'PK_{objectQualifier}SignalRChat_Messages', 'PK_{objectQualifier}DnnChat_Messages'
-
 GO
