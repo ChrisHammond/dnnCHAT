@@ -126,6 +126,7 @@
             </assembly>
           </assemblies>
         </component>
+        <component type="Cleanup" version="00.00.08" fileName="00.00.08.txt" />
       </components>
     </package>
   </packages>

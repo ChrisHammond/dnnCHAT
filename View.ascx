@@ -95,12 +95,24 @@
             var m = new Message(data);
             
             messageModel.messages.push(replaceMessage(m));
-            //we want to make sure to scroll to the bottom of the DIV when a new message posts
-            $("#messages").scrollTop($("#messages")[0].scrollHeight);
+            
 
             if (focus === false) {
                 //handle new messages if window isn't in focus
                 updateUnread(checkMention(m.messageText, chatHub.state.username));
+            } else {
+                
+                //if we are in focus, and we are currently within 10% of the bottom
+                //we want to make sure to scroll to the bottom of the DIV when a new message posts
+                //check if the current scroll position + the height of the div (default 500) is less than the overall height of the div minus 100
+                //randomly picked -100 here
+                //TODO: figure out a better way to check what 100 should be 
+                if ($("#messages").scrollTop() + $("#messages").height() < $("#messages")[0].scrollHeight-100) {
+                    //pause
+
+                } else {
+                    $("#messages").scrollTop($("#messages")[0].scrollHeight);
+                }
             }
         };
 
@@ -108,8 +120,21 @@
             var m = new Message(data);
             messageModel.messages.push(m);
             //we want to make sure to scroll to the bottom of the DIV when a new message posts
-            $("#messages").scrollTop($("#messages")[0].scrollHeight);
+            //check if the current scroll position + the height of the div (default 500) is less than the overall height of the div minus 100
+            //randomly picked -100 here
+            //TODO: figure out a better way to check what 100 should be 
+            
+            if ($("#messages").scrollTop() + $("#messages").height() < $("#messages")[0].scrollHeight - 100) {
+                //pause the scroll
+                
+            } else {
+                $("#messages").scrollTop($("#messages")[0].scrollHeight);
+            }
         };
+        
+
+        
+
 
         //TODO: handle state better if a connection is lost
 
