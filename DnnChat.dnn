@@ -14,6 +14,8 @@
       <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
       <dependencies>
         <dependency type="CoreVersion">07.00.02</dependency>
+        <!-- .NET 4.5 -->
+        <dependency type="type">System.Reflection.ReflectionContext</dependency>
       </dependencies>
       <components>
         <component type="Script">
