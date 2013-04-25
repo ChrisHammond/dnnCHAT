@@ -212,13 +212,16 @@
             chatHub.state.username = newName;
         };
 
-        //handle the return/enter key press within the module
-        $(document).keypress(function (e) {
+        //handle the return/enter key press within the module (but not within other modules)
+        $("#msg").keypress(function (e) {
             if (e.which == 13) {
                 e.preventDefault();
                 btnSubmit.click();
             }
         });
+
+
+
 
         var emoticons = {
             ':-)': 'smiling.png',
