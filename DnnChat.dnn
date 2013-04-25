@@ -110,21 +110,27 @@
             <basePath>bin</basePath>
             <assembly>
               <name>DnnChat.dll</name>
+              <path>bin</path>
             </assembly>
             <assembly>
               <name>Microsoft.AspNet.SignalR.Core.dll</name>
+              <path>bin</path>
             </assembly>
             <assembly>
               <name>Microsoft.AspNet.SignalR.Owin.dll</name>
+              <path>bin</path>
             </assembly>
             <assembly>
               <name>Microsoft.AspNet.SignalR.SystemWeb.dll</name>
+              <path>bin</path>
             </assembly>
             <assembly>
               <name>Owin.dll</name>
+              <path>bin</path>
             </assembly>
             <assembly>
               <name>Microsoft.Owin.Host.SystemWeb.dll</name>
+              <path>bin</path>
             </assembly>
           </assemblies>
         </component>
