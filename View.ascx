@@ -100,6 +100,12 @@
             if (focus === false) {
                 //handle new messages if window isn't in focus
                 updateUnread(checkMention(m.messageText, chatHub.state.username));
+                if ($("#messages").scrollTop() + $("#messages").height() < $("#messages")[0].scrollHeight - 250) {
+                    //pause
+
+                } else {
+                    $("#messages").scrollTop($("#messages")[0].scrollHeight);
+                }
             } else {
                 
                 //if we are in focus, and we are currently within 10% of the bottom
@@ -107,7 +113,7 @@
                 //check if the current scroll position + the height of the div (default 500) is less than the overall height of the div minus 100
                 //randomly picked -100 here
                 //TODO: figure out a better way to check what 100 should be 
-                if ($("#messages").scrollTop() + $("#messages").height() < $("#messages")[0].scrollHeight-100) {
+                if ($("#messages").scrollTop() + $("#messages").height() < $("#messages")[0].scrollHeight-250) {
                     //pause
 
                 } else {
@@ -132,9 +138,6 @@
             }
         };
         
-
-        
-
 
         //TODO: handle state better if a connection is lost
 
@@ -165,7 +168,6 @@
                         //clear the textbox for the next message
                         //$('#msg').val('');
                     }
-                
                 }
             });
         });
@@ -254,6 +256,8 @@
             message.messageText = message.messageText.replace(new RegExp(patterns.join('|'), 'g'), function (match) {
                 return typeof emoticons[match] != 'undefined' ? '<img src="' + url + emoticons[match] + '"/>' : match;
             });
+
+            //check for long string of characters
 
             return message;
         }

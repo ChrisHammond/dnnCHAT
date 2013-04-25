@@ -1,5 +1,7 @@
 .srcWindow
-{ width: 95%;}
+{
+    width: 95%;
+}
 
 .ChatWindow
 {
@@ -12,19 +14,25 @@
     width: 80%;
 }
 
-#msg {
+#msg
+{
     width: 70%;
 }
 
-.usersOnline{ width: 120px;}
+.usersOnline
+{
+    width: 120px;
+}
 
-.projectMessage {
+.projectMessage
+{
     width: 100%;
     font-size: 11px;
     text-align: center;
 }
 
-.UsersList {
+.UsersList
+{
     border: solid 1px #000;
     display: inline-block;
     height: 500px;
@@ -34,14 +42,16 @@
     width: 15%;
 }
 
-.ChatMessage {
+.ChatMessage
+{
     padding-bottom: 3px;
     border-left: 150px solid #dbdbdb;
     border-bottom: 1px solid #dbdbdb;
     position: relative;
 }
 
-.MessageAuthor {
+.MessageAuthor
+{
     font-weight: bold;
     font-size: .9em;
     float: left;
@@ -52,16 +62,24 @@
     text-align: right;
 }
 
-.MessageText {
-    word-break: break-all;
+.MessageText
+{
     margin-right: 95px;
     padding-top: 5px;
     padding-left: 5px;
     word-wrap: normal;
     float: left;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    /* Non standard for webkit */
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 
-.MessageTime {
+.MessageTime
+{
     position: absolute;
     top: 0;
     right: 0;
@@ -71,22 +89,32 @@
     text-transform: uppercase;
 }
 
-.ChatMentioned{ color: #f00;}
-.ChatSelf{ color: #00f;}
+.ChatMentioned
+{
+    color: #f00;
+}
 
-.UserListUser {
+.ChatSelf
+{
+    color: #00f;
+}
+
+.UserListUser
+{
     font-size: .9em;
 }
 
-.UserLoggedIn {
+.UserLoggedIn
+{
     font-weight: bold;
 }
 
-.UserNotLoggedIn {
-    
+.UserNotLoggedIn
+{
 }
 
-.chatStatus {
+.chatStatus
+{
     color: silver;
     width: 100%;
     border: solid 1px silver;
