@@ -62,7 +62,7 @@
           <desktopModule>
             <moduleName>DnnChat</moduleName>
             <foldername>DnnChat</foldername>
-            <businessControllerClass></businessControllerClass>
+            <businessControllerClass />
             <supportedFeatures />
             <moduleDefinitions>
               <moduleDefinition>

@@ -62,8 +62,8 @@ namespace Christoc.Modules.DnnChat
         override protected void OnInit(EventArgs e)
         {
             DotNetNuke.Framework.jQuery.RequestUIRegistration();
-            ClientResourceManager.RegisterScript(Parent.Page, "/Resources/Shared/scripts/knockout.js");
-            ClientResourceManager.RegisterScript(Parent.Page, "/desktopmodules/DnnChat/scripts/moment.min.js");
+            ClientResourceManager.RegisterScript(Parent.Page, "~/Resources/Shared/scripts/knockout.js");
+            ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/moment.min.js");
             base.OnInit(e);
         }
 
