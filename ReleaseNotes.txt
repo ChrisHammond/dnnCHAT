@@ -14,12 +14,13 @@
 	<h3>About the dnnCHAT Module</h3>
 
 	<p class="Owner">
-		<b>Version 00.00.08</b><br /><br />
+		<b>Version 00.00.09</b><br /><br />
 	</p>
 	<p>	
 	<ul>
 		<li>Rebranded to dnnCHAT from SignalRChat. Namespace changes, SQL tables, etc.</li>
 		<li>Stopped autoscrolling if your Window is out of focus, or if you have scrolled up from the bottom of the window</li>
+		<li>Abstracted the JS out of view.ascx</li>
 	</ul>
 	</p>
 	<p class="Owner">
