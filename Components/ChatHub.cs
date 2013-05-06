@@ -53,7 +53,8 @@ namespace Christoc.Modules.DnnChat.Components
                     {
 
                         int moduleId;
-                        int.TryParse(Clients.Caller.moduleid, out moduleId);
+                        //int.TryParse(Clients.Caller.moduleid, out moduleId);
+                        moduleId = Convert.ToInt32(Clients.Caller.moduleid);
 
                         var outputMessage = ParseMessage(message.Trim());
                         var m = new Message
@@ -147,7 +148,8 @@ namespace Christoc.Modules.DnnChat.Components
             try
             {
                 int moduleId;
-                int.TryParse(Clients.Caller.moduleid, out moduleId);
+                //int.TryParse(Clients.Caller.moduleid, out moduleId);
+                moduleId = Convert.ToInt32(Clients.Caller.moduleid);
 
                 var messages = new MessageController().GetRecentMessages(moduleId, 2, 50);
 
@@ -175,7 +177,7 @@ namespace Christoc.Modules.DnnChat.Components
             //    return new ConnectionRecord();
             //}
 
-            if (username.Trim() == "phantom")
+            if (username.Trim() == "phantom" || username.Trim() == string.Empty)
             {
                 username = string.Format(Localization.GetString("AnonymousUser.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), (Users.Count + 1));
             }

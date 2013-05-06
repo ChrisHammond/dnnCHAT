@@ -64,6 +64,9 @@ namespace Christoc.Modules.DnnChat
             DotNetNuke.Framework.jQuery.RequestUIRegistration();
             ClientResourceManager.RegisterScript(Parent.Page, "~/Resources/Shared/scripts/knockout.js");
             ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/moment.min.js");
+
+            ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/DnnChat.js");
+        
             base.OnInit(e);
         }
 

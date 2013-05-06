@@ -207,6 +207,7 @@
     <Content Include="ReleaseNotes.txt" />
     <None Include="Data\00.00.03.sqldataprovider" />
     <Content Include="Data\Uninstall.sqldataprovider" />
+    <Content Include="Scripts\DnnChat.js" />
     <Content Include="Scripts\jquery.signalR-1.0.1.js" />
     <Content Include="Scripts\jquery.signalR-1.0.1.min.js" />
     <Content Include="Scripts\moment.min.js" />
@@ -251,7 +252,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>64484</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
@@ -259,7 +260,7 @@
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://dnndev.me</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
+          <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://dnndev.me</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
