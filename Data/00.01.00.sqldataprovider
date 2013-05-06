@@ -1,0 +1,68 @@
+/*
+
+	This script is used to create the new Chat Room functionality, and the table to associate messages with a specific room
+
+*/
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_Rooms]') AND type in (N'U'))
+
+CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms
+	(
+	RoomId int NOT NULL IDENTITY (1, 1),
+	Name nvarchar(150) NOT NULL,
+	Enabled bit NOT NULL,
+	RoomDescription nvarchar(MAX) NULL,
+	RoomWelcome nvarchar(MAX) NULL,
+	Private bit NULL,
+	RoomPassword nvarchar(50) NULL,
+	CreatedDate datetime NOT NULL,
+	CreatedByUserId int NOT NULL,
+	LastUpdatedByUserId int NOT NULL,
+	LastUpdatedDate datetime NOT NULL
+	)  ON [PRIMARY]
+	 TEXTIMAGE_ON [PRIMARY]
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}DnnChat_Rooms' )
+
+ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms ADD CONSTRAINT
+	PK_{objectQualifier}DnnChat_Rooms PRIMARY KEY CLUSTERED 
+	(
+	RoomId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_RoomMessages]') AND type in (N'U'))
+
+CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_RoomMessages
+	(
+	RoomId int NOT NULL,
+	MessageId int NOT NULL
+	)  ON [PRIMARY]
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}DnnChat_RoomMessages' )
+
+ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_RoomMessages ADD CONSTRAINT
+	PK_{objectQualifier}DnnChat_RoomMessages PRIMARY KEY CLUSTERED 
+	(
+	RoomId,
+	MessageId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+
+
+
+
+
+/* 
+
+	TODO: should create a default room
+
+	TODO: need to associate all existing message (if any) with a new default room
+
+
+*/
