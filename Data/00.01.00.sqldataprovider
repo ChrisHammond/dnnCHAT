@@ -35,7 +35,7 @@ ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms ADD CONSTRAINT
 GO
 
 if not exists(select * from sys.columns 
-            where Name = N'RoomId' and Object_ID = Object_ID(N'{databaseOwner}{objectQualifier}DnnChat_Messages'))  
+	where Name = N'RoomId' and Object_ID = Object_ID(N'{databaseOwner}{objectQualifier}DnnChat_Messages'))  
 
 ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Messages ADD
 	RoomId int NULL
@@ -43,13 +43,17 @@ GO
 
 
 /* only create a default room if there are no rooms and there are already messages */
+/*
+
 IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}DnnChat_Rooms)
+
+*/
 
 /* we should only add a default room if there are already existing messages and a module on a page */
 
 /* otherwise require that the Default room get created when a module is on a page */
 
-
+/*
 Insert {databaseOwner}{objectQualifier}DnnChat_Rooms
 	(
 		Name
@@ -76,12 +80,18 @@ values
 		, -1
 		, -1
 		, GETDATE()
-		, (select ModuleId from dnn_DnnChat_Messages
+		, -1
 	)
-GO
 
+
+*/
+
+GO
 /* updated the RoomID for existing messages that don't have a room */
 
+/*
 Update {databaseOwner}{objectQualifier}DnnChat_Messages
 set RoomId = (select top 1 RoomId from {databaseOwner}{objectQualifier}DnnChat_Rooms)
 where RoomId is null
+
+*/
