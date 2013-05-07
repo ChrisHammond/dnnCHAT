@@ -55,6 +55,60 @@ ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_RoomMessages ADD CONSTRAINT
 GO
 
 
+/* only create a default room if there are no rooms */
+IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}DnnChat_Rooms)
+
+Insert {databaseOwner}{objectQualifier}DnnChat_Rooms
+	(
+		Name
+		, Enabled
+		, RoomDescription
+		, RoomWelcome
+		, Private
+		, RoomPassword
+		, CreatedDate
+		, CreatedByUserId
+		, LastUpdatedByUserId
+		,LastUpdatedDate
+	)
+values
+	(
+		'Default'
+		,1
+		,'Default Room for the dnnCHAT module'
+		,'Welcome to the Default Chat Room'
+		,0
+		,Null
+		,GETDATE()
+		,-1
+		,-1
+		,GETDATE()
+	)
+GO
+
+/*if we don't already have the existing messages in RoomMessages for the default room, insert them now */
+
+IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}DnnChat_RoomMessages)
+
+Insert into {databaseOwner}{objectQualifier}DnnChat_RoomMessages
+
+	select 
+	r.Roomid
+	, m.MessageId
+
+	from
+		{databaseOwner}{objectQualifier}DnnChat_Rooms r
+		, {databaseOwner}{objectQualifier}DnnChat_Messages m
+
+GO
+
+
+
+
+
+
+	
+	
 
 
 

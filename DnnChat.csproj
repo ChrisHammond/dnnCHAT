@@ -217,6 +217,7 @@
     <None Include="Data\00.00.06.sqldataprovider" />
     <Content Include="README.md" />
     <Content Include="Data\00.00.08.sqldataprovider" />
+    <Content Include="Data\00.01.00.sqldataprovider" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DnnChat.dnn" />
