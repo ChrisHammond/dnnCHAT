@@ -66,5 +66,10 @@ namespace Christoc.Modules.DnnChat.Components
         /// Gets or sets the module id.
         /// </summary>
         public int ModuleId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RoomId for a message
+        /// </summary>
+        public int RoomId { get; set; }
     }
 }

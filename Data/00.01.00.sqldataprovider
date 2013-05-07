@@ -18,7 +18,8 @@ CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms
 	CreatedDate datetime NOT NULL,
 	CreatedByUserId int NOT NULL,
 	LastUpdatedByUserId int NOT NULL,
-	LastUpdatedDate datetime NOT NULL
+	LastUpdatedDate datetime NOT NULL,
+	ModuleId int NOT NULL
 	)  ON [PRIMARY]
 	 TEXTIMAGE_ON [PRIMARY]
 GO
@@ -33,30 +34,21 @@ ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms ADD CONSTRAINT
 
 GO
 
+if not exists(select * from sys.columns 
+            where Name = N'RoomId' and Object_ID = Object_ID(N'{databaseOwner}{objectQualifier}DnnChat_Messages'))  
 
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_RoomMessages]') AND type in (N'U'))
-
-CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_RoomMessages
-	(
-	RoomId int NOT NULL,
-	MessageId int NOT NULL
-	)  ON [PRIMARY]
-GO
-
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}DnnChat_RoomMessages' )
-
-ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_RoomMessages ADD CONSTRAINT
-	PK_{objectQualifier}DnnChat_RoomMessages PRIMARY KEY CLUSTERED 
-	(
-	RoomId,
-	MessageId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-
+ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Messages ADD
+	RoomId int NULL
 GO
 
 
-/* only create a default room if there are no rooms */
+/* only create a default room if there are no rooms and there are already messages */
 IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}DnnChat_Rooms)
+
+/* we should only add a default room if there are already existing messages and a module on a page */
+
+/* otherwise require that the Default room get created when a module is on a page */
+
 
 Insert {databaseOwner}{objectQualifier}DnnChat_Rooms
 	(
@@ -69,54 +61,27 @@ Insert {databaseOwner}{objectQualifier}DnnChat_Rooms
 		, CreatedDate
 		, CreatedByUserId
 		, LastUpdatedByUserId
-		,LastUpdatedDate
+		, LastUpdatedDate
+		, ModuleId
 	)
 values
 	(
 		'Default'
-		,1
-		,'Default Room for the dnnCHAT module'
-		,'Welcome to the Default Chat Room'
-		,0
-		,Null
-		,GETDATE()
-		,-1
-		,-1
-		,GETDATE()
+		, 1
+		, 'Default Room for the dnnCHAT module'
+		, 'Welcome to the Default Chat Room'
+		, 0
+		, Null
+		, GETDATE()
+		, -1
+		, -1
+		, GETDATE()
+		, (select ModuleId from dnn_DnnChat_Messages
 	)
 GO
 
-/*if we don't already have the existing messages in RoomMessages for the default room, insert them now */
+/* updated the RoomID for existing messages that don't have a room */
 
-IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}DnnChat_RoomMessages)
-
-Insert into {databaseOwner}{objectQualifier}DnnChat_RoomMessages
-
-	select 
-	r.Roomid
-	, m.MessageId
-
-	from
-		{databaseOwner}{objectQualifier}DnnChat_Rooms r
-		, {databaseOwner}{objectQualifier}DnnChat_Messages m
-
-GO
-
-
-
-
-
-
-	
-	
-
-
-
-/* 
-
-	TODO: should create a default room
-
-	TODO: need to associate all existing message (if any) with a new default room
-
-
-*/
+Update {databaseOwner}{objectQualifier}DnnChat_Messages
+set RoomId = (select top 1 RoomId from {databaseOwner}{objectQualifier}DnnChat_Rooms)
+where RoomId is null
