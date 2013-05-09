@@ -35,9 +35,9 @@ namespace Christoc.Modules.DnnChat.Components
     public class Room
     {
         ///<summary>
-        /// The ID of the connection record
+        /// The ID of the Room
         ///</summary>
-        public int RoomId { get; set; }
+        public Guid RoomId { get; set; }
 
         ///<summary>
         /// The name of the room
@@ -69,28 +69,33 @@ namespace Christoc.Modules.DnnChat.Components
         ///</summary>
         public string RoomPassword { get; set; }
 
+        ///<summary>
+        /// The date the connection started
+        ///</summary>
+        public DateTime CreatedDate { get; set; }
 
+
+        ///<summary>
+        /// The ID of the user who created the record
+        ///</summary>
+        public int CreatedByUserId { get; set; }
+
+        ///<summary>
+        /// The date the connection started
+        ///</summary>
+        public DateTime LastUpdatedDate { get; set; }
+
+
+        ///<summary>
+        /// The ID of the user who last updated the room
+        ///</summary>
+        public int LastUpdatedByUserId { get; set; }
 
         ///<summary>
         /// The ModuleId of where the connect was created
         ///</summary>
         public int ModuleId { get; set; }
 
-        ///<summary>
-        /// The date the connection started
-        ///</summary>
-        public DateTime ConnectedDate { get; set; }
-
-        ///<summary>
-        /// The date the connected ended
-        ///</summary>
-        public DateTime? DisConnectedDate { get; set; }
-
-
-        ///<summary>
-        /// A string with user's ipaddress
-        ///</summary>
-        public string IpAddress { get; set; }
 
     }
 

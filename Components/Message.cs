@@ -70,6 +70,6 @@ namespace Christoc.Modules.DnnChat.Components
         /// <summary>
         /// Gets or sets the RoomId for a message
         /// </summary>
-        public int RoomId { get; set; }
+        public Guid RoomId { get; set; }
     }
 }

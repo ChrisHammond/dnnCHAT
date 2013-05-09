@@ -30,21 +30,37 @@ namespace Christoc.Modules.DnnChat.Components
     {
         //cjh - 2/28/2013 revamping to use knockout with guidance of http://www.slideshare.net/aegirth1/knockout-presentation-slides 
 
+
+        //TODO: modify Hub to support rooms
+
         //a list of connectionrecords to keep track of users connected
         private static readonly List<ConnectionRecord> Users = new List<ConnectionRecord>();
+
+        private static Guid DefaultGuid = new Guid();
 
         /*
          * This method is used to send messages to all connected clients.
          */
+
+        //for clients that may call the old method, send to the default room
         public void Send(string message)
         {
-            //if no valid connectionrecord don't let the message go through
+            //TODO: figure out the default room (module setting?)
+            
+            Send(message, DefaultGuid);
+        }
 
+        public void Send(string message, Guid roomId)
+        {
+            //if no valid connectionrecord don't let the message go through
             var crc = new ConnectionRecordController();
             var cr = crc.GetConnectionRecordByConnectionId(Context.ConnectionId);
 
             if (cr != null)
             {
+
+                //TODO: make sure that the user can send to that Room
+
                 // parse message before use
                 if (Clients.Caller.username != null && Clients.Caller.username.Trim() != "phantom")
                 {
@@ -63,7 +79,8 @@ namespace Christoc.Modules.DnnChat.Components
                                         MessageDate = DateTime.UtcNow,
                                         MessageText = outputMessage,
                                         AuthorName = Clients.Caller.username,
-                                        ModuleId = moduleId
+                                        ModuleId = moduleId,
+                                        RoomId = roomId
                                     };
 
                         new MessageController().CreateMessage(m);
@@ -72,13 +89,17 @@ namespace Christoc.Modules.DnnChat.Components
                 }
                 else
                 {
+                    //TODO: handle anon users for non-default rooms
+
                     // if there is no username for the user don't let them post
                     var m = new Message
                                 {
                                     ConnectionId = Context.ConnectionId,
                                     MessageDate = DateTime.UtcNow,
                                     MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
+                                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                                    RoomId = DefaultGuid
+
                                 };
                     Clients.Caller.newMessage(m);
                 }
@@ -92,30 +113,35 @@ namespace Christoc.Modules.DnnChat.Components
                     MessageDate = DateTime.UtcNow,
                     MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
                     AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
+                    RoomId = DefaultGuid
                 };
                 Clients.Caller.newMessage(m);
             }
         }
 
+        //TODO: on connection, reload rooms for user?
         public override Task OnConnected()
         {
             Clients.Caller.PopulateUser();
             return base.OnConnected();
         }
 
+        //TODO: on reconnection reload rooms for user
         public override Task OnReconnected()
         {
             Clients.Caller.PopulateUser();
             return base.OnReconnected();
         }
 
-        //lookup who just disconnected, and store the disconnect/time, remove them from the count
+        //TODO: remove user from all rooms
+        //lookup who just disconnected, and store the disconnect/time, remove them from the count for each room
         public override Task OnDisconnected()
         {
             if (Context.ConnectionId != null) DisconnectUser(Context.ConnectionId);
             return base.OnDisconnected();
         }
 
+        //TODO: remove user from all rooms
         private void DisconnectUser(string connectionId)
         {
             var id = connectionId;
@@ -143,6 +169,7 @@ namespace Christoc.Modules.DnnChat.Components
         /*
          * 	We need to grab the latest 50 chat messages for the channel, should make this configurable.
          */
+        //TODO: pull in history for specific room
         public void RestoreHistory()
         {
             try
@@ -224,6 +251,8 @@ namespace Christoc.Modules.DnnChat.Components
         /*
          * When a user connects we need to populate their user information, we default the username to be Anonymous + a #
          */
+
+        //TODO: populate which rooms
         public Task PopulateUser()
         {
 
@@ -250,6 +279,9 @@ namespace Christoc.Modules.DnnChat.Components
             
             return Clients.All.updateUserList(Users);
         }
+
+
+        //TODO: update name in all rooms
 
         /*
          * This method gets called when someone updates their name. We need to store the change in the ConnectionRecord

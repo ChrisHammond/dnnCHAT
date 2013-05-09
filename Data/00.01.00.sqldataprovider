@@ -6,39 +6,38 @@
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_Rooms]') AND type in (N'U'))
 
-CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms
-	(
-	RoomId int NOT NULL IDENTITY (1, 1),
-	Name nvarchar(150) NOT NULL,
-	Enabled bit NOT NULL,
-	RoomDescription nvarchar(MAX) NULL,
-	RoomWelcome nvarchar(MAX) NULL,
-	Private bit NULL,
-	RoomPassword nvarchar(50) NULL,
-	CreatedDate datetime NOT NULL,
-	CreatedByUserId int NOT NULL,
-	LastUpdatedByUserId int NOT NULL,
-	LastUpdatedDate datetime NOT NULL,
-	ModuleId int NOT NULL
-	)  ON [PRIMARY]
-	 TEXTIMAGE_ON [PRIMARY]
-GO
-
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}DnnChat_Rooms' )
-
-ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms ADD CONSTRAINT
-	PK_{objectQualifier}DnnChat_Rooms PRIMARY KEY CLUSTERED 
-	(
-	RoomId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms(
+	[RoomId] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](150) NOT NULL,
+	[Enabled] [bit] NOT NULL,
+	[RoomDescription] [nvarchar](max) NULL,
+	[RoomWelcome] [nvarchar](max) NULL,
+	[Private] [bit] NULL,
+	[RoomPassword] [nvarchar](50) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedByUserId] [int] NOT NULL,
+	[LastUpdatedByUserId] [int] NOT NULL,
+	[LastUpdatedDate] [datetime] NOT NULL,
+	
+CONSTRAINT [PK_{objectQualifier}DnnChat_Rooms] PRIMARY KEY CLUSTERED 
+(
+	[RoomId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
 
 GO
+
+ALTER TABLE {databaseOwner}[{objectQualifier}DnnChat_Rooms] ADD  CONSTRAINT [DF_{objectQualifier}DnnChat_Rooms_RoomId]  DEFAULT (newid()) FOR [RoomId]
+GO
+
+
+
 
 if not exists(select * from sys.columns 
 	where Name = N'RoomId' and Object_ID = Object_ID(N'{databaseOwner}{objectQualifier}DnnChat_Messages'))  
 
 ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Messages ADD
-	RoomId int NULL
+	RoomId [uniqueidentifier] NULL
 GO
 
 
