@@ -115,6 +115,8 @@
   <ItemGroup>
     <Compile Include="Components\ChatHub.cs" />
     <Compile Include="Components\ConnectionRecordController.cs" />
+    <Compile Include="Components\ConnectionRecordRoom.cs" />
+    <Compile Include="Components\ConnectionRecordRoomController.cs" />
     <Compile Include="Components\RoomController.cs" />
     <Compile Include="Components\Room.cs" />
     <Compile Include="Components\MessageController.cs" />
@@ -222,7 +224,9 @@
     <Content Include="Data\00.01.00.sqldataprovider" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DnnChat.dnn" />
+    <Content Include="DnnChat.dnn">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="BuildScripts\ModulePackage.targets" />

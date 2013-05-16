@@ -55,21 +55,26 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        public IEnumerable<Message> GetMessages(int moduleId)
+        //TODO: add roomid
+        public IEnumerable<Message> GetMessages(int moduleId, Guid roomId)
         {
             IEnumerable<Message> t;
             using (var ctx = DataContext.Instance())
             {
                 var rep = ctx.GetRepository<Message>();
-                t = rep.Get(moduleId).OrderByDescending(x => x.MessageDate);
+                //filter by the Room id
+                t = (from a in rep.Get(moduleId) where a.RoomId == roomId select a).OrderByDescending(x => x.MessageDate);
+
+                //t = rep.Get(moduleId).OrderByDescending(x => x.MessageDate);
             }
 
             return t;
         }
 
-        public IEnumerable<Message> GetRecentMessages(int moduleId, int hoursBackInTime, int maxRecords)
+        //TODO: get messages based on RoomID
+        public IEnumerable<Message> GetRecentMessages(int moduleId, int hoursBackInTime, int maxRecords, Guid roomId)
         {
-            var messages = (from a in this.GetMessages(moduleId) where a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime select a).Take(maxRecords).Reverse();
+            var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime select a).Take(maxRecords).Reverse();
 
             return messages.Any() ? messages : null;
         }

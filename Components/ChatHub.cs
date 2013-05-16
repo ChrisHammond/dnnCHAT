@@ -36,7 +36,7 @@ namespace Christoc.Modules.DnnChat.Components
         //a list of connectionrecords to keep track of users connected
         private static readonly List<ConnectionRecord> Users = new List<ConnectionRecord>();
 
-        private static Guid DefaultGuid = new Guid();
+        private static readonly Guid DefaultRoomId = new Guid(); //TODO: set the default room based on? ModuleId setting?
 
         /*
          * This method is used to send messages to all connected clients.
@@ -47,7 +47,7 @@ namespace Christoc.Modules.DnnChat.Components
         {
             //TODO: figure out the default room (module setting?)
             
-            Send(message, DefaultGuid);
+            Send(message, DefaultRoomId);
         }
 
         public void Send(string message, Guid roomId)
@@ -56,9 +56,12 @@ namespace Christoc.Modules.DnnChat.Components
             var crc = new ConnectionRecordController();
             var cr = crc.GetConnectionRecordByConnectionId(Context.ConnectionId);
 
-            if (cr != null)
-            {
+            //if the user (connectionrecord) isn't in a room don't let message go through
 
+            var rc = new RoomController();
+            
+            if (cr != null && rc.UserInRoom(roomId,cr))
+            {
                 //TODO: make sure that the user can send to that Room
 
                 // parse message before use
@@ -84,7 +87,7 @@ namespace Christoc.Modules.DnnChat.Components
                                     };
 
                         new MessageController().CreateMessage(m);
-                        Clients.All.newMessage(m);
+                        Clients.Group(roomId.ToString()).newMessage(m);
                     }
                 }
                 else
@@ -98,7 +101,7 @@ namespace Christoc.Modules.DnnChat.Components
                                     MessageDate = DateTime.UtcNow,
                                     MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
                                     AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                                    RoomId = DefaultGuid
+                                    RoomId = DefaultRoomId
 
                                 };
                     Clients.Caller.newMessage(m);
@@ -113,7 +116,7 @@ namespace Christoc.Modules.DnnChat.Components
                     MessageDate = DateTime.UtcNow,
                     MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
                     AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
-                    RoomId = DefaultGuid
+                    RoomId = DefaultRoomId
                 };
                 Clients.Caller.newMessage(m);
             }
@@ -122,6 +125,9 @@ namespace Christoc.Modules.DnnChat.Components
         //TODO: on connection, reload rooms for user?
         public override Task OnConnected()
         {
+            //connect user to the default room
+            Groups.Add(Context.ConnectionId, DefaultRoomId.ToString());
+
             Clients.Caller.PopulateUser();
             return base.OnConnected();
         }
@@ -264,6 +270,14 @@ namespace Christoc.Modules.DnnChat.Components
             //if the startMessage is empty, that means the user is a reconnection
             if (Clients.Caller.startMessage != string.Empty)
             {
+                //TODO: reconnect to all previous rooms
+
+                //get list of previously connected (not departed) rooms
+                var crrc = new ConnectionRecordRoomController();
+                var rooms = crrc.GetConnectionRecordRoomsByUserId(Clients.Caller.UserId);
+
+
+                //TODO: populate history for all previous rooms
                 RestoreHistory();
                 
                 Clients.Caller.newMessageNoParse(new Message

@@ -88,5 +88,36 @@ namespace Christoc.Modules.DnnChat.Components
                 rep.Update(r);
             }
         }
+
+        public void JoinRoom(Room r, ConnectionRecord cr)
+        {
+            //TODO: implement Join Room
+            //todo: write to the ConnectionRecordRooms table
+        }
+
+        public void DepartRoom(Room r, ConnectionRecord cr)
+        {
+            //TODO: implement Depart Room
+            //todo: write to the ConnectionRecordRooms table
+        }
+
+        public bool UserInRoom(Guid roomId, ConnectionRecord cr)
+        {
+            //TODO: check if the user is in that Room
+            // should ensure that they are still IN the room
+            return true;
+        }
+
+        public void GetUserRooms(int UserId)
+        {
+            //based on the UserId lookup all the previous rooms for the user
+            
+            //return a list of Room objects
+
+            var messages = (from a in this.GetMessages(moduleId) where a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime select a).Take(maxRecords).Reverse();
+
+            return messages.Any() ? messages : null;
+
+        }
     }
 }

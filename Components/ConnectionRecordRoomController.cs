@@ -32,14 +32,14 @@ namespace Christoc.Modules.DnnChat.Components
      * This class provides the DAL2 access to the storing of Connections within the DnnChat module
      */
 
-    public class ConnectionRecordController
+    public class ConnectionRecordRoomController
     {
         private const string ProviderType = "data";
         private readonly ProviderConfiguration _providerConfiguration = ProviderConfiguration.GetProviderConfiguration(ProviderType);
         private readonly string _objectQualifier;
         private readonly string _databaseOwner;
 
-        public ConnectionRecordController()
+        public ConnectionRecordRoomController()
         {
             var objProvider = (Provider)(_providerConfiguration.Providers[_providerConfiguration.DefaultProvider]);
 
@@ -56,18 +56,18 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        public void CreateConnectionRecord(ConnectionRecord t)
+        public void CreateConnectionRecordRoom(ConnectionRecordRoom t)
         {
             using (IDataContext ctx = DataContext.Instance())
             {
-                var rep = ctx.GetRepository<ConnectionRecord>();
+                var rep = ctx.GetRepository<ConnectionRecordRoom>();
                 rep.Insert(t);
             }
         }
 
-        public void DeleteConnectionRecord(int connectionRecordId, int moduleId)
+        public void DeleteConnectionRecord(ConnectionRecordRoom r)
         {
-            var t = GetConnectionRecord(connectionRecordId, moduleId);
+            var t = GetConnectionRecordRoom(r.RoomId,r.ConnectionRecordId);
             DeleteConnectionRecord(t);
         }
 
@@ -80,43 +80,46 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        public IEnumerable<ConnectionRecord> GetConnectionRecords(int moduleId)
+        //TODO:
+        public IEnumerable<ConnectionRecordRoom> GetConnectionRecordRooms(int ConnectionRecordId)
         {
-            IEnumerable<ConnectionRecord> t;
+            IEnumerable<ConnectionRecordRoom> t;
             using (IDataContext ctx = DataContext.Instance())
             {
-                var rep = ctx.GetRepository<ConnectionRecord>();
-                t = rep.Get(moduleId);
+                var rep = ctx.GetRepository<ConnectionRecordRoom>();
+                t = rep.Get(ConnectionRecordId);
             }
             return t;
         }
 
-        public ConnectionRecord GetConnectionRecord(int connectionRecordId, int moduleId)
+        public ConnectionRecordRoom GetConnectionRecordRoom(int connectionRecordId, Guid roomId)
         {
-            ConnectionRecord t;
+            ConnectionRecordRoom t;
             using (IDataContext ctx = DataContext.Instance())
             {
-                var rep = ctx.GetRepository<ConnectionRecord>();
-                t = rep.GetById(connectionRecordId, moduleId);
+                var rep = ctx.GetRepository<ConnectionRecordRoom>();
+                t = rep.GetById(connectionRecordId, roomId);
             }
             return t;
         }
 
-        public ConnectionRecord GetConnectionRecordByConnectionId(string connectionId)
+        //get a list of the connectionrecordrooms
+        public IEnumerable<ConnectionRecordRoom> GetConnectionRecordRoomsByUserId(int userId)
         {
-            ConnectionRecord t;
+            IEnumerable<ConnectionRecordRoom> t;
             using (IDataContext ctx = DataContext.Instance())
             {
-                var connections = ctx.ExecuteQuery<ConnectionRecord>(CommandType.Text,
+                //TODO: update this SQL to only choose the LATEST connectionrecord, not all
+                var connectionRecordRooms = ctx.ExecuteQuery<ConnectionRecordRoom>(CommandType.Text,
                                                        string.Format(
-                                                           "select top 1 * from {0}{1}DnnChat_ConnectionRecords where ConnectionId = '{2}'",
+                                                           "select crr.* from {0}{1}DnnChat_ConnectionRecordRooms crr join {0}{1}DnnChat_ConnectionRecords cr on (cr.ConnectionRecordId = crr.ConnectionRecordId) where cr.UserId = '{2}' and crr.DepartedDate is null",
                                                            _databaseOwner,
                                                            _objectQualifier,
-                                                          connectionId)).ToList();
+                                                          userId)).ToList();
 
-                if (connections.Any())
+                if (connectionRecordRooms.Any())
                 {
-                    t = connections[0];
+                    t = connectionRecordRooms;
                 }
                 else
                     return null;

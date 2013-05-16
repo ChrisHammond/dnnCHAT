@@ -1,8 +1,10 @@
 /*
-
 	This script is used to create the new Chat Room functionality, and the table to associate messages with a specific room
-
 */
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_Rooms]') AND type in (N'U'))
+	drop table {databaseOwner}{objectQualifier}DnnChat_Rooms
+GO
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_Rooms]') AND type in (N'U'))
 
@@ -19,17 +21,41 @@ CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms(
 	[LastUpdatedByUserId] [int] NOT NULL,
 	[LastUpdatedDate] [datetime] NOT NULL,
 	
-CONSTRAINT [PK_{objectQualifier}DnnChat_Rooms] PRIMARY KEY CLUSTERED 
-(
-	[RoomId] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
+	CONSTRAINT [PK_{objectQualifier}DnnChat_Rooms] PRIMARY KEY CLUSTERED 
+	(
+		[RoomId] ASC
+	)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+	) ON [PRIMARY]
 
+
+	ALTER TABLE {databaseOwner}[{objectQualifier}DnnChat_Rooms] ADD  CONSTRAINT [DF_{objectQualifier}DnnChat_Rooms_RoomId]  DEFAULT (newid()) FOR [RoomId]
 GO
 
-ALTER TABLE {databaseOwner}[{objectQualifier}DnnChat_Rooms] ADD  CONSTRAINT [DF_{objectQualifier}DnnChat_Rooms_RoomId]  DEFAULT (newid()) FOR [RoomId]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_ConnectionRecordRooms]') AND type in (N'U'))
+	drop table {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_ConnectionRecordRooms]') AND type in (N'U'))
+
+
+	CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms
+		(
+		ConnectionRecordId int NOT NULL,
+		RoomId uniqueidentifier NOT NULL,
+		JoinDate datetime NOT NULL,
+		DepartedDate datetime NULL
+		)  ON [PRIMARY]
+
+
+	ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms ADD CONSTRAINT
+		PK_{objectQualifier}DnnChat_ConnectionRecordRooms PRIMARY KEY CLUSTERED 
+		(
+		ConnectionRecordId,
+		RoomId
+		) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+		
+	ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms SET (LOCK_ESCALATION = TABLE)
+GO
 
 
 
@@ -39,6 +65,7 @@ if not exists(select * from sys.columns
 ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Messages ADD
 	RoomId [uniqueidentifier] NULL
 GO
+
 
 
 /* only create a default room if there are no rooms and there are already messages */
@@ -88,9 +115,9 @@ values
 GO
 /* updated the RoomID for existing messages that don't have a room */
 
-/*
+
 Update {databaseOwner}{objectQualifier}DnnChat_Messages
 set RoomId = (select top 1 RoomId from {databaseOwner}{objectQualifier}DnnChat_Rooms)
-where RoomId is null
-
+/*
+	where RoomId is null
 */

@@ -68,7 +68,6 @@ namespace Christoc.Modules.DnnChat.Components
         ///</summary>
         public DateTime? DisConnectedDate { get; set; }
 
-
         ///<summary>
         /// A string with user's ipaddress
         ///</summary>
