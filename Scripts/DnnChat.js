@@ -84,11 +84,31 @@ function DnnChat($, ko, settings) {
             this.cssName += " ChatSelf";
         }
     }
+    
 
-
+    
     var messageModel = {
         messages: ko.observableArray([])
     };
+
+    //used for the list of rooms
+    var roomModel = {
+        rooms: ko.observableArray([])
+    };
+
+    //used to manage which rooms a user is in
+    var userRoomModel = {
+        rooms: ko.observableArray([])
+    };
+
+
+    //Room mapping function
+    function Room(r) {
+        this.roomId = r.RoomId;
+        this.roomName = r.RoomName;
+        this.roomDescription = r.RoomDescription;
+        //this.roomCount = r.RoomCount; //TODO: implement a count of how many people are in the room
+    }
 
     var btnSubmit = $("#btnSubmit");
     var chatHub = $.connection.chatHub;
@@ -99,8 +119,7 @@ function DnnChat($, ko, settings) {
     chatHub.state.userid = userid;
     chatHub.state.username = username;
     chatHub.state.startMessage = startmessage;
-
-
+    
     // Declare a function to actually create a message on the chat hub so the server can invoke it
     chatHub.client.newMessage = function (data) {
         var m = new Message(data);
@@ -153,8 +172,6 @@ function DnnChat($, ko, settings) {
     //TODO: handle state better if a connection is lost
 
     //wire up the click handler for the button after the connection starts
-
-
     this.init = function (element) {
         $.connection.hub.start().done(function () {
             
@@ -222,8 +239,29 @@ function DnnChat($, ko, settings) {
     });
 
     //when a connection starts we can't use the "state", the properties defined above, so we have to fire this method after that connection starts
-    chatHub.client.populateUser = function () {
-        chatHub.server.populateUser();
+    chatHub.client.populateUser = function (allRooms, myRooms) {
+        //connect to each toom
+
+        roomModel.rooms.removeAll();
+
+        $.each(allRooms, function (i, item) {
+            //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
+            roomModel.rooms.push(new Room(item));
+            //TODO: wire up the KO for roomModel and connect to the rooms that this user should be connected to
+        });
+        
+        //usersViewModel.connectionRecords.removeAll();
+        userRoomModel.rooms.removeAll();
+        
+        $.each(myRooms, function (i, item) {
+            //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
+            var r = new Room(item);
+            userRoomModel.rooms.push(r);
+            chatHub.server.populateUser(r.roomId);            
+            //TODO: wire up the KO for userRoomModel and connect to the rooms that this user should be connected to
+        });
+        
+        
         chatHub.state.startMessage = "";
     };
 
@@ -307,6 +345,8 @@ function DnnChat($, ko, settings) {
 
     ko.applyBindings(messageModel, document.getElementById('messages'));
     ko.applyBindings(usersViewModel, document.getElementById('userList'));
+    
+    ko.applyBindings(roomModule, document.getElementById('roomList'));
 
     function updateUnread(mentioned) {
         if (focus === false) {

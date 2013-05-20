@@ -128,7 +128,19 @@ namespace Christoc.Modules.DnnChat.Components
             //connect user to the default room
             Groups.Add(Context.ConnectionId, DefaultRoomId.ToString());
 
-            Clients.Caller.PopulateUser();
+            //TODO: reconnect to all previous rooms
+            //get list of previously connected (not departed) rooms
+            var crrc = new ConnectionRecordRoomController();
+            var myRooms = crrc.GetConnectionRecordRoomsByUserId(Clients.Caller.UserId);
+
+            //TODO: if myRooms is empty, what to do (pass default room)
+
+            int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
+
+            var allRooms = crrc.GetConnectionRecordRooms(moduleId);
+
+            //we are passing in a list of All rooms, and the current user's rooms
+            Clients.Caller.PopulateUser(allRooms, myRooms);
             return base.OnConnected();
         }
 
@@ -140,6 +152,7 @@ namespace Christoc.Modules.DnnChat.Components
         }
 
         //TODO: remove user from all rooms
+
         //lookup who just disconnected, and store the disconnect/time, remove them from the count for each room
         public override Task OnDisconnected()
         {
@@ -176,20 +189,22 @@ namespace Christoc.Modules.DnnChat.Components
          * 	We need to grab the latest 50 chat messages for the channel, should make this configurable.
          */
         //TODO: pull in history for specific room
-        public void RestoreHistory()
+        public void RestoreHistory(Guid roomId)
         {
+            //TODO: make sure the user has access to this room
             try
             {
                 int moduleId;
                 //int.TryParse(Clients.Caller.moduleid, out moduleId);
                 moduleId = Convert.ToInt32(Clients.Caller.moduleid);
 
-                var messages = new MessageController().GetRecentMessages(moduleId, 2, 50);
+                var messages = new MessageController().GetRecentMessages(moduleId, 2, 50, roomId);
 
                 if (messages != null)
                 {
                     foreach (var msg in messages)
                     {
+                        //TODO: we need to figure out how to make sure it goes to the right room
                         Clients.Caller.newMessageNoParse(msg);
                     }
                 }
@@ -257,11 +272,10 @@ namespace Christoc.Modules.DnnChat.Components
         /*
          * When a user connects we need to populate their user information, we default the username to be Anonymous + a #
          */
-
+        
         //TODO: populate which rooms
-        public Task PopulateUser()
+        public Task PopulateUser(Guid roomId)
         {
-
             var crc = new ConnectionRecordController();
             var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
 
@@ -270,15 +284,9 @@ namespace Christoc.Modules.DnnChat.Components
             //if the startMessage is empty, that means the user is a reconnection
             if (Clients.Caller.startMessage != string.Empty)
             {
-                //TODO: reconnect to all previous rooms
-
-                //get list of previously connected (not departed) rooms
-                var crrc = new ConnectionRecordRoomController();
-                var rooms = crrc.GetConnectionRecordRoomsByUserId(Clients.Caller.UserId);
-
 
                 //TODO: populate history for all previous rooms
-                RestoreHistory();
+                RestoreHistory(roomId);
                 
                 Clients.Caller.newMessageNoParse(new Message
                 {
@@ -291,7 +299,7 @@ namespace Christoc.Modules.DnnChat.Components
                 Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName) });
             }
             
-            return Clients.All.updateUserList(Users);
+            return Clients.Group(roomId.ToString()).updateUserList(Users);
         }
 
 
@@ -331,6 +339,8 @@ namespace Christoc.Modules.DnnChat.Components
             //else return nothing
             return string.Empty;
         }
+
+        //TODO: Create method for leaving one room
 
         //check to see if there is a string in the message that is too many characters put together
         private string ParseMessage(string message)

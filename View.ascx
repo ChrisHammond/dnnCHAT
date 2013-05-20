@@ -54,6 +54,14 @@
         </div>
         <!-- /ko -->
     </div>
+        <div class="RoomList" id="roomList">
+        <!-- ko foreach: room -->
+        <div class="ChatRooms">
+            <div data-bind="html:roomName" class="RoomListRoom">
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
     <input type="text" id="msg" />
     <input id="btnSubmit" class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" />
     <div class="dnnRight usersOnline">
