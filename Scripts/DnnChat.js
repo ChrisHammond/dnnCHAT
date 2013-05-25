@@ -15,7 +15,7 @@ function DnnChat($, ko, settings) {
     var stateConnected = settings.stateConnected;
     var stateDisconnected = settings.stateDisconnected;
 
-    var emoticonsUrl = settings.emoticonsUrl //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
+    var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
     
     var focus = true;
     var pageTitle = document.title;
@@ -238,16 +238,24 @@ function DnnChat($, ko, settings) {
         }, 5000);
     });
 
+
+    chatHub.client.join = function() {
+        //fire the connection back to ChatHub that allows us to access the state, and join rooms
+        chatHub.server.join();
+    };
+
     //when a connection starts we can't use the "state", the properties defined above, so we have to fire this method after that connection starts
     chatHub.client.populateUser = function (allRooms, myRooms) {
         //connect to each toom
-
+        alert('Populate User');
         roomModel.rooms.removeAll();
 
+        alert(allRooms);
         $.each(allRooms, function (i, item) {
             //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
             roomModel.rooms.push(new Room(item));
-            //TODO: wire up the KO for roomModel and connect to the rooms that this user should be connected to
+            alert('loading all rooms');
+            //TODO: wire up the view KO for roomModel and connect to the rooms that this user should be connected to
         });
         
         //usersViewModel.connectionRecords.removeAll();
@@ -257,10 +265,9 @@ function DnnChat($, ko, settings) {
             //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
             var r = new Room(item);
             userRoomModel.rooms.push(r);
-            chatHub.server.populateUser(r.roomId);            
-            //TODO: wire up the KO for userRoomModel and connect to the rooms that this user should be connected to
+            chatHub.server.joinRoom(r.roomId);
+            //TODO: wire up the view KO for userRoomModel and connect to the rooms that this user should be connected to
         });
-        
         
         chatHub.state.startMessage = "";
     };
@@ -277,8 +284,7 @@ function DnnChat($, ko, settings) {
             btnSubmit.click();
         }
     });
-
-
+    
     var emoticons = {
         ':-)': 'smiling.png',
         ':)': 'smiling.png',
@@ -321,6 +327,8 @@ function DnnChat($, ko, settings) {
         return message;
     }
 
+    //TODO: how to we display the user list per room
+
     //take all the users and put them in the view model
     chatHub.client.updateUserList = function (data) {
         usersViewModel.connectionRecords.removeAll();
@@ -334,11 +342,13 @@ function DnnChat($, ko, settings) {
         //update the online user count
         $('#currentCount').text(data.length);
     };
-
+    
+    //TODO: userlist should be per room
     $('#userList').on('click', '.UserListUser', function () {
         $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
     });
 
+    //TODO: messages need to be per room
     $("#messages").on('click', '.MessageAuthor', function () {
         $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
     });
@@ -346,7 +356,7 @@ function DnnChat($, ko, settings) {
     ko.applyBindings(messageModel, document.getElementById('messages'));
     ko.applyBindings(usersViewModel, document.getElementById('userList'));
     
-    ko.applyBindings(roomModule, document.getElementById('roomList'));
+    ko.applyBindings(roomModel, document.getElementById('roomList'));
 
     function updateUnread(mentioned) {
         if (focus === false) {

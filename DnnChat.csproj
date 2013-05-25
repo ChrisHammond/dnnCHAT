@@ -67,22 +67,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\Microsoft.ApplicationBlocks.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Microsoft.AspNet.SignalR.Core.1.0.1\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <HintPath>packages\Microsoft.AspNet.SignalR.Core.1.1.1\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.AspNet.SignalR.Owin, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Microsoft.AspNet.SignalR.Owin.1.0.1\lib\net45\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
+      <HintPath>packages\Microsoft.AspNet.SignalR.Owin.1.1.1\lib\net45\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Microsoft.AspNet.SignalR.SystemWeb.1.0.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <HintPath>packages\Microsoft.AspNet.SignalR.SystemWeb.1.1.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Microsoft.Owin.Host.SystemWeb.1.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <HintPath>packages\Microsoft.Owin.Host.SystemWeb.1.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -212,8 +212,11 @@
     <None Include="Data\00.00.03.sqldataprovider" />
     <Content Include="Data\Uninstall.sqldataprovider" />
     <Content Include="Scripts\DnnChat.js" />
-    <Content Include="Scripts\jquery.signalR-1.0.1.js" />
-    <Content Include="Scripts\jquery.signalR-1.0.1.min.js" />
+    <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.6.4.js" />
+    <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Scripts\jquery.signalR-1.1.1.js" />
+    <Content Include="Scripts\jquery.signalR-1.1.1.min.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Settings.ascx" />
     <Content Include="View.ascx" />

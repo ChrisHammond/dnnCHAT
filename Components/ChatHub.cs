@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DotNetNuke.Services.Localization;
 using Microsoft.AspNet.SignalR;
@@ -36,7 +37,7 @@ namespace Christoc.Modules.DnnChat.Components
         //a list of connectionrecords to keep track of users connected
         private static readonly List<ConnectionRecord> Users = new List<ConnectionRecord>();
 
-        private static readonly Guid DefaultRoomId = new Guid(); //TODO: set the default room based on? ModuleId setting?
+        private static readonly Guid DefaultRoomId = new Guid("78fbeba0-cc57-4cd4-9dde-8611c91f7b9c"); //TODO: set the default room based on? ModuleId setting?
 
         /*
          * This method is used to send messages to all connected clients.
@@ -115,7 +116,7 @@ namespace Christoc.Modules.DnnChat.Components
                     ConnectionId = Context.ConnectionId,
                     MessageDate = DateTime.UtcNow,
                     MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
+                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
                     RoomId = DefaultRoomId
                 };
                 Clients.Caller.newMessage(m);
@@ -125,22 +126,7 @@ namespace Christoc.Modules.DnnChat.Components
         //TODO: on connection, reload rooms for user?
         public override Task OnConnected()
         {
-            //connect user to the default room
-            Groups.Add(Context.ConnectionId, DefaultRoomId.ToString());
-
-            //TODO: reconnect to all previous rooms
-            //get list of previously connected (not departed) rooms
-            var crrc = new ConnectionRecordRoomController();
-            var myRooms = crrc.GetConnectionRecordRoomsByUserId(Clients.Caller.UserId);
-
-            //TODO: if myRooms is empty, what to do (pass default room)
-
-            int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
-
-            var allRooms = crrc.GetConnectionRecordRooms(moduleId);
-
-            //we are passing in a list of All rooms, and the current user's rooms
-            Clients.Caller.PopulateUser(allRooms, myRooms);
+            Clients.Caller.Join();
             return base.OnConnected();
         }
 
@@ -185,35 +171,6 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        /*
-         * 	We need to grab the latest 50 chat messages for the channel, should make this configurable.
-         */
-        //TODO: pull in history for specific room
-        public void RestoreHistory(Guid roomId)
-        {
-            //TODO: make sure the user has access to this room
-            try
-            {
-                int moduleId;
-                //int.TryParse(Clients.Caller.moduleid, out moduleId);
-                moduleId = Convert.ToInt32(Clients.Caller.moduleid);
-
-                var messages = new MessageController().GetRecentMessages(moduleId, 2, 50, roomId);
-
-                if (messages != null)
-                {
-                    foreach (var msg in messages)
-                    {
-                        //TODO: we need to figure out how to make sure it goes to the right room
-                        Clients.Caller.newMessageNoParse(msg);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                DotNetNuke.Services.Exceptions.Exceptions.LogException(ex);
-            }
-        }
         
         private ConnectionRecord SetupConnectionRecord()
         {
@@ -269,32 +226,75 @@ namespace Christoc.Modules.DnnChat.Components
             return c;
         }
 
+        //TODO: on connection, reload rooms for user?
+        public Task Join()
+        {
+            //connect user to the default room
+            Groups.Add(Context.ConnectionId, DefaultRoomId.ToString());
+
+            //TODO: reconnect to all previous rooms
+            //get list of previously connected (not departed) rooms
+            var crrc = new ConnectionRecordRoomController();
+            var rc = new RoomController();
+            int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
+
+            var myRooms = crrc.GetConnectionRecordRoomsByUserId((int)Clients.Caller.userid);
+
+            //if myRooms is empty, what to do (pass default room)
+            if (myRooms == null)
+            {
+                //load the default room
+                var r = rc.GetRoom(DefaultRoomId, moduleId);
+                myRooms = new List<Room>();
+                myRooms = myRooms.Concat(new[]{r});
+            }
+            
+            var allRooms = rc.GetRooms(moduleId);
+
+            //we are passing in a list of All rooms, and the current user's rooms
+            Clients.Caller.PopulateUser(allRooms, myRooms);
+            return base.OnConnected();
+        }
+
+
         /*
          * When a user connects we need to populate their user information, we default the username to be Anonymous + a #
          */
         
-        //TODO: populate which rooms
-        public Task PopulateUser(Guid roomId)
+        //This method is to populate/join room
+        public Task JoinRoom(Guid roomId)
         {
             var crc = new ConnectionRecordController();
+            var crrc = new ConnectionRecordRoomController();
+            
             var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
-
-            //post the message to the hub
+            
 
             //if the startMessage is empty, that means the user is a reconnection
             if (Clients.Caller.startMessage != string.Empty)
             {
+                var crr = new ConnectionRecordRoom
+                    {
+                        ConnectionRecordId = c.ConnectionRecordId,
+                        JoinDate = DateTime.UtcNow,
+                        RoomId = roomId
+                    };
 
+                //TODO: join the room
+                crrc.CreateConnectionRecordRoom(crr);
+                
                 //TODO: populate history for all previous rooms
                 RestoreHistory(roomId);
                 
+                //TODO: target a room here
                 Clients.Caller.newMessageNoParse(new Message
                 {
                     AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
                     ConnectionId = "0",
                     MessageDate = DateTime.UtcNow,
                     MessageId = -1,
-                    MessageText = Clients.Caller.startMessage
+                    MessageText = Clients.Caller.startMessage,
+                    RoomId = roomId
                 });
                 Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName) });
             }
@@ -302,6 +302,36 @@ namespace Christoc.Modules.DnnChat.Components
             return Clients.Group(roomId.ToString()).updateUserList(Users);
         }
 
+
+        /*
+         * 	We need to grab the latest 50 chat messages for the channel, should make this configurable.
+         */
+        //TODO: pull in history for specific room
+        public void RestoreHistory(Guid roomId)
+        {
+            //TODO: make sure the user has access to this room
+            try
+            {
+                int moduleId;
+                //int.TryParse(Clients.Caller.moduleid, out moduleId);
+                moduleId = Convert.ToInt32(Clients.Caller.moduleid);
+
+                var messages = new MessageController().GetRecentMessages(moduleId, 2, 50, roomId);
+
+                if (messages != null)
+                {
+                    foreach (var msg in messages)
+                    {
+                        //TODO: we need to figure out how to make sure it goes to the right room
+                        Clients.Caller.newMessageNoParse(msg);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DotNetNuke.Services.Exceptions.Exceptions.LogException(ex);
+            }
+        }
 
         //TODO: update name in all rooms
 

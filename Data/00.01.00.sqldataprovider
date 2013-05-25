@@ -10,7 +10,7 @@ IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{database
 
 CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms(
 	[RoomId] [uniqueidentifier] NOT NULL,
-	[Name] [nvarchar](150) NOT NULL,
+	[RoomName] [nvarchar](150) NOT NULL,
 	[Enabled] [bit] NOT NULL,
 	[RoomDescription] [nvarchar](max) NULL,
 	[RoomWelcome] [nvarchar](max) NULL,
@@ -20,7 +20,8 @@ CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms(
 	[CreatedByUserId] [int] NOT NULL,
 	[LastUpdatedByUserId] [int] NOT NULL,
 	[LastUpdatedDate] [datetime] NOT NULL,
-	
+	[ModuleId] [int] NOT NULL
+
 	CONSTRAINT [PK_{objectQualifier}DnnChat_Rooms] PRIMARY KEY CLUSTERED 
 	(
 		[RoomId] ASC

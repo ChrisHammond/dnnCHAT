@@ -25,11 +25,11 @@ using DotNetNuke.ComponentModel.DataAnnotations;
 namespace Christoc.Modules.DnnChat.Components
 {
 
-    [TableName("DnnChat_ConnectionRecords")]
+    [TableName("DnnChat_Rooms")]
     //setup the primary key for table
-    [PrimaryKey("ConnectionRecordId", AutoIncrement = true)]
+    [PrimaryKey("RoomId", AutoIncrement = false)]
     //configure caching using PetaPoco
-    [Cacheable("ConnectionRecords", CacheItemPriority.Default, 20)]
+    [Cacheable("RoomId", CacheItemPriority.Default, 20)]
     //scope the objects to the ModuleId of a module on a page (or copy of a module on a page)
     [Scope("ModuleId")]
     public class Room

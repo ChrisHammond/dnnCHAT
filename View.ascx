@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="dnn" Namespace="DotNetNuke.Web.Client.ClientResourceManagement" Assembly="DotNetNuke.Web.Client" %>
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
 
-<dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-1.0.1.min.js" Priority="10" />
+<dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-1.1.1.min.js" Priority="10" />
 <dnn:DnnJsInclude runat="server" FilePath="~/signalr/hubs" Priority="100"  />
 
 
@@ -22,7 +22,6 @@
             stateConnected:'<%=Localization.GetString("StateConnected.Text",LocalResourceFile)%>',
             stateDisconnected:'<%=Localization.GetString("StateDisconnected.Text",LocalResourceFile)%>',
             emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>'
-            
         });
         md.init('#messages');
     });
@@ -55,7 +54,7 @@
         <!-- /ko -->
     </div>
         <div class="RoomList" id="roomList">
-        <!-- ko foreach: room -->
+        <!-- ko foreach: rooms -->
         <div class="ChatRooms">
             <div data-bind="html:roomName" class="RoomListRoom">
             </div>

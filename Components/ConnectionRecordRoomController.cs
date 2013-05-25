@@ -67,7 +67,7 @@ namespace Christoc.Modules.DnnChat.Components
 
         public void DeleteConnectionRecord(ConnectionRecordRoom r)
         {
-            var t = GetConnectionRecordRoom(r.RoomId,r.ConnectionRecordId);
+            var t = GetConnectionRecordRoom(r.ConnectionRecordId, r.RoomId);
             DeleteConnectionRecord(t);
         }
 
@@ -104,21 +104,24 @@ namespace Christoc.Modules.DnnChat.Components
         }
 
         //get a list of the connectionrecordrooms
-        public IEnumerable<ConnectionRecordRoom> GetConnectionRecordRoomsByUserId(int userId)
+        public IEnumerable<Room> GetConnectionRecordRoomsByUserId(int userId)
         {
-            IEnumerable<ConnectionRecordRoom> t;
+            IEnumerable<Room> t;
             using (IDataContext ctx = DataContext.Instance())
             {
                 //TODO: update this SQL to only choose the LATEST connectionrecord, not all
-                var connectionRecordRooms = ctx.ExecuteQuery<ConnectionRecordRoom>(CommandType.Text,
+                var connectionRecordRooms = ctx.ExecuteQuery<Room>(CommandType.Text,
                                                        string.Format(
-                                                           "select crr.* from {0}{1}DnnChat_ConnectionRecordRooms crr join {0}{1}DnnChat_ConnectionRecords cr on (cr.ConnectionRecordId = crr.ConnectionRecordId) where cr.UserId = '{2}' and crr.DepartedDate is null",
+                                                           "select r.* from {0}{1}DnnChat_ConnectionRecordRooms crr join {0}{1}DnnChat_ConnectionRecords cr on (cr.ConnectionRecordId = crr.ConnectionRecordId)" +
+                                                           " join {0}{1}DnnChat_Rooms r on (r.RoomId = crr.RoomId)" +
+                                                           " where cr.UserId = '{2}' and crr.DepartedDate is null",
                                                            _databaseOwner,
                                                            _objectQualifier,
                                                           userId)).ToList();
 
                 if (connectionRecordRooms.Any())
                 {
+                    //get all rooms from the list of ConnectionRecords
                     t = connectionRecordRooms;
                 }
                 else
