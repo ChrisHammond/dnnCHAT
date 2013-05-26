@@ -22,6 +22,8 @@
             stateConnected:'<%=Localization.GetString("StateConnected.Text",LocalResourceFile)%>',
             stateDisconnected:'<%=Localization.GetString("StateDisconnected.Text",LocalResourceFile)%>',
             emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>'
+            //,
+            //defaultRoomId:' = //DefaultRoomId '
         });
         md.init('#messages');
     });

@@ -34,7 +34,7 @@ namespace Christoc.Modules.DnnChat.Components
         ///<summary>
         /// The date the user departed the room
         ///</summary>
-        public DateTime DepartedDate { get; set; }
+        public DateTime? DepartedDate { get; set; }
         
        
     }

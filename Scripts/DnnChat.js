@@ -246,15 +246,15 @@ function DnnChat($, ko, settings) {
 
     //when a connection starts we can't use the "state", the properties defined above, so we have to fire this method after that connection starts
     chatHub.client.populateUser = function (allRooms, myRooms) {
-        //connect to each toom
-        alert('Populate User');
-        roomModel.rooms.removeAll();
 
-        alert(allRooms);
+        roomModel.rooms.removeAll();
         $.each(allRooms, function (i, item) {
             //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
-            roomModel.rooms.push(new Room(item));
-            alert('loading all rooms');
+            alert(item);
+            var r = new Room(item);
+
+            roomModel.rooms.push(r);
+            
             //TODO: wire up the view KO for roomModel and connect to the rooms that this user should be connected to
         });
         
@@ -265,7 +265,8 @@ function DnnChat($, ko, settings) {
             //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
             var r = new Room(item);
             userRoomModel.rooms.push(r);
-            chatHub.server.joinRoom(r.roomId);
+            alert('RoomGuid: ' + r.roomId + ' ModuleId: ' + moduleid);
+            chatHub.server.joinRoom(r.roomId, moduleid);
             //TODO: wire up the view KO for userRoomModel and connect to the rooms that this user should be connected to
         });
         

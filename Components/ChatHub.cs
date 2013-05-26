@@ -31,7 +31,6 @@ namespace Christoc.Modules.DnnChat.Components
     {
         //cjh - 2/28/2013 revamping to use knockout with guidance of http://www.slideshare.net/aegirth1/knockout-presentation-slides 
 
-
         //TODO: modify Hub to support rooms
 
         //a list of connectionrecords to keep track of users connected
@@ -262,13 +261,16 @@ namespace Christoc.Modules.DnnChat.Components
          */
         
         //This method is to populate/join room
-        public Task JoinRoom(Guid roomId)
+        public Task JoinRoom(Guid roomId, int moduleId)
         {
+
             var crc = new ConnectionRecordController();
             var crrc = new ConnectionRecordRoomController();
+            var rc = new RoomController();
+
+            var r = rc.GetRoom(roomId,moduleId);
             
-            var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
-            
+            var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();            
 
             //if the startMessage is empty, that means the user is a reconnection
             if (Clients.Caller.startMessage != string.Empty)
@@ -277,10 +279,11 @@ namespace Christoc.Modules.DnnChat.Components
                     {
                         ConnectionRecordId = c.ConnectionRecordId,
                         JoinDate = DateTime.UtcNow,
+                        DepartedDate = null,
                         RoomId = roomId
                     };
 
-                //TODO: join the room
+                //join the room
                 crrc.CreateConnectionRecordRoom(crr);
                 
                 //TODO: populate history for all previous rooms

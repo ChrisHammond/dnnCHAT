@@ -41,7 +41,7 @@ IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{database
 
 	CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms
 		(
-		ConnectionRecordId int NOT NULL,
+		ConnectionRecordId int NOT NULL IDENTITY (1, 1),
 		RoomId uniqueidentifier NOT NULL,
 		JoinDate datetime NOT NULL,
 		DepartedDate datetime NULL
