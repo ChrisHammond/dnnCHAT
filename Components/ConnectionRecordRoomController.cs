@@ -81,13 +81,13 @@ namespace Christoc.Modules.DnnChat.Components
         }
 
         //TODO:
-        public IEnumerable<ConnectionRecordRoom> GetConnectionRecordRooms(int ModuleId)
+        public IEnumerable<ConnectionRecordRoom> GetConnectionRecordRooms(int moduleId)
         {
             IEnumerable<ConnectionRecordRoom> t;
             using (IDataContext ctx = DataContext.Instance())
             {
                 var rep = ctx.GetRepository<ConnectionRecordRoom>();
-                t = rep.Get(ModuleId);
+                t = rep.Get(moduleId);
             }
             return t;
         }

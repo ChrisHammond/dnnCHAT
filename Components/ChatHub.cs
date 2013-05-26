@@ -275,17 +275,27 @@ namespace Christoc.Modules.DnnChat.Components
             //if the startMessage is empty, that means the user is a reconnection
             if (Clients.Caller.startMessage != string.Empty)
             {
+                //lookup client room connection record, if there don't add
+
+                //var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
+                
+                //if (cr == null)
+                //{
+                            
+                //}
+
+
                 var crr = new ConnectionRecordRoom
-                    {
-                        ConnectionRecordId = c.ConnectionRecordId,
-                        JoinDate = DateTime.UtcNow,
-                        DepartedDate = null,
-                        RoomId = roomId
-                    };
+                {
+                    ConnectionRecordId = c.ConnectionRecordId,
+                    JoinDate = DateTime.UtcNow,
+                    DepartedDate = null,
+                    RoomId = roomId
+                };
 
                 //join the room
-                crrc.CreateConnectionRecordRoom(crr);
-                
+                crrc.CreateConnectionRecordRoom(crr);           
+
                 //TODO: populate history for all previous rooms
                 RestoreHistory(roomId);
                 

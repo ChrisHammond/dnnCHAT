@@ -250,9 +250,8 @@ function DnnChat($, ko, settings) {
         roomModel.rooms.removeAll();
         $.each(allRooms, function (i, item) {
             //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
-            alert(item);
-            var r = new Room(item);
 
+            var r = new Room(item);
             roomModel.rooms.push(r);
             
             //TODO: wire up the view KO for roomModel and connect to the rooms that this user should be connected to
@@ -262,10 +261,10 @@ function DnnChat($, ko, settings) {
         userRoomModel.rooms.removeAll();
         
         $.each(myRooms, function (i, item) {
-            //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
+            
             var r = new Room(item);
+
             userRoomModel.rooms.push(r);
-            alert('RoomGuid: ' + r.roomId + ' ModuleId: ' + moduleid);
             chatHub.server.joinRoom(r.roomId, moduleid);
             //TODO: wire up the view KO for userRoomModel and connect to the rooms that this user should be connected to
         });
