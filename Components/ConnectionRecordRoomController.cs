@@ -80,7 +80,7 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        //TODO:
+        //TODO: This fails if there is no record
         public IEnumerable<ConnectionRecordRoom> GetConnectionRecordRooms(int moduleId)
         {
             IEnumerable<ConnectionRecordRoom> t;

@@ -229,7 +229,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BuildScripts\ModulePackage.targets" />
+    <Content Include="BuildScripts\ModulePackage.targets">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="BuildScripts\MSBuild.Community.Tasks.Targets" />
   </ItemGroup>
   <ItemGroup>

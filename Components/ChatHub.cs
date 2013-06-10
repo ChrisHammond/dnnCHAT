@@ -46,7 +46,7 @@ namespace Christoc.Modules.DnnChat.Components
         public void Send(string message)
         {
             //TODO: figure out the default room (module setting?)
-            
+
             Send(message, DefaultRoomId);
         }
 
@@ -59,8 +59,8 @@ namespace Christoc.Modules.DnnChat.Components
             //if the user (connectionrecord) isn't in a room don't let message go through
 
             var rc = new RoomController();
-            
-            if (cr != null && rc.UserInRoom(roomId,cr))
+
+            if (cr != null && rc.UserInRoom(roomId, cr))
             {
                 //TODO: make sure that the user can send to that Room
 
@@ -170,7 +170,7 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        
+
         private ConnectionRecord SetupConnectionRecord()
         {
             string username = Clients.Caller.username;
@@ -189,14 +189,14 @@ namespace Christoc.Modules.DnnChat.Components
             Clients.Caller.username = username;
             var userId = -1;
 
-            
+
             if (Convert.ToInt32(Clients.Caller.userid) > 0)
             {
                 userId = Convert.ToInt32(Clients.Caller.userid);
             }
 
             //check if the connectionrecord is already in the DB
-            
+
             var crc = new ConnectionRecordController();
             var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId);
             if (c != null)
@@ -245,9 +245,9 @@ namespace Christoc.Modules.DnnChat.Components
                 //load the default room
                 var r = rc.GetRoom(DefaultRoomId, moduleId);
                 myRooms = new List<Room>();
-                myRooms = myRooms.Concat(new[]{r});
+                myRooms = myRooms.Concat(new[] { r });
             }
-            
+
             var allRooms = rc.GetRooms(moduleId);
 
             //we are passing in a list of All rooms, and the current user's rooms
@@ -259,7 +259,7 @@ namespace Christoc.Modules.DnnChat.Components
         /*
          * When a user connects we need to populate their user information, we default the username to be Anonymous + a #
          */
-        
+
         //This method is to populate/join room
         public Task JoinRoom(Guid roomId, int moduleId)
         {
@@ -268,37 +268,34 @@ namespace Christoc.Modules.DnnChat.Components
             var crrc = new ConnectionRecordRoomController();
             var rc = new RoomController();
 
-            var r = rc.GetRoom(roomId,moduleId);
-            
-            var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();            
+            var r = rc.GetRoom(roomId, moduleId);
+
+            var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
 
             //if the startMessage is empty, that means the user is a reconnection
             if (Clients.Caller.startMessage != string.Empty)
             {
                 //lookup client room connection record, if there don't add
 
-                //var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
-                
-                //if (cr == null)
-                //{
-                            
-                //}
+                var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
 
-
-                var crr = new ConnectionRecordRoom
+                if (cr == null)
                 {
-                    ConnectionRecordId = c.ConnectionRecordId,
-                    JoinDate = DateTime.UtcNow,
-                    DepartedDate = null,
-                    RoomId = roomId
-                };
+                    var crr = new ConnectionRecordRoom
+                    {
+                        ConnectionRecordId = c.ConnectionRecordId,
+                        JoinDate = DateTime.UtcNow,
+                        DepartedDate = null,
+                        RoomId = roomId
+                    };
 
-                //join the room
-                crrc.CreateConnectionRecordRoom(crr);           
+                    //join the room
+                    crrc.CreateConnectionRecordRoom(crr);
+                }
 
                 //TODO: populate history for all previous rooms
                 RestoreHistory(roomId);
-                
+
                 //TODO: target a room here
                 Clients.Caller.newMessageNoParse(new Message
                 {
@@ -311,7 +308,7 @@ namespace Christoc.Modules.DnnChat.Components
                 });
                 Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName) });
             }
-            
+
             return Clients.Group(roomId.ToString()).updateUserList(Users);
         }
 

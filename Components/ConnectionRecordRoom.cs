@@ -13,7 +13,7 @@ namespace Christoc.Modules.DnnChat.Components
     //configure caching using PetaPoco
     [Cacheable("ConnectRecordRoom", CacheItemPriority.Default, 20)]
     //scope the objects to the ModuleId of a module on a page (or copy of a module on a page)
-    //[Scope("ModuleId")]
+    [Scope("ConnectionRecordId,RoomId")]
     public class ConnectionRecordRoom
     {
         ///<summary>
