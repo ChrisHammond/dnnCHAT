@@ -37,27 +37,22 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwne
 GO
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_ConnectionRecordRooms]') AND type in (N'U'))
-
-
 	CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms
 		(
+		id int NOT NULL IDENTITY (1, 1),
 		ConnectionRecordId int NOT NULL,
 		RoomId uniqueidentifier NOT NULL,
 		JoinDate datetime NOT NULL,
 		DepartedDate datetime NULL
 		)  ON [PRIMARY]
-
-
 	ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms ADD CONSTRAINT
 		PK_{objectQualifier}DnnChat_ConnectionRecordRooms PRIMARY KEY CLUSTERED 
 		(
-		ConnectionRecordId,
-		RoomId
+		id
 		) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-		
+
 	ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms SET (LOCK_ESCALATION = TABLE)
 GO
-
 
 
 if not exists(select * from sys.columns 

@@ -9,13 +9,18 @@ namespace Christoc.Modules.DnnChat.Components
 {
     [TableName("DnnChat_ConnectionRecordRooms")]
     //setup the primary key for table
-    [PrimaryKey("ConnectionRecordId,RoomId", AutoIncrement = false)]
+    [PrimaryKey("Id")]
     //configure caching using PetaPoco
     [Cacheable("ConnectRecordRoom", CacheItemPriority.Default, 20)]
     //scope the objects to the ModuleId of a module on a page (or copy of a module on a page)
-    [Scope("ConnectionRecordId,RoomId")]
+    [Scope("Id")]
     public class ConnectionRecordRoom
     {
+        ///<summary>
+        /// The ID of the ConnectionRecordRoom
+        ///</summary>
+        public int Id { get; set; }
+
         ///<summary>
         /// The ConnectionRecordId of the user
         ///</summary>

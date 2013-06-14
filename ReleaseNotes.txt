@@ -22,6 +22,7 @@
 		<li>Stopped autoscrolling if your Window is out of focus, or if you have scrolled up from the bottom of the window</li>
 		<li>Abstracted the JS out of view.ascx</li>
 		<li>Updated MSBuild Community Tasks to 1.4.0.61</li>
+		<li>Updated to SignalR 1.1.2</li>
 	</ul>
 	</p>
 	<p class="Owner">

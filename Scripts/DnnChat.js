@@ -1,6 +1,8 @@
 ﻿//TODO: the connection fails with websockets and no fall back
 //TODO: anon doesn't work
 //TODO: messages aren't coming through
+//TODO: startup message isn't working
+
 
 function DnnChat($, ko, settings) {
         
@@ -247,23 +249,17 @@ function DnnChat($, ko, settings) {
     //when a connection starts we can't use the "state", the properties defined above, so we have to fire this method after that connection starts
     chatHub.client.populateUser = function (allRooms, myRooms) {
 
-        roomModel.rooms.removeAll();
         $.each(allRooms, function (i, item) {
             //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
-
             var r = new Room(item);
-            roomModel.rooms.push(r);
-            
+            roomModel.rooms.push(r);          
             //TODO: wire up the view KO for roomModel and connect to the rooms that this user should be connected to
         });
         
         //usersViewModel.connectionRecords.removeAll();
         userRoomModel.rooms.removeAll();
-        
-        $.each(myRooms, function (i, item) {
-            
+        $.each(myRooms, function (i, item) {            
             var r = new Room(item);
-
             userRoomModel.rooms.push(r);
             chatHub.server.joinRoom(r.roomId, moduleid);
             //TODO: wire up the view KO for userRoomModel and connect to the rooms that this user should be connected to

@@ -94,13 +94,22 @@ namespace Christoc.Modules.DnnChat.Components
 
         public ConnectionRecordRoom GetConnectionRecordRoom(int connectionRecordId, Guid roomId)
         {
-            ConnectionRecordRoom t;
-            using (IDataContext ctx = DataContext.Instance())
+            try
             {
-                var rep = ctx.GetRepository<ConnectionRecordRoom>();
-                t = rep.GetById(connectionRecordId, roomId);
+
+                ConnectionRecordRoom t;
+                using (IDataContext ctx = DataContext.Instance())
+                {
+                    var rep = ctx.GetRepository<ConnectionRecordRoom>();
+                    //TODO: something is erroring here "value can't be null"
+                    t = rep.GetById(connectionRecordId, roomId);
+                }
+                return t;
             }
-            return t;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         //get a list of the connectionrecordrooms

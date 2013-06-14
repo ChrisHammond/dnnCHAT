@@ -237,7 +237,13 @@ namespace Christoc.Modules.DnnChat.Components
             var rc = new RoomController();
             int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
 
-            var myRooms = crrc.GetConnectionRecordRoomsByUserId((int)Clients.Caller.userid);
+            IEnumerable<Room> myRooms = null;
+
+            if (Convert.ToInt32(Clients.Caller.userid) > 0)
+            {
+               myRooms = crrc.GetConnectionRecordRoomsByUserId((int)Clients.Caller.userid);
+            }
+
 
             //if myRooms is empty, what to do (pass default room)
             if (myRooms == null)
@@ -263,7 +269,6 @@ namespace Christoc.Modules.DnnChat.Components
         //This method is to populate/join room
         public Task JoinRoom(Guid roomId, int moduleId)
         {
-
             var crc = new ConnectionRecordController();
             var crrc = new ConnectionRecordRoomController();
             var rc = new RoomController();
@@ -273,10 +278,10 @@ namespace Christoc.Modules.DnnChat.Components
             var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
 
             //if the startMessage is empty, that means the user is a reconnection
+
             if (Clients.Caller.startMessage != string.Empty)
             {
                 //lookup client room connection record, if there don't add
-
                 var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
 
                 if (cr == null)
