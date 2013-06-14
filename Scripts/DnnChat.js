@@ -1,8 +1,6 @@
 ﻿//TODO: the connection fails with websockets and no fall back
-//TODO: anon doesn't work
-//TODO: messages aren't coming through
-//TODO: startup message isn't working
-
+//TODO: messages aren't targetting a specific room id (div/guid)
+//TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
 
 function DnnChat($, ko, settings) {
         
@@ -75,6 +73,7 @@ function DnnChat($, ko, settings) {
         this.messageText = m.MessageText;
         this.messageDate = m.MessageDate;
         this.authorName = m.AuthorName;
+        this.roomId = m.roomId;
 
         //this.cssName = m.MessageText.toLowerCase().indexOf(chatHub.state.username.toLowerCase()) !== -1 ? "ChatMessage ChatMentioned dnnClear" : "ChatMessage dnnClear";
         //patch from @briandukes to highlight your own posts
@@ -125,6 +124,7 @@ function DnnChat($, ko, settings) {
     // Declare a function to actually create a message on the chat hub so the server can invoke it
     chatHub.client.newMessage = function (data) {
         var m = new Message(data);
+        //TODO: make sure this message goes to the proper Room (#messagesRoomGuid or something, RoomId is on the Message object)
 
         messageModel.messages.push(replaceMessage(m));
         
@@ -154,6 +154,9 @@ function DnnChat($, ko, settings) {
     };
 
     chatHub.client.newMessageNoParse = function (data) {
+
+        //TODO: make sure this message goes to the proper Room (#messagesRoomGuid or something, RoomId is on the Message object)
+
         var m = new Message(data);
 
         messageModel.messages.push(m);

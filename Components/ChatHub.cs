@@ -298,7 +298,7 @@ namespace Christoc.Modules.DnnChat.Components
                     crrc.CreateConnectionRecordRoom(crr);
                 }
 
-                //TODO: populate history for all previous rooms
+                //populate history for all previous rooms
                 RestoreHistory(roomId);
 
                 //TODO: target a room here
