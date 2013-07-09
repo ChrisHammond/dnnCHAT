@@ -3,7 +3,7 @@
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
 
 <dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-1.1.2.min.js" Priority="10" />
-<dnn:DnnJsInclude runat="server" FilePath="~/signalr/hubs" Priority="100"  />
+<dnn:DnnJsInclude runat="server" FilePath="~/signalr/hubs" Priority="100" />
 
 
 <script type="text/javascript">
@@ -23,53 +23,71 @@
             stateDisconnected:'<%=Localization.GetString("StateDisconnected.Text",LocalResourceFile)%>',
             emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>'
             //,
-            //defaultRoomId:' = //DefaultRoomId '
+            //defaultRoomId:' = //DefaultRoomId ' //TODO: get default roomid from the settings
         });
         md.init('#messages');
     });
     
 
 </script>
-<div class="srcWindow">
-    <div id="messages" class="ChatWindow">
-        <!-- ko foreach: messages -->
-        <div data-bind="attr:{class:cssName}">
-            <div data-bind="html:authorName" class="MessageAuthor"></div>
-            <div data-bind="html:messageText" class="MessageText"></div>
-            <div data-bind="dateString: messageDate" class="MessageTime"></div>
+<!-- TODO: Create a display for the list of all Rooms -->
+<div class="RoomList" id="roomList">
+    <!-- ko foreach: rooms -->
+    <div class="ChatRooms">
+        <div data-bind="html:roomName" class="RoomListRoom">
         </div>
-        <!-- /ko -->
     </div>
-    <div class="UsersList" id="userList">
-        <!-- ko foreach: connectionRecords -->
-        <div class="ChatUsers">
-            <!-- ko if: userId>0 -->
-            <div data-bind="html:authorName" class="UserListUser UserLoggedIn">
-            </div>
-            <!-- /ko -->
-            <!-- ko if: userId<1 -->
-            <div data-bind="html:authorName" class="UserListUser UserNotLoggedIn">
-            </div>
-            <!-- /ko -->
-
-        </div>
-        <!-- /ko -->
-    </div>
-        <div class="RoomList" id="roomList">
-        <!-- ko foreach: rooms -->
-        <div class="ChatRooms">
-            <div data-bind="html:roomName" class="RoomListRoom">
-            </div>
-        </div>
-        <!-- /ko -->
-    </div>
-    <input type="text" id="msg" />
-    <input id="btnSubmit" class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" />
-    <div class="dnnRight usersOnline">
-        <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div id="currentCount" class="dnnRight">1</div>
-    </div>
-    <div id="ChatStatus" class="chatStatus dnnClear">
-    </div>
+    <!-- /ko -->
 </div>
+
+<!-- TODO: style this list of rooms that a user is connected to, likely as tabs at the top of the page -->
+<div class="RoomList" id="userRoomList">
+    <!-- ko foreach: rooms -->
+    <div class="ChatRooms">
+        <div data-bind="html:roomName" class="RoomListRoom">
+        </div>
+        <!-- the display of the rooms that a user is connected -->
+
+        <!-- TODO: need to KO this, make it repeatable for multiple rooms -->
+        <div class="srcWindow">
+            <div id="messages" class="ChatWindow">
+                <!-- ko foreach: messages -->
+                <div data-bind="attr:{class:cssName}">
+                    <div data-bind="html:authorName" class="MessageAuthor"></div>
+                    <div data-bind="html:messageText" class="MessageText"></div>
+                    <div data-bind="dateString: messageDate" class="MessageTime"></div>
+                </div>
+                <!-- /ko -->
+            </div>
+            <div class="UsersList" id="userList">
+                <!-- ko foreach: connectionRecords -->
+                <div class="ChatUsers">
+                    <!-- ko if: userId>0 -->
+                    <div data-bind="html:authorName" class="UserListUser UserLoggedIn">
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: userId<1 -->
+                    <div data-bind="html:authorName" class="UserListUser UserNotLoggedIn">
+                    </div>
+                    <!-- /ko -->
+
+                </div>
+                <!-- /ko -->
+            </div>
+
+            <input type="text" id="msg" />
+            <input id="btnSubmit" class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" />
+            <div class="dnnRight usersOnline">
+                <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div id="currentCount" class="dnnRight">1</div>
+            </div>
+            <div id="ChatStatus" class="chatStatus dnnClear">
+            </div>
+        </div>
+
+
+    </div>
+    <!-- /ko -->
+</div>
+
 
 <div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>

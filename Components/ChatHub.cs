@@ -33,6 +33,7 @@ namespace Christoc.Modules.DnnChat.Components
 
         //TODO: modify Hub to support rooms
 
+        //TODO: we need to keep a list of users PER ROOM
         //a list of connectionrecords to keep track of users connected
         private static readonly List<ConnectionRecord> Users = new List<ConnectionRecord>();
 
@@ -165,7 +166,8 @@ namespace Christoc.Modules.DnnChat.Components
                 cr.DisConnectedDate = DateTime.UtcNow;
                 crc.UpdateConnectionRecord(cr);
 
-                Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName) });
+                //TODO: handle ROOMID, not currently using below
+                Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName, DefaultRoomId) });
                 Clients.All.updateUserList(Users);
             }
         }
@@ -314,7 +316,7 @@ namespace Christoc.Modules.DnnChat.Components
                 Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName) });
             }
 
-            return Clients.Group(roomId.ToString()).updateUserList(Users);
+            return Clients.Group(roomId.ToString()).updateUserList(Users,roomId);
         }
 
 
