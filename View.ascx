@@ -30,26 +30,34 @@
     
 
 </script>
-<!-- TODO: Create a display for the list of all Rooms -->
+
 <div class="RoomList" id="roomList">
-    <!-- ko foreach: rooms -->
-    <div class="ChatRooms">
-        <div data-bind="html:roomName" class="RoomListRoom">
-        </div>
+
+    <div class="ChatRooms" data-bind="click:$root.ShowLobby">
+        <%=Localization.GetString("lobbyName.Text",LocalResourceFile) %>
     </div>
-    <!-- /ko -->
+    <div class="LobbyRoomList" style="display: none;" title="<%=Localization.GetString("lobbyTitle.Text",LocalResourceFile) %>">
+        <!-- ko foreach: rooms -->
+
+
+        <div data-bind="html:roomName,click:joinRoom" class="LobbyRoom">
+        </div>
+
+        <!-- /ko -->
+    </div>
 </div>
 
-<!-- TODO: style this list of rooms that a user is connected to, likely as tabs at the top of the page -->
 <div class="RoomList" id="userRoomList">
     <!-- ko foreach: rooms -->
     <div class="ChatRooms">
-        <div data-bind="html:roomName" class="RoomListRoom">
+        <div class="RoomListTab dnnClear">
+            <div data-bind="html:roomName,click:visible.toggle()" class="RoomListRoom">
+            </div>
+            <div data-bind="click:disconnectRoom" class="RoomClose"></div>
         </div>
-        <!-- the display of the rooms that a user is connected -->
 
-        <!-- TODO: need to KO this, make it repeatable for multiple rooms -->
-        <div class="srcWindow">
+        <!-- the display of the rooms that a user is connected -->
+        <div class="srcWindow" data-bind="visible:visible">
             <div id="messages" class="ChatWindow">
                 <!-- ko foreach: messages -->
                 <div data-bind="attr:{class:cssName}">
@@ -70,13 +78,13 @@
                     <div data-bind="html:authorName" class="UserListUser UserNotLoggedIn">
                     </div>
                     <!-- /ko -->
-
                 </div>
                 <!-- /ko -->
             </div>
 
-            <input type="text" id="msg" />
-            <input id="btnSubmit" class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" />
+            <input type="text" data-bind="value:newMessageText" class="msg" />
+            <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
+
             <div class="dnnRight usersOnline">
                 <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div id="currentCount" class="dnnRight">1</div>
             </div>

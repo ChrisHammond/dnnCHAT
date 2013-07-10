@@ -147,4 +147,11 @@
   <data name="StateReconnecting.Text" xml:space="preserve">
     <value>reconnecting to the chat...</value>
   </data>
+  <data name="lobbyName.Text" xml:space="preserve">
+    <value>Show Lobby</value>
+    <comment>.</comment>
+  </data>
+  <data name="lobbyTitle.Text" xml:space="preserve">
+    <value>Choose a Room to Join</value>
+  </data>
 </root>

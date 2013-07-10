@@ -18,6 +18,9 @@
 ' 
 */
 
+using System.Data;
+using DotNetNuke.Framework.Providers;
+
 namespace Christoc.Modules.DnnChat.Components
 {
     using System;
@@ -31,6 +34,27 @@ namespace Christoc.Modules.DnnChat.Components
      */
     public class RoomController
     {
+        private const string ProviderType = "data";
+        private readonly ProviderConfiguration _providerConfiguration = ProviderConfiguration.GetProviderConfiguration(ProviderType);
+        private readonly string _objectQualifier;
+        private readonly string _databaseOwner;
+
+        public RoomController()
+        {
+            var objProvider = (Provider)(_providerConfiguration.Providers[_providerConfiguration.DefaultProvider]);
+
+            _objectQualifier = objProvider.Attributes["objectQualifier"];
+            if (!string.IsNullOrEmpty(_objectQualifier) && _objectQualifier.EndsWith("_", StringComparison.Ordinal) == false)
+            {
+                _objectQualifier += "_";
+            }
+
+            _databaseOwner = objProvider.Attributes["databaseOwner"];
+            if (!string.IsNullOrEmpty(_databaseOwner) && _databaseOwner.EndsWith(".", StringComparison.Ordinal) == false)
+            {
+                _databaseOwner += ".";
+            }
+        }
         public void CreateRoom(Room r)
         {
             using (var ctx = DataContext.Instance())
@@ -78,6 +102,28 @@ namespace Christoc.Modules.DnnChat.Components
             }
 
             return t;
+        }
+
+        public Room GetRoom(string roomName)
+        {
+            Room r;
+            using (IDataContext ctx = DataContext.Instance())
+            {
+                var rooms = ctx.ExecuteQuery<Room>(CommandType.Text,
+                                                       string.Format(
+                                                           "select top 1 * from {0}{1}DnnChat_Rooms where RoomName = '{2}' and Enabled=1",
+                                                           _databaseOwner,
+                                                           _objectQualifier,
+                                                          roomName)).ToList();
+
+                if (rooms.Any())
+                {
+                    r = rooms[0];
+                }
+                else
+                    return null;
+            }
+            return r;
         }
 
         public void UpdateRoom(Room r)

@@ -14,7 +14,7 @@
     width: 80%;
 }
 
-#msg
+.msg
 {
     width: 70%;
 }
@@ -121,10 +121,17 @@
     padding: 5px;
 }
 
-
-.ActiveRoom {
-    display: inline;    
+.RoomListTab {
+    border: solid 1px #000;
+    width: 150px;
 }
-.InActiveRoom {
-    display: none;
+
+.RoomListRoom {
+    float: left;
+}
+.RoomClose {
+    background-image: url('../../images/close-icn.png');
+    width: 24px;
+    height: 24px;
+    float: right;
 }

@@ -1,8 +1,8 @@
-﻿//TODO: 7/9/2013 can't "Submit" messages
-//TODO: 7/9/2013 check to see if the room user lists work
-//TODO: 7/9/2013 no way to "join" rooms
-//TODO: 7/9/2013 no way to "leave" rooms
-//TODO: 7/9/2013 no way to "switch" rooms
+﻿//TODO: 7/9/2013 check to see if the room user lists work
+//TODO: 7/10/2013   messages aren't going to the proper rooms
+//TODO: 7/10/2013   clients aren't getting reconnected to multiple rooms
+//TODO: 7/10/2013   When you Join a room, the existing Room doesn't go away
+//TODO: 7/10/2013   The Room tabs aren't grouped together
 
 //TODO: the connection fails with websockets and no fall back
 //TODO: messages aren't targetting a specific room id (div/guid)
@@ -98,7 +98,17 @@ function DnnChat($, ko, settings) {
 
     //used for the list of rooms
     var roomModel = {
-        rooms: ko.observableArray([])
+        rooms: ko.observableArray([]),
+        ShowLobby: function () {
+            $(".LobbyRoomList").dialog({
+                width:'600px',
+                modal: true
+                , dialogClass: "dnnFormPopup"
+            });
+        },
+        HideLobby: function () {
+        $(".LobbyRoomList").hide();
+    }
     };
 
     //used to manage which rooms a user is in
@@ -110,6 +120,7 @@ function DnnChat($, ko, settings) {
 
     //Room mapping function
     function Room(r) {
+        alert('room creation:' + r.RoomName);
         this.roomId = r.RoomId;
         this.roomName = r.RoomName;
         this.roomDescription = r.RoomDescription;
@@ -124,7 +135,57 @@ function DnnChat($, ko, settings) {
         this.addConnectionRecord = function (cr) {
             this.connectionRecords.push(cr);
         }.bind(this);
+        
+        this.removeConnectionRecords = function() {
+            this.connectionRecords.removeAll();
+        }
+        
+        this.visible = ko.observable(true);
 
+        this.newMessageText = ko.observable("");
+
+        this.sendMessage = function() {
+
+            //remove all HTML tags first for safety
+            var msgSend = $.trim(this.newMessageText().replace(/(<([^>]+)>)/ig, ""));
+
+            //make sure the chat string isn't empty
+            if (msgSend != '') {
+
+                // Call the chat method on the server
+                if ($.connection.hub.state === $.connection.connectionState.connected) {
+                    //console.log("connected");
+                    chatHub.server.send(msgSend);
+                    //clear the textbox for the next message
+                    this.newMessageText('');
+
+                    showStatus(stateConnected);
+
+                } else if ($.connection.hub.state === $.connection.connectionState.reconnecting) {
+
+                    chatHub.state.moduleid = moduleid;
+                    chatHub.state.userid = userid;
+                    chatHub.state.username = username;
+
+                    //start the connection again -should handle this better
+                    showStatus(sendMessageReconnecting);
+                }
+            }
+        };
+
+        this.disconnectRoom = function () {
+            //TODO: disconnect a room
+            alert('disconnect');
+        };
+
+        this.joinRoom = function() {
+            //TODO: make sure the room isn't already part of our list
+            //TODO: we need to push the room to the userRoomModel
+            chatHub.server.getRoomInfo(this.roomId, moduleid);
+            //TODO: set the current room as visible
+        };
+        
+        //TODO: create an observable for Unread messages and Mentions
     }
 
     function findRoom(rId) {
@@ -134,7 +195,13 @@ function DnnChat($, ko, settings) {
 
     }
 
-    var btnSubmit = $("#btnSubmit");
+    ko.observable.fn.toggle = function () {
+        var obs = this;
+        return function () {
+            obs(!obs());
+        };
+    };
+    
     var chatHub = $.connection.chatHub;
     $.connection.hub.logging = false;
 
@@ -143,11 +210,9 @@ function DnnChat($, ko, settings) {
     chatHub.state.userid = userid;
     chatHub.state.username = username;
     chatHub.state.startMessage = startmessage;
-
-
+    
     // Declare a function to actually create a message on the chat hub so the server can invoke it
     chatHub.client.newMessage = function (data) {
-        alert('new message');
         var m = new Message(data);
        
         //lookup the proper ROOM in the array and push a message to it
@@ -215,38 +280,8 @@ function DnnChat($, ko, settings) {
     //wire up the click handler for the button after the connection starts
     this.init = function (element) {
         $.connection.hub.start().done(function () {
-
-            btnSubmit.click(function () {
-
-                //remove all HTML tags first for safety
-                var msgSend = $.trim($('#msg').val().replace(/(<([^>]+)>)/ig, ""));
-
-                //make sure the chat string isn't empty
-                if (msgSend != '') {
-
-                    // Call the chat method on the server
-                    if ($.connection.hub.state === $.connection.connectionState.connected) {
-                        //console.log("connected");
-                        chatHub.server.send(msgSend);
-                        //clear the textbox for the next message
-                        $('#msg').val('');
-
-                        showStatus(stateConnected);
-
-                    } else if ($.connection.hub.state === $.connection.connectionState.reconnecting) {
-
-                        chatHub.state.moduleid = moduleid;
-                        chatHub.state.userid = userid;
-                        chatHub.state.username = username;
-
-                        //start the connection again -should handle this better
-                        showStatus(sendMessageReconnecting);
-
-                        //clear the textbox for the next message
-                        //$('#msg').val('');
-                    }
-                }
-            });
+            //TODO: do anything here?
+            //btnSubmit.click();
         });
     };
 
@@ -290,7 +325,6 @@ function DnnChat($, ko, settings) {
         $.each(allRooms, function (i, item) {
             var r = new Room(item);
             roomModel.rooms.push(r);
-            //TODO: wire up the view KO for roomModel and connect to the rooms that this user should be connected to
         });
 
         //usersViewModel.connectionRecords.removeAll();
@@ -299,10 +333,16 @@ function DnnChat($, ko, settings) {
             var r = new Room(item);
             userRoomModel.rooms.push(r);
             chatHub.server.joinRoom(r.roomId, moduleid);
-            //TODO: wire up the view KO for userRoomModel and connect to the rooms that this user should be connected to
         });
 
         chatHub.state.startMessage = "";
+    };
+
+    chatHub.client.joinRoom = function(item) {
+        var r = new Room(item);
+        alert('add room to userRoomModel:' + r.roomId);
+        userRoomModel.rooms.push(r);
+        chatHub.server.joinRoom(r.roomId, moduleid);
     };
 
     //this method get's called from the Hub when you update your name using the /name SOMETHING call in the text window
@@ -311,10 +351,11 @@ function DnnChat($, ko, settings) {
     };
 
     //handle the return/enter key press within the module (but not within other modules)
-    $("#msg").keypress(function (e) {
+    //TODO: handle keypress for Enter/Return
+    $(".msg").keypress(function (e) {
         if (e.which == 13) {
             e.preventDefault();
-            btnSubmit.click();
+            //btnSubmit.click();
         }
     });
 
@@ -362,15 +403,15 @@ function DnnChat($, ko, settings) {
 
     //take all the users and put them in the view model
     chatHub.client.updateUserList = function (data, roomId) {
-        usersViewModel.connectionRecords.removeAll();
-
+        alert(roomId);
         var curRoom = findRoom(roomId);
-
-        if (curRoom != 'undefined') {
+        alert(curRoom);
+        if (curRoom) {
+            curRoom.removeConnectionRecords();
             $.each(data, function (i, item) {
                 //TODO: figure out how to push to a specific Room's connection records
                 var cr = new ConnectionRecord(item);
-
+                
                 //lookup the proper ROOM in the array and push the connection to it
                 curRoom.connectionRecords.push(cr);
 
@@ -386,6 +427,8 @@ function DnnChat($, ko, settings) {
         $('#currentCount').text(data.length);
     };
 
+    //TODO: handle these click events with knockout
+
     //TODO: userlist should be per room
     $('#userList').on('click', '.UserListUser', function () {
         $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
@@ -396,12 +439,13 @@ function DnnChat($, ko, settings) {
         $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
     });
 
+
     ko.applyBindings(userRoomModel, document.getElementById('userRoomList'));
 
     //ko.applyBindings(userRoomModel.messageModel, document.getElementById('messages'));
     //ko.applyBindings(userRoomModel.usersViewModel, document.getElementById('userList'));
 
-    //ko.applyBindings(roomModel, document.getElementById('roomList'));
+    ko.applyBindings(roomModel, document.getElementById('roomList'));
 
 
     function updateUnread(mentioned) {

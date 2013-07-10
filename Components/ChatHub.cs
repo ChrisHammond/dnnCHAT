@@ -230,9 +230,6 @@ namespace Christoc.Modules.DnnChat.Components
         //TODO: on connection, reload rooms for user?
         public Task Join()
         {
-            //connect user to the default room
-            Groups.Add(Context.ConnectionId, DefaultRoomId.ToString());
-
             //TODO: reconnect to all previous rooms
             //get list of previously connected (not departed) rooms
             var crrc = new ConnectionRecordRoomController();
@@ -243,7 +240,7 @@ namespace Christoc.Modules.DnnChat.Components
 
             if (Convert.ToInt32(Clients.Caller.userid) > 0)
             {
-               myRooms = crrc.GetConnectionRecordRoomsByUserId((int)Clients.Caller.userid);
+                myRooms = crrc.GetConnectionRecordRoomsByUserId((int)Clients.Caller.userid);
             }
 
 
@@ -279,10 +276,11 @@ namespace Christoc.Modules.DnnChat.Components
 
             var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
 
+            //TODO: handle reconnections
             //if the startMessage is empty, that means the user is a reconnection
 
-            if (Clients.Caller.startMessage != string.Empty)
-            {
+            //if (Clients.Caller.startMessage != string.Empty)
+            //{
                 //lookup client room connection record, if there don't add
                 var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
 
@@ -300,10 +298,11 @@ namespace Christoc.Modules.DnnChat.Components
                     crrc.CreateConnectionRecordRoom(crr);
                 }
 
+                Groups.Add(Context.ConnectionId, roomId.ToString());
+
                 //populate history for all previous rooms
                 RestoreHistory(roomId);
 
-                //TODO: target a room here
                 Clients.Caller.newMessageNoParse(new Message
                 {
                     AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
@@ -313,17 +312,49 @@ namespace Christoc.Modules.DnnChat.Components
                     MessageText = Clients.Caller.startMessage,
                     RoomId = roomId
                 });
-                Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName) });
-            }
+                Clients.All.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName, roomId) });
+            //}
 
-            return Clients.Group(roomId.ToString()).updateUserList(Users,roomId);
+            return Clients.Group(roomId.ToString()).updateUserList(Users, roomId);
         }
 
+        //This method is to populate/join room
+        public Task LeaveRoom(Guid roomId, int moduleId)
+        {
+            var crc = new ConnectionRecordController();
+            var crrc = new ConnectionRecordRoomController();
+            var rc = new RoomController();
+
+            var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
+
+            //lookup client room connection record, if there don't add
+            var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
+
+            if (cr != null)
+            {
+                cr.DepartedDate = DateTime.UtcNow;
+            }
+            crrc.UpdateConnectionRecord(cr);
+
+            //TODO: Remove the user from the RoomUserList
+
+            return Clients.Group(roomId.ToString()).updateUserList(Users, roomId);
+
+        }
+
+
+        public Task GetRoomInfo(Guid roomId, int moduleId)
+        {
+            var rc = new RoomController();
+            //Lookup existing Rooms
+            var r = rc.GetRoom(roomId,moduleId);
+
+            return Clients.Caller.joinRoom(r);
+        }
 
         /*
          * 	We need to grab the latest 50 chat messages for the channel, should make this configurable.
          */
-        //TODO: pull in history for specific room
         public void RestoreHistory(Guid roomId)
         {
             //TODO: make sure the user has access to this room
@@ -404,6 +435,64 @@ namespace Christoc.Modules.DnnChat.Components
             //    message = UpdateName(newName.Trim());
             //}
 
+            //TODO: allow command for Updating room description/properties
+            //http://www.irchelp.org/irchelp/changuide.html
+
+            //allow for Room creation/joining
+            if (message.ToLower().StartsWith("/join"))
+            {
+                string roomName = message.Remove(0, 5);
+                if (roomName.Length > 25)
+                {
+                    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("RoomNameTooLong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile) });
+                    return string.Empty;
+                }
+                //create room
+                else
+                {
+                    var rc = new RoomController();
+                    //Lookup existing Rooms
+                    var r = rc.GetRoom(roomName);
+                    int moduleId;
+                    //int.TryParse(Clients.Caller.moduleid, out moduleId);
+                    moduleId = Convert.ToInt32(Clients.Caller.moduleid);
+
+                    var userId = -1;
+                    if (Convert.ToInt32(Clients.Caller.userid) > 0)
+                    {
+                        userId = Convert.ToInt32(Clients.Caller.userid);
+                    }
+
+                    if (r != null)
+                    {
+                        //todo: anything to do here?
+                    }
+                    else
+                    {
+                        r = new Room
+                            {
+                                RoomId = Guid.NewGuid(),
+                                RoomName = roomName,
+                                RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text",
+                                                                     Localization.LocalSharedResourceFile),
+                                RoomDescription = Localization.GetString("DefaultRoomDescription.Text",
+                                                                         Localization.LocalSharedResourceFile),
+                                ModuleId = moduleId,
+                                CreatedDate = DateTime.UtcNow,
+                                CreatedByUserId = userId,
+                                LastUpdatedByUserId =  userId,
+                                LastUpdatedDate =  DateTime.UtcNow,
+                                Enabled = true
+
+                            };
+                        rc.CreateRoom(r);
+                    }
+
+                    //make a call to the client to add the room to their model, and join
+                    Clients.Caller.joinRoom(r);
+                }
+            }
+
             message = message.Replace("&nbsp;", " ").Replace("&nbsp", " ").Trim();
 
             //for name change, using starts with to see if they typed /nick in
@@ -428,6 +517,8 @@ namespace Christoc.Modules.DnnChat.Components
 
             return message;
         }
+
+
 
         //get IP address of the client
         //from: http://stackoverflow.com/questions/13889463/get-client-ip-address-in-self-hosted-signalr-hub

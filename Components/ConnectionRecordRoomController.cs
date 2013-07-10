@@ -65,20 +65,20 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        public void DeleteConnectionRecord(ConnectionRecordRoom r)
-        {
-            var t = GetConnectionRecordRoom(r.ConnectionRecordId, r.RoomId);
-            DeleteConnectionRecord(t);
-        }
+        //public void DeleteConnectionRecord(ConnectionRecordRoom r)
+        //{
+        //    var t = GetConnectionRecordRoom(r.ConnectionRecordId, r.RoomId);
+        //    DeleteConnectionRecord(t);
+        //}
 
-        public void DeleteConnectionRecord(ConnectionRecord t)
-        {
-            using (IDataContext ctx = DataContext.Instance())
-            {
-                var rep = ctx.GetRepository<ConnectionRecord>();
-                rep.Delete(t);
-            }
-        }
+        //public void DeleteConnectionRecord(ConnectionRecord t)
+        //{
+        //    using (IDataContext ctx = DataContext.Instance())
+        //    {
+        //        var rep = ctx.GetRepository<ConnectionRecord>();
+        //        rep.Delete(t);
+        //    }
+        //}
 
         //TODO: This fails if there is no record
         public IEnumerable<ConnectionRecordRoom> GetConnectionRecordRooms(int moduleId)
@@ -139,11 +139,11 @@ namespace Christoc.Modules.DnnChat.Components
             return t;
         }
 
-        public void UpdateConnectionRecord(ConnectionRecord t)
+        public void UpdateConnectionRecord(ConnectionRecordRoom t)
         {
             using (IDataContext ctx = DataContext.Instance())
             {
-                var rep = ctx.GetRepository<ConnectionRecord>();
+                var rep = ctx.GetRepository<ConnectionRecordRoom>();
                 rep.Update(t);
             }
         }
