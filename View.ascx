@@ -21,9 +21,9 @@
             stateReconnected:'<%=Localization.GetString("StateReconnected.Text",LocalResourceFile)%>',
             stateConnected:'<%=Localization.GetString("StateConnected.Text",LocalResourceFile)%>',
             stateDisconnected:'<%=Localization.GetString("StateDisconnected.Text",LocalResourceFile)%>',
-            emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>'
-            //,
-            //defaultRoomId:' = //DefaultRoomId ' //TODO: get default roomid from the settings
+            emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>',
+            alreadyInRoom:'<%=Localization.GetString("AlreadyInRoom.Text",LocalResourceFile)%>',
+            defaultRoomId:'<%=new Guid("78fbeba0-cc57-4cd4-9dde-8611c91f7b9c") %>'
         });
         md.init('#messages');
     });
@@ -38,11 +38,8 @@
     </div>
     <div class="LobbyRoomList" style="display: none;" title="<%=Localization.GetString("lobbyTitle.Text",LocalResourceFile) %>">
         <!-- ko foreach: rooms -->
-
-
         <div data-bind="html:roomName,click:joinRoom" class="LobbyRoom">
         </div>
-
         <!-- /ko -->
     </div>
 </div>
@@ -50,18 +47,24 @@
 <div class="RoomList" id="userRoomList">
     <!-- ko foreach: rooms -->
     <div class="ChatRooms">
-        <div class="RoomListTab dnnClear">
-            <div data-bind="html:roomName,click:visible.toggle()" class="RoomListRoom">
+        <div class="RoomListTab">
+            <div data-bind="html:roomName,click:setActiveRoom" class="RoomListRoom">
             </div>
             <div data-bind="click:disconnectRoom" class="RoomClose"></div>
         </div>
+    </div>
+    <!-- /ko -->
+</div>
+
+<div class="RoomContainer dnnClear" id="roomView">
+    <!-- ko foreach: rooms -->
 
         <!-- the display of the rooms that a user is connected -->
-        <div class="srcWindow" data-bind="visible:visible">
-            <div id="messages" class="ChatWindow">
+        <div class="srcWindow" data-bind="visible:showRoom">
+            <div class="ChatWindow">
                 <!-- ko foreach: messages -->
                 <div data-bind="attr:{class:cssName}">
-                    <div data-bind="html:authorName" class="MessageAuthor"></div>
+                    <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthor"></div>
                     <div data-bind="html:messageText" class="MessageText"></div>
                     <div data-bind="dateString: messageDate" class="MessageTime"></div>
                 </div>
@@ -91,9 +94,6 @@
             <div id="ChatStatus" class="chatStatus dnnClear">
             </div>
         </div>
-
-
-    </div>
     <!-- /ko -->
 </div>
 
