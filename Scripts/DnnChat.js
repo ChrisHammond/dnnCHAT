@@ -1,10 +1,11 @@
 ﻿//TODO: 7/11/2013   User Counts in Room isn't doing anything
 
 //TODO: 7/11/2013   Highlight the active Room
-//TODO: 7/11/2013   enter key doesn't submit messages
 //TODO: 7/11/2013   Welcome messages for Rooms aren't loading
 //TODO: 7/11/2013   If you "connect" you aren't reconnected to your previous rooms
-//TODO: 7/11/2013   On initial Load there's a user connect message firing for the TEST room
+//TODO: 7/13/2013   Auto scrolling doesn't work
+
+//TODO: 7/13/2013   if you've got any open connection records things go crazy (multiple connections to a room)
 
 //TODO: the connection fails with websockets and no fall back
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
@@ -74,6 +75,18 @@ function DnnChat($, ko, settings) {
                 //TODO: add a formatting option for the date
                 $(element).text(moment.utc(valueUnwrapped).local().format('h:mm:ss a'));
             }
+        }
+    };
+    
+    ko.bindingHandlers.enterKey = {
+        init: function (element, valueAccessor, allBindings, vm) {
+            ko.utils.registerEventHandler(element, "keyup", function (event) {
+                if (event.keyCode === 13) {
+                    ko.utils.triggerEvent(element, "change");
+                    valueAccessor().call(vm, vm);
+                }
+                return true;
+            });
         }
     };
 
@@ -160,6 +173,17 @@ function DnnChat($, ko, settings) {
         };
 
         //this.visible = ko.observable(true);
+
+
+        this.addOnEnter = function(event) {
+            var keyCode = (event.which ? event.which : event.keyCode);
+            alert(event.keyCode);
+            if (keyCode === 13) {
+                this.sendMessage();
+                return false;
+            }
+            return true;
+        };
 
         this.setActiveRoom = function () {
             userRoomModel.activeRoom(this.roomId);
@@ -280,6 +304,7 @@ function DnnChat($, ko, settings) {
 
         var m = new Message(data);
 
+//        alert('Message RoomId:' + m.roomId);
         var curRoom = findRoom(m.roomId);
         if (curRoom) {
             curRoom.addSystemMessage(m);

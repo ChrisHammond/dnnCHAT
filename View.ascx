@@ -85,7 +85,7 @@
                 <!-- /ko -->
             </div>
 
-            <input type="text" data-bind="value:newMessageText" class="msg" />
+            <input type="text" data-bind="value:newMessageText, enterKey: sendMessage" class="msg" />
             <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
 
             <div class="dnnRight usersOnline">
