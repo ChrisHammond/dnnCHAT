@@ -73,6 +73,21 @@ namespace Christoc.Modules.DnnChat.Components
         ///</summary>
         public string IpAddress { get; set; }
 
+        public ConnectionRecord()
+        {}
+
+        public ConnectionRecord(ConnectionRecord cr)
+        {
+            ConnectionRecordId = cr.ConnectionRecordId;
+            ConnectionId = cr.ConnectionId;
+            UserName = cr.UserName;
+            UserId = cr.UserId;
+            ModuleId = cr.ModuleId;
+            ConnectedDate = cr.ConnectedDate;
+            DisConnectedDate = cr.DisConnectedDate;
+            IpAddress = cr.IpAddress;
+        }
+
     }
 
 }

@@ -2,10 +2,13 @@
 
 //TODO: 7/11/2013   Highlight the active Room
 //TODO: 7/11/2013   Welcome messages for Rooms aren't loading
-//TODO: 7/11/2013   If you "connect" you aren't reconnected to your previous rooms
 //TODO: 7/13/2013   Auto scrolling doesn't work
 
-//TODO: 7/13/2013   if you've got any open connection records things go crazy (multiple connections to a room)
+//TODO: 7/23/2013   Check to see if Room creation works
+
+//TODO: 7/23/2013   Keep track of Focus for each tab and show counter
+
+//TODO: 7/23/2013   enter key binding not working for anonymous users...
 
 //TODO: the connection fails with websockets and no fall back
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
@@ -77,10 +80,10 @@ function DnnChat($, ko, settings) {
             }
         }
     };
-    
+
     ko.bindingHandlers.enterKey = {
         init: function (element, valueAccessor, allBindings, vm) {
-            ko.utils.registerEventHandler(element, "keyup", function (event) {
+            ko.utils.registerEventHandler(element, "keydown", function (event) {
                 if (event.keyCode === 13) {
                     ko.utils.triggerEvent(element, "change");
                     valueAccessor().call(vm, vm);
@@ -110,12 +113,12 @@ function DnnChat($, ko, settings) {
         }
         this.targetMessageAuthor = function () {
             //$('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
-            alert(m.RoomId);
+
             var parentRoom = findRoom(m.roomId);
             if (parentRoom) {
                 alert('parent text: ' + parentRoom.newMessageText());
             }
-            
+
             //parent.newMessageText().(parent.newMessageText() + ' @' + this.authorName + ' ').focus();
         };
     }
@@ -160,7 +163,7 @@ function DnnChat($, ko, settings) {
         this.addSystemMessage = function (m) {
             this.messages.push(m);
         }.bind(this);
-        
+
         this.addMessage = function (m) {
             this.messages.push(replaceMessage(m));
         }.bind(this);
@@ -173,11 +176,9 @@ function DnnChat($, ko, settings) {
         };
 
         //this.visible = ko.observable(true);
-
-
-        this.addOnEnter = function(event) {
+        
+        this.addOnEnter = function (event) {
             var keyCode = (event.which ? event.which : event.keyCode);
-            alert(event.keyCode);
             if (keyCode === 13) {
                 this.sendMessage();
                 return false;
@@ -271,7 +272,7 @@ function DnnChat($, ko, settings) {
             //If the room isn't found display an alert
             //TODO: localize this
             alert('Message received for a room you aren\'t connected to');
-        }   
+        }
         //Original messageModel pushing
         //messageModel.messages.push(replaceMessage(m));
 
@@ -303,8 +304,6 @@ function DnnChat($, ko, settings) {
     chatHub.client.newMessageNoParse = function (data) {
 
         var m = new Message(data);
-
-//        alert('Message RoomId:' + m.roomId);
         var curRoom = findRoom(m.roomId);
         if (curRoom) {
             curRoom.addSystemMessage(m);
@@ -312,7 +311,6 @@ function DnnChat($, ko, settings) {
             //If the room isn't found display an alert
             //TODO: localize this
             alert('Message received for a room you aren\'t connected to: newMessageNoParse');
-            alert('RoomId:' + m.roomId + ' Message: ' + m.messageText);
         }
 
         //messageModel.messages.push(m);
@@ -393,25 +391,24 @@ function DnnChat($, ko, settings) {
         chatHub.state.startMessage = "";
     };
 
+    chatHub.client.messageJoin = function (item) {
+        var r = new Room(item);
+        r.joinRoom();
+    };
+
     chatHub.client.joinRoom = function (item) {
         var r = new Room(item);
-        userRoomModel.rooms.push(r);
-        chatHub.server.joinRoom(r.roomId, moduleid);
+        var foundRoom = findRoom(r.roomId);
+        if (!foundRoom) {
+            userRoomModel.rooms.push(r);
+            chatHub.server.joinRoom(r.roomId, moduleid);
+        }
     };
 
     //this method get's called from the Hub when you update your name using the /name SOMETHING call in the text window
     chatHub.client.updateName = function (newName) {
         chatHub.state.username = newName;
     };
-
-    //handle the return/enter key press within the module (but not within other modules)
-    //TODO: handle keypress for Enter/Return
-    $(".msg").keypress(function (e) {
-        if (e.which == 13) {
-            e.preventDefault();
-            //btnSubmit.click();
-        }
-    });
 
     var emoticons = {
         ':-)': 'smiling.png',
@@ -462,6 +459,7 @@ function DnnChat($, ko, settings) {
             curRoom.removeConnectionRecords();
             $.each(data, function (i, item) {
                 //TODO: figure out how to push to a specific Room's connection records
+                //TODO: change to ConnectionRecordRoom
                 var cr = new ConnectionRecord(item);
 
                 //lookup the proper ROOM in the array and push the connection to it

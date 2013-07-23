@@ -123,6 +123,7 @@
     <Compile Include="Components\ConnectionRecord.cs" />
     <Compile Include="Components\Message.cs" />
     <Compile Include="Components\RouteMapper.cs" />
+    <Compile Include="Components\UserListRecords.cs" />
     <Compile Include="DnnChatModuleBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

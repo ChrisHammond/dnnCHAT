@@ -121,7 +121,7 @@ namespace Christoc.Modules.DnnChat.Components
                 //TODO: update this SQL to only choose the LATEST connectionrecord, not all
                 var connectionRecordRooms = ctx.ExecuteQuery<Room>(CommandType.Text,
                                                        string.Format(
-                                                           "select r.* from {0}{1}DnnChat_ConnectionRecordRooms crr join {0}{1}DnnChat_ConnectionRecords cr on (cr.ConnectionRecordId = crr.ConnectionRecordId)" +
+                                                           "select distinct r.* from {0}{1}DnnChat_ConnectionRecordRooms crr join {0}{1}DnnChat_ConnectionRecords cr on (cr.ConnectionRecordId = crr.ConnectionRecordId)" +
                                                            " join {0}{1}DnnChat_Rooms r on (r.RoomId = crr.RoomId)" +
                                                            " where cr.UserId = '{2}' and crr.DepartedDate is null",
                                                            _databaseOwner,

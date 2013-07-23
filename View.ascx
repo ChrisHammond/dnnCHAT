@@ -47,8 +47,8 @@
 <div class="RoomList" id="userRoomList">
     <!-- ko foreach: rooms -->
     <div class="ChatRooms">
-        <div class="RoomListTab">
-            <div data-bind="html:roomName,click:setActiveRoom" class="RoomListRoom">
+        <div class="RoomListTab" data-bind="id:roomName,click:setActiveRoom">
+            <div data-bind="html:roomName" class="RoomListRoom">
             </div>
             <div data-bind="click:disconnectRoom" class="RoomClose"></div>
         </div>
@@ -58,7 +58,6 @@
 
 <div class="RoomContainer dnnClear" id="roomView">
     <!-- ko foreach: rooms -->
-
         <!-- the display of the rooms that a user is connected -->
         <div class="srcWindow" data-bind="visible:showRoom">
             <div class="ChatWindow">
@@ -96,6 +95,5 @@
         </div>
     <!-- /ko -->
 </div>
-
 
 <div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>

@@ -33,10 +33,10 @@ namespace Christoc.Modules.DnnChat.Components
 
         //TODO: we need to keep a list of users PER ROOM
         //a list of connectionrecords to keep track of users connected
-        private static readonly List<ConnectionRecord> Users = new List<ConnectionRecord>();
+        private static readonly List<UserListRecords> Users = new List<UserListRecords>();
 
         //TODO: set the default room based on? ModuleId setting?
-        private static readonly Guid DefaultRoomId = new Guid("78fbeba0-cc57-4cd4-9dde-8611c91f7b9c"); 
+        private static readonly Guid DefaultRoomId = new Guid("78fbeba0-cc57-4cd4-9dde-8611c91f7b9c");
 
         /*
          * This method is used to send messages to all connected clients.
@@ -65,20 +65,19 @@ namespace Christoc.Modules.DnnChat.Components
                 // parse message before use
                 if (Clients.Caller.username != null && Clients.Caller.username.Trim() != "phantom")
                 {
-                    var parsedMessage = ParseMessage(message);
+                    var parsedMessage = ParseMessage(message,roomId);
                     if (parsedMessage != string.Empty)
                     {
-
                         int moduleId;
                         //int.TryParse(Clients.Caller.moduleid, out moduleId);
                         moduleId = Convert.ToInt32(Clients.Caller.moduleid);
 
-                        var outputMessage = ParseMessage(message.Trim());
+                        
                         var m = new Message
                                     {
                                         ConnectionId = Context.ConnectionId,
                                         MessageDate = DateTime.UtcNow,
-                                        MessageText = outputMessage,
+                                        MessageText = parsedMessage,
                                         AuthorName = Clients.Caller.username,
                                         ModuleId = moduleId,
                                         RoomId = roomId
@@ -143,34 +142,31 @@ namespace Christoc.Modules.DnnChat.Components
             return base.OnDisconnected();
         }
 
-        
+
         private void DisconnectUser(string connectionId)
         {
+
             //TODO: remove user from all rooms
+            var crc = new ConnectionRecordController();
+
             var id = connectionId;
+            var cr = crc.GetConnectionRecordByConnectionId(id);
+            var crId = cr.ConnectionRecordId;
+
             if (id == null)
                 return;
-            var removeCrr = Users.Find(c => (c.ConnectionId == id));
-            if (removeCrr != null)
+            var roomList = Users.FindAll(c => (c.Id == crId));
+
+            foreach (UserListRecords rr in roomList)
             {
-                Users.Remove(removeCrr);
-            }
-
-            //todo: remove this next line when looping is enabled
-
-            var roomId = DefaultRoomId;
-
-            var crc = new ConnectionRecordController();
-            var cr = crc.GetConnectionRecordByConnectionId(id);
-            if (cr != null)
-            {
+                Users.Remove(rr);
                 Clients.Others.removeUserFromList(cr);
                 cr.DisConnectedDate = DateTime.UtcNow;
                 crc.UpdateConnectionRecord(cr);
 
                 //TODO: handle ROOMID, not currently using below
-                Clients.Group(roomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName), RoomId =  roomId});
-                Clients.Group(roomId.ToString()).updateUserList(Users);
+                Clients.Group(rr.RoomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName), RoomId = rr.RoomId });
+                Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(c => (c.RoomId == rr.RoomId)));
             }
         }
 
@@ -207,7 +203,7 @@ namespace Christoc.Modules.DnnChat.Components
             {
 
                 c.UserName = username;
-                Users.Add(c);
+                //Users.Add(c);
                 crc.UpdateConnectionRecord(c);
             }
             else
@@ -222,7 +218,7 @@ namespace Christoc.Modules.DnnChat.Components
                     IpAddress = GetIpAddress()
                 };
 
-                Users.Add(c);
+                //Users.Add(c);
                 crc.CreateConnectionRecord(c);
             }
             //store the record for the connection
@@ -232,14 +228,16 @@ namespace Christoc.Modules.DnnChat.Components
         //TODO: on connection, reload rooms for user?
         public Task Join()
         {
+            int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
+
             //TODO: reconnect to all previous rooms
             //get list of previously connected (not departed) rooms
             var crrc = new ConnectionRecordRoomController();
             var rc = new RoomController();
-            int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
 
             IEnumerable<Room> myRooms = null;
 
+            //TODO: don't allow connecting to the same room twice
             if (Convert.ToInt32(Clients.Caller.userid) > 0)
             {
                 myRooms = crrc.GetConnectionRecordRoomsByUserId((int)Clients.Caller.userid);
@@ -270,6 +268,7 @@ namespace Christoc.Modules.DnnChat.Components
         //This method is to populate/join room
         public Task JoinRoom(Guid roomId, int moduleId)
         {
+            //TODO: don't allow connecting to the same room twice
             var crc = new ConnectionRecordController();
             var crrc = new ConnectionRecordRoomController();
             var rc = new RoomController();
@@ -282,43 +281,46 @@ namespace Christoc.Modules.DnnChat.Components
             //if the startMessage is empty, that means the user is a reconnection
 
             //TODO: handle start messages
-            //if (Clients.Caller.startMessage != string.Empty)
-            //{
-                //lookup client room connection record, if there don't add
-                var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
+            //lookup client room connection record, if there don't add
+            var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
 
-                if (cr == null)
+            if (cr == null)
+            {
+                var crr = new ConnectionRecordRoom
                 {
-                    var crr = new ConnectionRecordRoom
-                    {
-                        ConnectionRecordId = c.ConnectionRecordId,
-                        JoinDate = DateTime.UtcNow,
-                        DepartedDate = null,
-                        RoomId = roomId
-                    };
-
-                    //join the room
-                    crrc.CreateConnectionRecordRoom(crr);
-                }
-
-                Groups.Add(Context.ConnectionId, roomId.ToString());
-
-                //populate history for all previous rooms
-                RestoreHistory(roomId);
-
-                Clients.Caller.newMessageNoParse(new Message
-                {
-                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                    ConnectionId = "0",
-                    MessageDate = DateTime.UtcNow,
-                    MessageId = -1,
-                    MessageText = Clients.Caller.startMessage,
+                    ConnectionRecordId = c.ConnectionRecordId,
+                    JoinDate = DateTime.UtcNow,
+                    DepartedDate = null,
                     RoomId = roomId
-                });
-                Clients.Group(roomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName), RoomId = roomId });
-            //}
+                };
 
-            return Clients.Group(roomId.ToString()).updateUserList(Users, roomId);
+                //join the room
+                crrc.CreateConnectionRecordRoom(crr);
+
+                var ulr = new UserListRecords(c, crr);
+
+                //add the user to the List of users that will be later filtered by RoomId
+                Users.Add(ulr);
+            }
+
+            Groups.Add(Context.ConnectionId, roomId.ToString());
+
+            //populate history for all previous rooms
+            RestoreHistory(roomId);
+
+            //lookup the Room to get the Welcome Message
+            Clients.Caller.newMessageNoParse(new Message
+            {
+                AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                ConnectionId = "0",
+                MessageDate = DateTime.UtcNow,
+                MessageId = -1,
+                MessageText = r.RoomWelcome,
+                RoomId = roomId
+            });
+            Clients.Group(roomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName), RoomId = roomId });
+
+            return Clients.Group(roomId.ToString()).updateUserList(Users.FindAll(uc => (uc.RoomId == r.RoomId)), roomId);
         }
 
         //This method is to populate/join room
@@ -343,7 +345,7 @@ namespace Christoc.Modules.DnnChat.Components
             Groups.Remove(Context.ConnectionId, roomId.ToString());
             //TODO: Remove the user from the RoomUserList
 
-            return Clients.Group(roomId.ToString()).updateUserList(Users, roomId);
+            return Clients.Group(roomId.ToString()).updateUserList(Users.FindAll(cc => (cc.RoomId == roomId)), roomId);
 
         }
 
@@ -352,8 +354,7 @@ namespace Christoc.Modules.DnnChat.Components
         {
             var rc = new RoomController();
             //Lookup existing Rooms
-            var r = rc.GetRoom(roomId,moduleId);
-
+            var r = rc.GetRoom(roomId, moduleId);
             return Clients.Caller.joinRoom(r);
         }
 
@@ -394,32 +395,51 @@ namespace Christoc.Modules.DnnChat.Components
          */
         public string UpdateName(string userName)
         {
-            var id = Context.ConnectionId;
-            //we need to remove the original CR before updating it in the users list
-            var removeCrr = Users.Find(c => (c.ConnectionId == id));
-            if (removeCrr != null)
-            {
-                //handle removing the users
-                Users.Remove(removeCrr);
-            }
-
             var crc = new ConnectionRecordController();
+            var id = Context.ConnectionId;
             var cr = crc.GetConnectionRecordByConnectionId(id);
-            if (cr != null)
-            {
-                var originalName = cr.UserName;
-                //set the new name and save
-                cr.UserName = userName;
-                crc.UpdateConnectionRecord(cr);
-                Users.Add(cr);
-                Clients.Caller.UpdateName(userName);
-                var nameChange = String.Format(Localization.GetString("NameChange.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), originalName,
-                           cr.UserName);
+            var crId = cr.ConnectionRecordId;
 
-                //TODO: how should we handle this? update every room that the user is connected to
-                Clients.All.updateUserList(Users);
-                return nameChange;
+            //we need to remove the original CR before updating it in the users list
+
+            //TODO: this isn't the right search
+            var roomList = Users.FindAll(c => (c.ConnectionRecordId == crId));
+
+            foreach (UserListRecords rr in roomList)
+            {
+                //todo: it doesn't look like the Remove happens on the client side
+                Users.Remove(rr);
+                var originalName = rr.UserName;
+                //set the new name on both record objects
+                rr.UserName = cr.UserName = userName;
+                
+                //we need to update with the connectionrecord not UserListRecord
+                crc.UpdateConnectionRecord(cr);
+
+                Users.Add(rr);
+
+                var nameChange = String.Format(Localization.GetString("NameChange.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), originalName,
+           rr.UserName);
+                Clients.All.updateUserList(Users, rr.RoomId);
+
+                var m = new Message
+                {
+                    ConnectionId = Context.ConnectionId,
+                    MessageDate = DateTime.UtcNow,
+                    MessageText = nameChange,
+                    AuthorName = originalName,
+                    ModuleId = rr.ModuleId,
+                    RoomId = rr.RoomId
+                };
+                new MessageController().CreateMessage(m);
+                Clients.Group(rr.RoomId.ToString()).newMessage(m);
+
+                //update message for all rooms 
             }
+
+            Clients.Caller.updateName(userName);
+
+
             //else return nothing
             return string.Empty;
         }
@@ -427,7 +447,7 @@ namespace Christoc.Modules.DnnChat.Components
         //TODO: Create method for leaving one room
 
         //check to see if there is a string in the message that is too many characters put together
-        private string ParseMessage(string message)
+        private string ParseMessage(string message, Guid roomId)
         {
             //not using REGEX for now, maybe in the future
             //Regex nameChangeRegex = new Regex(@"/nick[^/]+", RegexOptions.IgnoreCase);
@@ -447,56 +467,78 @@ namespace Christoc.Modules.DnnChat.Components
             //allow for Room creation/joining
             if (message.ToLower().StartsWith("/join"))
             {
-                string roomName = message.Remove(0, 5);
-                if (roomName.Length > 25)
+                var userId = -1;
+                if (Convert.ToInt32(Clients.Caller.userid) > 0)
                 {
-                    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("RoomNameTooLong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile) });
-                    return string.Empty;
+                    userId = Convert.ToInt32(Clients.Caller.userid);
                 }
-                //create room
-                else
+
+                if (userId > 0)
                 {
-                    var rc = new RoomController();
-                    //Lookup existing Rooms
-                    var r = rc.GetRoom(roomName);
-                    int moduleId;
-                    //int.TryParse(Clients.Caller.moduleid, out moduleId);
-                    moduleId = Convert.ToInt32(Clients.Caller.moduleid);
-
-                    var userId = -1;
-                    if (Convert.ToInt32(Clients.Caller.userid) > 0)
+                    string roomName = message.Remove(0, 5);
+                    if (roomName.Length > 25)
                     {
-                        userId = Convert.ToInt32(Clients.Caller.userid);
+                        Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("RoomNameTooLong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), RoomId = roomId });
+                        return string.Empty;
                     }
-
-                    if (r != null)
-                    {
-                        //todo: anything to do here?
-                    }
+                    //create room
                     else
                     {
-                        r = new Room
+                        var rc = new RoomController();
+                        //Lookup existing Rooms
+                        var r = rc.GetRoom(roomName);
+                        //int.TryParse(Clients.Caller.moduleid, out moduleId);
+                        int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
+
+
+                        if (r != null)
+                        {
+                            //todo: anything to do here? the room exists already
+                            if (r.Enabled == false)
                             {
-                                RoomId = Guid.NewGuid(),
-                                RoomName = roomName,
-                                RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text",
-                                                                     Localization.LocalSharedResourceFile),
-                                RoomDescription = Localization.GetString("DefaultRoomDescription.Text",
+                                //what if the room has been disabled?
+                            }
+
+                        }
+                        else
+                        {
+                            r = new Room
+                                {
+                                    RoomId = Guid.NewGuid(),
+                                    RoomName = roomName,
+                                    RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text",
                                                                          Localization.LocalSharedResourceFile),
-                                ModuleId = moduleId,
-                                CreatedDate = DateTime.UtcNow,
-                                CreatedByUserId = userId,
-                                LastUpdatedByUserId =  userId,
-                                LastUpdatedDate =  DateTime.UtcNow,
-                                Enabled = true
+                                    RoomDescription = Localization.GetString("DefaultRoomDescription.Text",
+                                                                             Localization.LocalSharedResourceFile),
+                                    ModuleId = moduleId,
+                                    CreatedDate = DateTime.UtcNow,
+                                    CreatedByUserId = userId,
+                                    LastUpdatedByUserId = userId,
+                                    LastUpdatedDate = DateTime.UtcNow,
+                                    Enabled = true
 
-                            };
-                        rc.CreateRoom(r);
+                                };
+                            rc.CreateRoom(r);
+                        }
+
+                        //make a call to the client to add the room to their model, and join
+                        Clients.Caller.messageJoin(r);
                     }
-
-                    //make a call to the client to add the room to their model, and join
-                    Clients.Caller.joinRoom(r);
                 }
+                else
+                {
+                    // if there is no username for the user don't let them post
+                    var m = new Message
+                    {
+                        ConnectionId = Context.ConnectionId,
+                        MessageDate = DateTime.UtcNow,
+                        MessageText = Localization.GetString("AnonymousJoinDenied.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                        AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                        RoomId = roomId
+                    };
+                    Clients.Caller.newMessage(m);
+                }
+                message = string.Empty;
             }
 
             message = message.Replace("&nbsp;", " ").Replace("&nbsp", " ").Trim();
@@ -507,10 +549,9 @@ namespace Christoc.Modules.DnnChat.Components
                 string newName = message.Remove(0, 5);
                 if (newName.Length > 25)
                 {
-                    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("NameToolong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile) });
+                    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("NameToolong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), RoomId = roomId });
                     newName = newName.Remove(25);
                 }
-
 
                 if (newName.Trim().Length > 0)
                     message = UpdateName(newName.Trim());

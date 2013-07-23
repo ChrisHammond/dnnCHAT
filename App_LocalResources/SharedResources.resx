@@ -126,6 +126,9 @@
   <data name="/WHO.Text" xml:space="preserve">
     <value>The list of users is on the right side of the page</value>
   </data>
+  <data name="AnonymousJoinDenied.Text" xml:space="preserve">
+    <value>Anonymous users are not allowed to Join rooms. Please register/login to proceed.</value>
+  </data>
   <data name="AnonymousUser.Text" xml:space="preserve">
     <value>Anonymous{0}</value>
   </data>
