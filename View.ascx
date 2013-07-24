@@ -23,6 +23,7 @@
             stateDisconnected:'<%=Localization.GetString("StateDisconnected.Text",LocalResourceFile)%>',
             emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>',
             alreadyInRoom:'<%=Localization.GetString("AlreadyInRoom.Text",LocalResourceFile)%>',
+            anonUsersRooms:'<%=Localization.GetString("AnonymousJoinDenied.Text",LocalResourceFile)%>',
             defaultRoomId:'<%=new Guid("78fbeba0-cc57-4cd4-9dde-8611c91f7b9c") %>'
         });
         md.init('#messages');
@@ -50,6 +51,9 @@
         <div class="RoomListTab" data-bind="id:roomName,click:setActiveRoom">
             <div data-bind="html:roomName" class="RoomListRoom">
             </div>
+            <div data-bind="html:formatCount(awayMessageCount()),visible:(showRoom()!=true && awayMessageCount()>0)" class="roomAwayMessageCount"></div>
+            <div data-bind="html:formatCount(awayMessageCount()),visible:(showRoom()!=true && awayMentionCount()>0)" class="roomAwayMentionCount"></div>
+
             <div data-bind="click:disconnectRoom" class="RoomClose"></div>
         </div>
     </div>

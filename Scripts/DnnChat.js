@@ -6,8 +6,6 @@
 
 //TODO: 7/23/2013   Check to see if Room creation works
 
-//TODO: 7/23/2013   Keep track of Focus for each tab and show counter
-
 //TODO: 7/23/2013   enter key binding not working for anonymous users...
 
 //TODO: the connection fails with websockets and no fall back
@@ -26,6 +24,7 @@ function DnnChat($, ko, settings) {
     var stateConnected = settings.stateConnected;
     var stateDisconnected = settings.stateDisconnected;
     var alreadyInRoom = settings.alreadyInRoom;
+    var anonUsersRooms = settings.anonUsersRooms;
     var defaultRoomId = settings.defaultRoomId;
 
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
@@ -148,6 +147,7 @@ function DnnChat($, ko, settings) {
         , activeRoom: ko.observable(activeRoomId)
     };
 
+
     //Room mapping function
     function Room(r) {
 
@@ -159,6 +159,19 @@ function DnnChat($, ko, settings) {
         this.messages = ko.observableArray([]);
         this.connectionRecords = ko.observableArray([]);
 
+        this.awayMessageCount = ko.observable(0);
+        this.awayMentionCount = ko.observable(0);
+
+        this.formattedAwayMessageCount = ko.computed(function () {
+            return "(" + this.awayMessageCount + ")";
+        }, this);
+
+        this.formattedAwayMentionCount = ko.computed(function () {
+            return '(' + this.awayMentionCount + ')';
+        }, this);
+
+
+
         //add a message without parsing
         this.addSystemMessage = function (m) {
             this.messages.push(m);
@@ -166,7 +179,18 @@ function DnnChat($, ko, settings) {
 
         this.addMessage = function (m) {
             this.messages.push(replaceMessage(m));
+
+            //check if this is the current room
+            //TODO: also check if focus
+            if (!this.showRoom()) {
+                this.awayMessageCount(this.awayMessageCount() + 1);
+                if (checkMention(m.messageText, chatHub.state.username)) {
+                    this.awayMentionCount(this.awayMentionCount() + 1);
+                }
+            }
+
         }.bind(this);
+
         this.addConnectionRecord = function (cr) {
             this.connectionRecords.push(cr);
         }.bind(this);
@@ -176,7 +200,7 @@ function DnnChat($, ko, settings) {
         };
 
         //this.visible = ko.observable(true);
-        
+
         this.addOnEnter = function (event) {
             var keyCode = (event.which ? event.which : event.keyCode);
             if (keyCode === 13) {
@@ -188,12 +212,14 @@ function DnnChat($, ko, settings) {
 
         this.setActiveRoom = function () {
             userRoomModel.activeRoom(this.roomId);
+            this.awayMessageCount(0);
+            this.awayMentionCount(0);
         };
+
 
         this.showRoom = ko.computed(function () {
             return this.roomId === userRoomModel.activeRoom();
         }, this);
-
 
         //clear out the message text to start
         this.newMessageText = ko.observable("");
@@ -226,19 +252,27 @@ function DnnChat($, ko, settings) {
         this.disconnectRoom = function () {
             chatHub.server.leaveRoom(this.roomId, moduleid);
             userRoomModel.rooms.remove(this);
+            //TODo: should we send them to a different room?
             userRoomModel.activeRoom(defaultRoomId);
         };
 
         this.joinRoom = function () {
-            var foundRoom = findRoom(this.roomId);
-            if (!foundRoom) {
-                if (this.roomId != userRoomModel.activeRoom) {
-                    chatHub.server.getRoomInfo(this.roomId, moduleid);
-                    this.setActiveRoom();
+            //check if the userid >0 otherwise don't let them join
+            if (chatHub.state.userid > 0 || this.roomId == defaultRoomId) {
+                var foundRoom = findRoom(this.roomId);
+                if (!foundRoom) {
+                    if (this.roomId != userRoomModel.activeRoom) {
+                        chatHub.server.getRoomInfo(this.roomId, moduleid);
+                        this.setActiveRoom();
+                    }
+                    $(".LobbyRoomList").dialog('close');
+                } else {
+                    alert(alreadyInRoom);
+                    $(".LobbyRoomList").dialog('close');
                 }
-                $(".LobbyRoomList").dialog('close');
             } else {
-                alert(alreadyInRoom);
+                alert(anonUsersRooms);
+                $(".LobbyRoomList").dialog('close');
             }
         };
 
@@ -250,6 +284,11 @@ function DnnChat($, ko, settings) {
             return room.roomId === rId;
         });
     }
+
+    function formatCount(value) {
+        return "$" + value;
+    }
+
 
     var chatHub = $.connection.chatHub;
     $.connection.hub.logging = false;
@@ -480,11 +519,13 @@ function DnnChat($, ko, settings) {
     //TODO: handle these click events with knockout
 
     //TODO: userlist should be per room
+    //TODO: wire up user list click to the text box
     $('#userList').on('click', '.UserListUser', function () {
         $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
     });
 
     //TODO: messages need to be per room
+    //TODO: wire up the authorname click to the proper text box
     $(".chatMessages").on('click', '.MessageAuthor', function () {
         $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
     });
@@ -524,10 +565,12 @@ function DnnChat($, ko, settings) {
     ko.applyBindings(userRoomModel, document.getElementById('roomView'));
 
     ko.applyBindings(roomModel, document.getElementById('roomList'));
-
-
 }
 
+/* used to format the counters when a room isn't active */
+function formatCount(value) {
+    return "(" + value + ")";
+}
 
 function showStatus(message) {
     $('#ChatStatus').html(message);
