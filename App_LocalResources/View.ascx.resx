@@ -157,4 +157,7 @@
   <data name="AlreadyInRoom.Text" xml:space="preserve">
     <value>You are already in that Room</value>
   </data>
+  <data name="MessageMissingRoom.Text" xml:space="preserve">
+    <value>You have recieved a message for a room you are not connected to, it will not be displayed.</value>
+  </data>
 </root>

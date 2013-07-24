@@ -32,8 +32,9 @@ namespace Christoc.Modules.DnnChat.Components
         //a list of connectionrecords to keep track of users connected
         private static readonly List<UserListRecords> Users = new List<UserListRecords>();
 
-        //TODO: set the default room based on? ModuleId setting?
-        private static readonly Guid DefaultRoomId = new Guid("78fbeba0-cc57-4cd4-9dde-8611c91f7b9c");
+        //set the default room based on name (probably should change this somehow for languages)
+        RoomController rc = new RoomController();
+        private static Guid DefaultRoomId = new Guid(new RoomController().GetRoom("Default Room").RoomId.ToString());
 
         /*
          * This method is used to send messages to all connected clients.
@@ -164,6 +165,7 @@ namespace Christoc.Modules.DnnChat.Components
         private ConnectionRecord SetupConnectionRecord()
         {
             string username = Clients.Caller.username;
+            
 
             //if (string.IsNullOrEmpty(username))
             //{
@@ -219,6 +221,12 @@ namespace Christoc.Modules.DnnChat.Components
         public Task Join()
         {
             int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
+
+            var settingsDefault = new Guid(Clients.Caller.defaultRoomId);
+            if (DefaultRoomId != settingsDefault)
+            {
+                DefaultRoomId = settingsDefault;
+            }
 
             //TODO: reconnect to all previous rooms
             //get list of previously connected (not departed) rooms
@@ -487,7 +495,6 @@ namespace Christoc.Modules.DnnChat.Components
                         var r = rc.GetRoom(roomName);
                         //int.TryParse(Clients.Caller.moduleid, out moduleId);
                         int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
-
 
                         if (r != null)
                         {

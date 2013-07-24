@@ -63,22 +63,11 @@ ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Messages ADD
 GO
 
 
-
-/* only create a default room if there are no rooms and there are already messages */
-/*
-
 IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}DnnChat_Rooms)
-
-*/
-
-/* we should only add a default room if there are already existing messages and a module on a page */
-
-/* otherwise require that the Default room get created when a module is on a page */
-
-/*
 Insert {databaseOwner}{objectQualifier}DnnChat_Rooms
 	(
-		Name
+		RoomId
+		, Name
 		, Enabled
 		, RoomDescription
 		, RoomWelcome
@@ -92,9 +81,10 @@ Insert {databaseOwner}{objectQualifier}DnnChat_Rooms
 	)
 values
 	(
-		'Default'
+		NEWID()
+		, 'Default Room'
 		, 1
-		, 'Default Room for the dnnCHAT module'
+		, 'Default Room for the dnnCHAT module.'
 		, 'Welcome to the Default Chat Room'
 		, 0
 		, Null
@@ -106,14 +96,11 @@ values
 	)
 
 
-*/
-
 GO
 /* updated the RoomID for existing messages that don't have a room */
 
 
 Update {databaseOwner}{objectQualifier}DnnChat_Messages
 set RoomId = (select top 1 RoomId from {databaseOwner}{objectQualifier}DnnChat_Rooms)
-/*
-	where RoomId is null
-*/
+where RoomId is null
+

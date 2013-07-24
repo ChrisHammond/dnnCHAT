@@ -24,8 +24,8 @@
             emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>',
             alreadyInRoom:'<%=Localization.GetString("AlreadyInRoom.Text",LocalResourceFile)%>',
             anonUsersRooms:'<%=Localization.GetString("AnonymousJoinDenied.Text",LocalResourceFile)%>',
-            messageMissingRoom: '<%=Localization.GetString("messageMissingRoom.Text",LocalResourceFile)%>',
-            defaultRoomId:'<%=new Guid("78fbeba0-cc57-4cd4-9dde-8611c91f7b9c") %>'
+            messageMissingRoom: '<%=Localization.GetString("MessageMissingRoom.Text",LocalResourceFile)%>',
+            defaultRoomId:'<%=DefaultRoomId %>'
             
         });
         md.init('#messages');

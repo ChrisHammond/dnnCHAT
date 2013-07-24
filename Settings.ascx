@@ -8,6 +8,11 @@
 
         <asp:TextBox ID="txtStartMessage" runat="server" />
     </div>
+    <div class="dnnFormItem">
+        <dnn:Label ID="lblDefaultRoom" runat="server" />
+
+        <asp:DropDownList runat="server" ID="ddlDefaultRoom" DataTextField="RoomName" DataValueField="RoomId"/>
+    </div>
 </fieldset>
 
 

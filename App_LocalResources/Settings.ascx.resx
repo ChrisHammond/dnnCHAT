@@ -120,6 +120,12 @@
   <data name="ControlTitle_settings.Text" xml:space="preserve">
     <value>DnnChat Settings</value>
   </data>
+  <data name="lblDefaultRoom.Help" xml:space="preserve">
+    <value>Choose a default room that users will connect to. Anonymous users can only connect to this room.</value>
+  </data>
+  <data name="lblDefaultRoom.Text" xml:space="preserve">
+    <value>Default Room</value>
+  </data>
   <data name="lblStartMessage.Help" xml:space="preserve">
     <value>Put in the message that should be displayed when a user connects to the chat.</value>
   </data>

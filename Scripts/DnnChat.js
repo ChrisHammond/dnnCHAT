@@ -3,8 +3,6 @@
 
 //TODO: 7/23/2013   need to control the sort order on the room list
 
-//TODO: 7/23/2013   need to store the defaultroomid somehow
-//TODO: 7/23/2013   need to create a default room when installing/upgrading
 //TODO: 7/23/2013   user counts aren't working
 //TODO: 7/23/2013   check on disconnections and leaving a room
 
@@ -28,7 +26,7 @@ function DnnChat($, ko, settings) {
     var messageMissingRoom = settings.MessageMissingRoom;
 
     var defaultRoomId = settings.defaultRoomId;
-
+    
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
 
     var focus = true;
@@ -311,6 +309,7 @@ function DnnChat($, ko, settings) {
     chatHub.state.userid = userid;
     chatHub.state.username = username;
     chatHub.state.startMessage = startmessage;
+    chatHub.state.defaultRoomId = defaultRoomId;
 
     // Declare a function to actually create a message on the chat hub so the server can invoke it
     chatHub.client.newMessage = function (data) {

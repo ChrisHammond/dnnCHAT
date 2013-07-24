@@ -18,6 +18,8 @@
 ' 
 */
 
+using Christoc.Modules.DnnChat.Components;
+
 namespace Christoc.Modules.DnnChat
 {
     using System;
@@ -44,7 +46,7 @@ namespace Christoc.Modules.DnnChat
     public partial class View : DnnChatModuleBase, IActionable
     {
         public string StartMessage = string.Empty;
-
+        public string DefaultRoomId = string.Empty;
         public string ChatNick
         {
             get
@@ -64,7 +66,6 @@ namespace Christoc.Modules.DnnChat
             DotNetNuke.Framework.jQuery.RequestUIRegistration();
             ClientResourceManager.RegisterScript(Parent.Page, "~/Resources/Shared/scripts/knockout.js");
             ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/moment.min.js");
-
             ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/DnnChat.js");
         
             base.OnInit(e);
@@ -76,6 +77,17 @@ namespace Christoc.Modules.DnnChat
             try
             {
                 StartMessage = Settings.Contains("StartMessage") ? Settings["StartMessage"].ToString() : Localization.GetString("DefaultStartMessage", LocalResourceFile);
+                
+                if (Settings.Contains("DefaultRoomId"))
+                {
+                    DefaultRoomId = Settings["DefaultRoomId"].ToString();
+                }
+                else
+                {
+                    //if we don't have a setting. go get the default room from the database.
+                    var rc = new RoomController();
+                    DefaultRoomId = rc.GetRoom("Default Room").RoomId.ToString();
+                }
             }
             catch (Exception exc) //Module failed to load
             {

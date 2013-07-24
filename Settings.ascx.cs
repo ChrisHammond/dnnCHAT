@@ -20,6 +20,7 @@
 
 
 using System;
+using Christoc.Modules.DnnChat.Components;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.Localization;
@@ -65,6 +66,19 @@ namespace Christoc.Modules.DnnChat
                     //Settings["SettingName"]
                     
                     txtStartMessage.Text = Settings.Contains("StartMessage") ? Settings["StartMessage"].ToString() : Localization.GetString("DefaultStartMessage", "/DesktopModules/DnnChat/App_LocalResources/SharedResources.resx");
+
+
+                    var rc = new RoomController();
+
+                    ddlDefaultRoom.DataSource = rc.GetRooms(ModuleId);
+                    ddlDefaultRoom.DataBind();
+
+                    if (Settings.Contains("DefaultRoomId"))
+                    {
+                        ddlDefaultRoom.Items.FindByValue(Settings["DefaultRoomId"].ToString()).Selected = true;
+                    }
+
+                    
                 }
             }
             catch (Exception exc) //Module failed to load
@@ -84,6 +98,8 @@ namespace Christoc.Modules.DnnChat
             {
                 var modules = new ModuleController();
                 modules.UpdateModuleSetting(ModuleId, "StartMessage", txtStartMessage.Text);
+
+                modules.UpdateModuleSetting(ModuleId, "DefaultRoomId", ddlDefaultRoom.SelectedValue);
             }
             catch (Exception exc) //Module failed to load
             {

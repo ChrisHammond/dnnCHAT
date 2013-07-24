@@ -86,9 +86,8 @@ namespace Christoc.Modules.DnnChat.Components
             using (var ctx = DataContext.Instance())
             {
                 var rep = ctx.GetRepository<Room>();
-                t = rep.Get(moduleId).OrderByDescending(x => x.RoomName);
+                t = rep.Get(moduleId).OrderBy(x => x.CreatedDate);
             }
-
             return t;
         }
 
@@ -100,7 +99,6 @@ namespace Christoc.Modules.DnnChat.Components
                 var rep = ctx.GetRepository<Room>();
                 t = rep.GetById(roomId, moduleId);
             }
-
             return t;
         }
 
