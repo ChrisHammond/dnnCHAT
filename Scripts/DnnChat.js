@@ -1,12 +1,12 @@
-﻿//TODO: 7/11/2013   User Counts in Room isn't doing anything
-
-//TODO: 7/11/2013   Highlight the active Room
-//TODO: 7/11/2013   Welcome messages for Rooms aren't loading
-//TODO: 7/13/2013   Auto scrolling doesn't work
-
-//TODO: 7/23/2013   Check to see if Room creation works
-
+﻿//TODO: 7/23/2013   Room creation from /Join doesn't repopulate the RoomModel for all users...
 //TODO: 7/23/2013   enter key binding not working for anonymous users...
+
+//TODO: 7/23/2013   need to control the sort order on the room list
+
+//TODO: 7/23/2013   need to store the defaultroomid somehow
+//TODO: 7/23/2013   need to create a default room when installing/upgrading
+//TODO: 7/23/2013   user counts aren't working
+//TODO: 7/23/2013   check on disconnections and leaving a room
 
 //TODO: the connection fails with websockets and no fall back
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
@@ -25,6 +25,8 @@ function DnnChat($, ko, settings) {
     var stateDisconnected = settings.stateDisconnected;
     var alreadyInRoom = settings.alreadyInRoom;
     var anonUsersRooms = settings.anonUsersRooms;
+    var messageMissingRoom = settings.MessageMissingRoom;
+
     var defaultRoomId = settings.defaultRoomId;
 
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
@@ -110,6 +112,8 @@ function DnnChat($, ko, settings) {
         if (m.AuthorName === chatHub.state.username) {
             this.cssName += " ChatSelf";
         }
+        
+        //TODO: not sure what this was for?
         this.targetMessageAuthor = function () {
             //$('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
 
@@ -130,6 +134,10 @@ function DnnChat($, ko, settings) {
     var roomModel = {
         rooms: ko.observableArray([]),
         ShowLobby: function () {
+            //get an updated list of rooms for the Lobby
+            chatHub.server.getLobby();
+            
+            //open the lobby dialog
             $(".LobbyRoomList").dialog({
                 width: '600px',
                 modal: true
@@ -150,12 +158,12 @@ function DnnChat($, ko, settings) {
 
     //Room mapping function
     function Room(r) {
-
         this.roomId = r.RoomId;
         this.roomName = r.RoomName;
         this.roomDescription = r.RoomDescription;
-        //this.roomCount = r.RoomCount; //TODO: implement a count of how many people are in the room
-
+        //this is used to be able to "scroll" properly when a new message comes in, need to be able to know what the outer div is, it is this id
+        this.roomNameId = "room-" + r.RoomId;
+        
         this.messages = ko.observableArray([]);
         this.connectionRecords = ko.observableArray([]);
 
@@ -169,9 +177,7 @@ function DnnChat($, ko, settings) {
         this.formattedAwayMentionCount = ko.computed(function () {
             return '(' + this.awayMentionCount + ')';
         }, this);
-
-
-
+        
         //add a message without parsing
         this.addSystemMessage = function (m) {
             this.messages.push(m);
@@ -187,8 +193,17 @@ function DnnChat($, ko, settings) {
                 if (checkMention(m.messageText, chatHub.state.username)) {
                     this.awayMentionCount(this.awayMentionCount() + 1);
                 }
-            }
+            } else {
+                //only scroll if the room is currently visible
+                var parentDiv = "#" + this.roomNameId;
 
+                if ($(parentDiv).scrollTop() + $(parentDiv).height() < $(parentDiv)[0].scrollHeight - 250) {
+                    //pause
+                } else {
+                    $(parentDiv).scrollTop($(parentDiv)[0].scrollHeight);
+                }
+
+            }            
         }.bind(this);
 
         this.addConnectionRecord = function (cr) {
@@ -275,8 +290,6 @@ function DnnChat($, ko, settings) {
                 $(".LobbyRoomList").dialog('close');
             }
         };
-
-        //TODO: create an observable for Unread messages and Mentions counts
     }
 
     function findRoom(rId) {
@@ -309,35 +322,13 @@ function DnnChat($, ko, settings) {
             curRoom.addMessage(m);
         } else {
             //If the room isn't found display an alert
-            //TODO: localize this
-            alert('Message received for a room you aren\'t connected to');
+            alert(messageMissingRoom);
         }
-        //Original messageModel pushing
-        //messageModel.messages.push(replaceMessage(m));
 
         if (focus === false) {
             //handle new messages if window isn't in focus
             updateUnread(checkMention(m.messageText, chatHub.state.username));
-            if ($("#messages").scrollTop() + $("#messages").height() < $("#messages")[0].scrollHeight - 250) {
-                //pause
-
-            } else {
-                $("#messages").scrollTop($("#messages")[0].scrollHeight);
-            }
-        } else {
-
-            //if we are in focus, and we are currently within 10% of the bottom
-            //we want to make sure to scroll to the bottom of the DIV when a new message posts
-            //check if the current scroll position + the height of the div (default 500) is less than the overall height of the div minus 100
-            //randomly picked -100 here
-            //TODO: figure out a better way to check what 100 should be 
-            if ($("#messages").scrollTop() + $("#messages").height() < $("#messages")[0].scrollHeight - 250) {
-                //pause
-
-            } else {
-                $("#messages").scrollTop($("#messages")[0].scrollHeight);
-            }
-        }
+        } 
     };
 
     chatHub.client.newMessageNoParse = function (data) {
@@ -348,21 +339,7 @@ function DnnChat($, ko, settings) {
             curRoom.addSystemMessage(m);
         } else {
             //If the room isn't found display an alert
-            //TODO: localize this
-            alert('Message received for a room you aren\'t connected to: newMessageNoParse');
-        }
-
-        //messageModel.messages.push(m);
-        //we want to make sure to scroll to the bottom of the DIV when a new message posts
-        //check if the current scroll position + the height of the div (default 500) is less than the overall height of the div minus 100
-        //randomly picked -100 here
-        //TODO: figure out a better way to check what 100 should be 
-
-        if ($(".chatMessages").scrollTop() + $(".chatMmessages").height() < $(".chatMessages")[0].scrollHeight - 100) {
-            //pause the scroll
-
-        } else {
-            $(".chatMessages").scrollTop($(".chatMessages")[0].scrollHeight);
+            alert(messageMissingRoom);
         }
     };
 
@@ -428,6 +405,15 @@ function DnnChat($, ko, settings) {
         });
 
         chatHub.state.startMessage = "";
+    };
+    
+
+    chatHub.client.fillLobby = function (allRooms) {
+        roomModel.rooms.removeAll();
+        $.each(allRooms, function (i, item) {
+            var r = new Room(item);
+            roomModel.rooms.push(r);
+        });
     };
 
     chatHub.client.messageJoin = function (item) {
@@ -497,22 +483,18 @@ function DnnChat($, ko, settings) {
         if (curRoom) {
             curRoom.removeConnectionRecords();
             $.each(data, function (i, item) {
-                //TODO: figure out how to push to a specific Room's connection records
-                //TODO: change to ConnectionRecordRoom
                 var cr = new ConnectionRecord(item);
-
                 //lookup the proper ROOM in the array and push the connection to it
                 curRoom.connectionRecords.push(cr);
-
-                //usersViewModel.connectionRecords.push(new ConnectionRecord(item));
             });
         }
 
         //sort the list of users
         usersViewModel.connectionRecords.sort(function (left, right) { return left.authorName == right.authorName ? 0 : (left.authorName.toLowerCase() < right.authorName.toLowerCase() ? -1 : 1); });
 
-        //TODO: configure the Count for a specific room
+
         //update the online user count
+        //TODO: user counts aren't working
         $('#currentCount').text(data.length);
     };
 

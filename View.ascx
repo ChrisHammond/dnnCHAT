@@ -24,7 +24,9 @@
             emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>',
             alreadyInRoom:'<%=Localization.GetString("AlreadyInRoom.Text",LocalResourceFile)%>',
             anonUsersRooms:'<%=Localization.GetString("AnonymousJoinDenied.Text",LocalResourceFile)%>',
+            messageMissingRoom: '<%=Localization.GetString("messageMissingRoom.Text",LocalResourceFile)%>',
             defaultRoomId:'<%=new Guid("78fbeba0-cc57-4cd4-9dde-8611c91f7b9c") %>'
+            
         });
         md.init('#messages');
     });
@@ -48,7 +50,7 @@
 <div class="RoomList" id="userRoomList">
     <!-- ko foreach: rooms -->
     <div class="ChatRooms">
-        <div class="RoomListTab" data-bind="id:roomName,click:setActiveRoom">
+        <div class="RoomListTab" data-bind="id:roomName,click:setActiveRoom,css:{activeRoom:roomId == $parent.activeRoom()}">
             <div data-bind="html:roomName" class="RoomListRoom">
             </div>
             <div data-bind="html:formatCount(awayMessageCount()),visible:(showRoom()!=true && awayMessageCount()>0)" class="roomAwayMessageCount"></div>
@@ -64,7 +66,7 @@
     <!-- ko foreach: rooms -->
         <!-- the display of the rooms that a user is connected -->
         <div class="srcWindow" data-bind="visible:showRoom">
-            <div class="ChatWindow">
+            <div class="ChatWindow" data-bind="attr:{id: roomNameId}">
                 <!-- ko foreach: messages -->
                 <div data-bind="attr:{class:cssName}">
                     <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthor"></div>

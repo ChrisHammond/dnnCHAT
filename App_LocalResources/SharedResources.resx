@@ -156,6 +156,9 @@
   <data name="FailedUnknown.Text" xml:space="preserve">
     <value>Unable to send your message because we don't know who you are. Try another browser, and see if you have a Proxy server or Firewall blocking this site.</value>
   </data>
+  <data name="MessageMissingRoom.Text" xml:space="preserve">
+    <value>You have recieved a message for a room you are not connected to, it will not be displayed.</value>
+  </data>
   <data name="NameChange.Text" xml:space="preserve">
     <value>is now {1}</value>
     <comment>{0} = old username

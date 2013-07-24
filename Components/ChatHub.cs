@@ -29,9 +29,6 @@ namespace Christoc.Modules.DnnChat.Components
 {
     public class ChatHub : Hub
     {
-        //cjh - 2/28/2013 revamping to use knockout with guidance of http://www.slideshare.net/aegirth1/knockout-presentation-slides 
-
-        //TODO: we need to keep a list of users PER ROOM
         //a list of connectionrecords to keep track of users connected
         private static readonly List<UserListRecords> Users = new List<UserListRecords>();
 
@@ -60,8 +57,6 @@ namespace Christoc.Modules.DnnChat.Components
 
             if (cr != null && rc.UserInRoom(roomId, cr))
             {
-                //TODO: make sure that the user can send to that Room
-
                 // parse message before use
                 if (Clients.Caller.username != null && Clients.Caller.username.Trim() != "phantom")
                 {
@@ -89,8 +84,6 @@ namespace Christoc.Modules.DnnChat.Components
                 }
                 else
                 {
-                    //TODO: handle anon users for non-default rooms
-
                     // if there is no username for the user don't let them post
                     var m = new Message
                                 {
@@ -134,7 +127,6 @@ namespace Christoc.Modules.DnnChat.Components
         }
 
         //TODO: remove user from all rooms
-
         //lookup who just disconnected, and store the disconnect/time, remove them from the count for each room
         public override Task OnDisconnected()
         {
@@ -145,10 +137,8 @@ namespace Christoc.Modules.DnnChat.Components
 
         private void DisconnectUser(string connectionId)
         {
-
             //TODO: remove user from all rooms
             var crc = new ConnectionRecordController();
-
             var id = connectionId;
             var cr = crc.GetConnectionRecordByConnectionId(id);
             var crId = cr.ConnectionRecordId;
@@ -260,7 +250,15 @@ namespace Christoc.Modules.DnnChat.Components
             return base.OnConnected();
         }
 
+        public void GetLobby()
+        {
+            int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
+            var rc = new RoomController();
 
+            var allRooms = rc.GetRooms(moduleId);
+            Clients.Caller.FillLobby(allRooms);            
+        }
+        
         /*
          * When a user connects we need to populate their user information, we default the username to be Anonymous + a #
          */
