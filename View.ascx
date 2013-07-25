@@ -79,11 +79,11 @@
                 <!-- ko foreach: connectionRecords -->
                 <div class="ChatUsers">
                     <!-- ko if: userId>0 -->
-                    <div data-bind="html:authorName" class="UserListUser UserLoggedIn">
+                    <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn">
                     </div>
                     <!-- /ko -->
                     <!-- ko if: userId<1 -->
-                    <div data-bind="html:authorName" class="UserListUser UserNotLoggedIn">
+                    <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserNotLoggedIn">
                     </div>
                     <!-- /ko -->
                 </div>

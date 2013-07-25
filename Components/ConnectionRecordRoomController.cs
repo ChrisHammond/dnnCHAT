@@ -96,7 +96,6 @@ namespace Christoc.Modules.DnnChat.Components
         {
             try
             {
-
                 ConnectionRecordRoom t;
                 using (IDataContext ctx = DataContext.Instance())
                 {
@@ -123,7 +122,7 @@ namespace Christoc.Modules.DnnChat.Components
                                                        string.Format(
                                                            "select distinct r.* from {0}{1}DnnChat_ConnectionRecordRooms crr join {0}{1}DnnChat_ConnectionRecords cr on (cr.ConnectionRecordId = crr.ConnectionRecordId)" +
                                                            " join {0}{1}DnnChat_Rooms r on (r.RoomId = crr.RoomId)" +
-                                                           " where cr.UserId = '{2}' and crr.DepartedDate is null",
+                                                           " where cr.UserId = '{2}' and crr.DepartedDate is null order by r.roomName asc",
                                                            _databaseOwner,
                                                            _objectQualifier,
                                                           userId)).ToList();

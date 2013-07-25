@@ -1,11 +1,11 @@
-﻿//TODO: 7/23/2013   Room creation from /Join doesn't repopulate the RoomModel for all users...
+﻿//Below is a list of todo items that still need to be completed before release
+
 //TODO: 7/23/2013   enter key binding not working for anonymous users...
-
-//TODO: 7/23/2013   need to control the sort order on the room list
-
 //TODO: 7/23/2013   user counts aren't working
 //TODO: 7/23/2013   check on disconnections and leaving a room
+//TODO: 7/24/2013   should we automatically add a DNN7.1 URL binding in the SQL script?
 
+//older todo items
 //TODO: the connection fails with websockets and no fall back
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
 
@@ -62,6 +62,14 @@ function DnnChat($, ko, settings) {
         this.connectedDate = u.ConnectedDate;
         this.disconnectedDate = u.DisconnectedDate;
         this.ipAddress = u.IpAddress;
+        this.roomId = u.RoomId;
+        
+        this.targetMessageAuthor = function () {
+            var foundRoom = findRoom(this.roomId);
+            if (foundRoom) {
+                foundRoom.newMessageText(foundRoom.newMessageText() + ' @' + this.authorName + ' ');
+            }
+        };
     }
 
     //user connection view model
@@ -111,19 +119,16 @@ function DnnChat($, ko, settings) {
             this.cssName += " ChatSelf";
         }
         
-        //TODO: not sure what this was for?
         this.targetMessageAuthor = function () {
-            //$('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
-
-            var parentRoom = findRoom(m.roomId);
-            if (parentRoom) {
-                alert('parent text: ' + parentRoom.newMessageText());
+            //todo: is there a more efficient way to find the message entry for this room?
+            var foundRoom = findRoom(this.roomId);
+            if (foundRoom) {
+                foundRoom.newMessageText(foundRoom.newMessageText() + ' @' + this.authorName + ' ');
             }
-
-            //parent.newMessageText().(parent.newMessageText() + ' @' + this.authorName + ' ').focus();
         };
     }
 
+    //this can probably be removed
     var messageModel = {
         messages: ko.observableArray([])
     };
@@ -152,8 +157,7 @@ function DnnChat($, ko, settings) {
         rooms: ko.observableArray([])
         , activeRoom: ko.observable(activeRoomId)
     };
-
-
+    
     //Room mapping function
     function Room(r) {
         this.roomId = r.RoomId;
@@ -265,7 +269,7 @@ function DnnChat($, ko, settings) {
         this.disconnectRoom = function () {
             chatHub.server.leaveRoom(this.roomId, moduleid);
             userRoomModel.rooms.remove(this);
-            //TODo: should we send them to a different room?
+            //TODO: should we send them to a different room?
             userRoomModel.activeRoom(defaultRoomId);
         };
 
@@ -295,11 +299,6 @@ function DnnChat($, ko, settings) {
             return room.roomId === rId;
         });
     }
-
-    function formatCount(value) {
-        return "$" + value;
-    }
-
 
     var chatHub = $.connection.chatHub;
     $.connection.hub.logging = false;
@@ -347,10 +346,7 @@ function DnnChat($, ko, settings) {
     //wire up the click handler for the button after the connection starts
     this.init = function (element) {
         $.connection.hub.start().done(function () {
-            //set the default room?
-            //usersViewModel.activeRoom(settings.defaultRoomId);
-            //TODO: do anything here?
-            //btnSubmit.click();
+           //nothing to do here?
         });
     };
 
@@ -374,9 +370,7 @@ function DnnChat($, ko, settings) {
         }
     });
     $.connection.hub.disconnected(function () {
-
         showStatus(stateDisconnected);
-
         // Restart the connection
         setTimeout(function () {
             $.connection.hub.start();
@@ -395,13 +389,15 @@ function DnnChat($, ko, settings) {
             var r = new Room(item);
             roomModel.rooms.push(r);
         });
-
+        
         //usersViewModel.connectionRecords.removeAll();
         userRoomModel.rooms.removeAll();
         $.each(myRooms, function (i, item) {
             var r = new Room(item);
             r.joinRoom();
         });
+
+        userRoomModel.rooms.sort(function (left, right) { return left.roomName == right.roomName ? 0 : (left.roomName.toLowerCase() < right.roomName.toLowerCase() ? -1 : 1); });
 
         chatHub.state.startMessage = "";
     };
@@ -429,7 +425,8 @@ function DnnChat($, ko, settings) {
         }
     };
 
-    //this method get's called from the Hub when you update your name using the /name SOMETHING call in the text window
+    //this method get's called from the Hub when you update your 
+    //name using the /nick SOMETHING call in the text window
     chatHub.client.updateName = function (newName) {
         chatHub.state.username = newName;
     };
@@ -491,7 +488,6 @@ function DnnChat($, ko, settings) {
         //sort the list of users
         usersViewModel.connectionRecords.sort(function (left, right) { return left.authorName == right.authorName ? 0 : (left.authorName.toLowerCase() < right.authorName.toLowerCase() ? -1 : 1); });
 
-
         //update the online user count
         //TODO: user counts aren't working
         $('#currentCount').text(data.length);
@@ -505,12 +501,7 @@ function DnnChat($, ko, settings) {
         $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
     });
 
-    //TODO: messages need to be per room
-    //TODO: wire up the authorname click to the proper text box
-    $(".chatMessages").on('click', '.MessageAuthor', function () {
-        $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
-    });
-
+    //todo: this is still being used at the Page level notifications, but not for the Room counts
     function updateUnread(mentioned) {
         if (focus === false) {
             if (mentioned === true)

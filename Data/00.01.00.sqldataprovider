@@ -67,7 +67,7 @@ IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}DnnChat_Rooms)
 Insert {databaseOwner}{objectQualifier}DnnChat_Rooms
 	(
 		RoomId
-		, Name
+		, RoomName
 		, Enabled
 		, RoomDescription
 		, RoomWelcome

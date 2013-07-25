@@ -33,7 +33,7 @@ namespace Christoc.Modules.DnnChat.Components
         private static readonly List<UserListRecords> Users = new List<UserListRecords>();
 
         //set the default room based on name (probably should change this somehow for languages)
-        RoomController rc = new RoomController();
+        //TODO: this only works for a single instance of the module, another instance and all hell might break loose
         private static Guid DefaultRoomId = new Guid(new RoomController().GetRoom("Default Room").RoomId.ToString());
 
         /*
@@ -242,6 +242,7 @@ namespace Christoc.Modules.DnnChat.Components
             }
 
 
+            //TODO: the default room doesn't have a moduleid associated with it
             //if myRooms is empty, what to do (pass default room)
             if (myRooms == null)
             {
@@ -481,7 +482,7 @@ namespace Christoc.Modules.DnnChat.Components
 
                 if (userId > 0)
                 {
-                    string roomName = message.Remove(0, 5);
+                    string roomName = message.Remove(0, 5).Trim();
                     if (roomName.Length > 25)
                     {
                         Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("RoomNameTooLong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), RoomId = roomId });
@@ -509,12 +510,12 @@ namespace Christoc.Modules.DnnChat.Components
                         {
                             r = new Room
                                 {
-                                    RoomId = Guid.NewGuid(),
+                                    RoomId = Guid.NewGuid(),                                    
                                     RoomName = roomName,
-                                    RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text",
+                                    RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text", "/desktopmodules/DnnChat/app_localresources/" +
                                                                          Localization.LocalSharedResourceFile),
                                     RoomDescription = Localization.GetString("DefaultRoomDescription.Text",
-                                                                             Localization.LocalSharedResourceFile),
+                                                                             "/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
                                     ModuleId = moduleId,
                                     CreatedDate = DateTime.UtcNow,
                                     CreatedByUserId = userId,

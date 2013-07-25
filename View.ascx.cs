@@ -67,7 +67,7 @@ namespace Christoc.Modules.DnnChat
             ClientResourceManager.RegisterScript(Parent.Page, "~/Resources/Shared/scripts/knockout.js");
             ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/moment.min.js");
             ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/DnnChat.js");
-        
+
             base.OnInit(e);
         }
 
@@ -77,7 +77,7 @@ namespace Christoc.Modules.DnnChat
             try
             {
                 StartMessage = Settings.Contains("StartMessage") ? Settings["StartMessage"].ToString() : Localization.GetString("DefaultStartMessage", LocalResourceFile);
-                
+
                 if (Settings.Contains("DefaultRoomId"))
                 {
                     DefaultRoomId = Settings["DefaultRoomId"].ToString();
@@ -86,7 +86,23 @@ namespace Christoc.Modules.DnnChat
                 {
                     //if we don't have a setting. go get the default room from the database.
                     var rc = new RoomController();
-                    DefaultRoomId = rc.GetRoom("Default Room").RoomId.ToString();
+                    var r = rc.GetRoom("Default Room");
+                    if (r == null || (r.ModuleId > 0 && r.ModuleId != ModuleId))
+                    {
+                        //todo: if there isn't a room we need display a message about creating one
+
+                    }
+                    else
+                    {
+                        //if the default room doesn't have a moduleid on it, set the module id
+                        if (r.ModuleId < 0)
+                        {
+                            r.ModuleId = ModuleId;
+                        }
+                        rc.UpdateRoom(r);
+                    }
+                    DefaultRoomId = r.RoomId.ToString();
+
                 }
             }
             catch (Exception exc) //Module failed to load
