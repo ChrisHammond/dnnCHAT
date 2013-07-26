@@ -31,7 +31,6 @@
         md.init('#messages');
     });
     
-
 </script>
 
 <div class="RoomList" id="roomList">

@@ -2,7 +2,6 @@
 
 //TODO: 7/24/2013   should we automatically add a DNN7.1 URL binding in the SQL script?
 
-//TODO: 7/25/2013   don't allow connecting to a room that is no longer enabled
 
 //older todo items
 //TODO: the connection fails with websockets and no fall back
