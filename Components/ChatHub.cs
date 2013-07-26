@@ -113,28 +113,24 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        //TODO: on connection, reload rooms for user?
         public override Task OnConnected()
         {
             Clients.Caller.Join();
             return base.OnConnected();
         }
 
-        //TODO: on reconnection reload rooms for user
         public override Task OnReconnected()
         {
             Clients.Caller.PopulateUser();
             return base.OnReconnected();
         }
 
-        //TODO: remove user from all rooms
-        //lookup who just disconnected, and store the disconnect/time, remove them from the count for each room
+        //lookup who just disconnected, and store the disconnect/time from the ConnectionRecord but not each room, remove them from the count for each room
         public override Task OnDisconnected()
         {
             if (Context.ConnectionId != null) DisconnectUser(Context.ConnectionId);
             return base.OnDisconnected();
         }
-
 
         private void DisconnectUser(string connectionId)
         {
@@ -159,7 +155,7 @@ namespace Christoc.Modules.DnnChat.Components
                     //var connectionRoom = crrc.GetConnectionRecordRoomByConnectionRecordId(rr.ConnectionRecordId, rr.RoomId);
                     //if (connectionRoom != null)
                     //{
-                        
+
                     //    connectionRoom.DepartedDate = DateTime.UtcNow;
                     //    crrc.UpdateConnectionRecordRoom(connectionRoom);
                     //}
@@ -295,47 +291,55 @@ namespace Christoc.Modules.DnnChat.Components
 
             var r = rc.GetRoom(roomId, moduleId);
 
-            var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
-
-            var cr = crrc.GetConnectionRecordRoomByConnectionRecordId(c.ConnectionRecordId, roomId);
-
-            if (cr == null)
+            if (r.Enabled)
             {
-                var crr = new ConnectionRecordRoom
+                var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
+
+                var cr = crrc.GetConnectionRecordRoomByConnectionRecordId(c.ConnectionRecordId, roomId);
+
+                if (cr == null)
                 {
-                    ConnectionRecordId = c.ConnectionRecordId,
-                    JoinDate = DateTime.UtcNow,
-                    DepartedDate = null,
+                    var crr = new ConnectionRecordRoom
+                    {
+                        ConnectionRecordId = c.ConnectionRecordId,
+                        JoinDate = DateTime.UtcNow,
+                        DepartedDate = null,
+                        RoomId = roomId
+                    };
+
+                    //join the room
+                    crrc.CreateConnectionRecordRoom(crr);
+
+                    var ulr = new UserListRecords(c, crr);
+
+                    //add the user to the List of users that will be later filtered by RoomId
+                    Users.Add(ulr);
+                }
+
+                Groups.Add(Context.ConnectionId, roomId.ToString());
+
+                //populate history for all previous rooms
+                RestoreHistory(roomId);
+
+                //lookup the Room to get the Welcome Message
+                Clients.Caller.newMessageNoParse(new Message
+                {
+                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                    ConnectionId = "0",
+                    MessageDate = DateTime.UtcNow,
+                    MessageId = -1,
+                    MessageText = r.RoomWelcome,
                     RoomId = roomId
-                };
+                });
+                Clients.Group(roomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName), RoomId = roomId });
 
-                //join the room
-                crrc.CreateConnectionRecordRoom(crr);
-
-                var ulr = new UserListRecords(c, crr);
-
-                //add the user to the List of users that will be later filtered by RoomId
-                Users.Add(ulr);
+                return Clients.Group(roomId.ToString()).updateUserList(Users.FindAll(uc => (uc.RoomId == r.RoomId)), roomId);
             }
-
-            Groups.Add(Context.ConnectionId, roomId.ToString());
-
-            //populate history for all previous rooms
-            RestoreHistory(roomId);
-
-            //lookup the Room to get the Welcome Message
-            Clients.Caller.newMessageNoParse(new Message
+            else
             {
-                AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                ConnectionId = "0",
-                MessageDate = DateTime.UtcNow,
-                MessageId = -1,
-                MessageText = r.RoomWelcome,
-                RoomId = roomId
-            });
-            Clients.Group(roomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName), RoomId = roomId });
-
-            return Clients.Group(roomId.ToString()).updateUserList(Users.FindAll(uc => (uc.RoomId == r.RoomId)), roomId);
+                //if the room was no longer enabled, return nothing
+                return null;
+            }
         }
 
         //This method is to populate/join room

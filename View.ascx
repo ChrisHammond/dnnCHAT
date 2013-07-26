@@ -54,7 +54,7 @@
             <div data-bind="html:roomName" class="RoomListRoom">
             </div>
             <div data-bind="html:formatCount(awayMessageCount()),visible:(showRoom()!=true && awayMessageCount()>0)" class="roomAwayMessageCount"></div>
-            <div data-bind="html:formatCount(awayMessageCount()),visible:(showRoom()!=true && awayMentionCount()>0)" class="roomAwayMentionCount"></div>
+            <div data-bind="html:formatCount(awayMentionCount()),visible:(showRoom()!=true && awayMentionCount()>0)" class="roomAwayMentionCount"></div>
 
             <div data-bind="click:disconnectRoom" class="RoomClose"></div>
         </div>

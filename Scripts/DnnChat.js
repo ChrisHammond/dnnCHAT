@@ -2,6 +2,8 @@
 
 //TODO: 7/24/2013   should we automatically add a DNN7.1 URL binding in the SQL script?
 
+//TODO: 7/25/2013   don't allow connecting to a room that is no longer enabled
+
 //older todo items
 //TODO: the connection fails with websockets and no fall back
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
@@ -176,11 +178,10 @@ function DnnChat($, ko, settings) {
         this.connectionRecords = ko.observableArray([]);
 
         this.userCount = ko.computed(function () {
-            //count connectionRecords
+            //count connectionRecords to see how many users are in a Room
             return this.connectionRecords().length;
         }, this);
-
-
+        
 
         this.awayMessageCount = ko.observable(0);
         this.awayMentionCount = ko.observable(0);

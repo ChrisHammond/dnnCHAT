@@ -86,7 +86,7 @@ namespace Christoc.Modules.DnnChat.Components
             using (var ctx = DataContext.Instance())
             {
                 var rep = ctx.GetRepository<Room>();
-                t = rep.Get(moduleId).OrderBy(x => x.RoomName);
+                t = rep.Get(moduleId).Where(x=>x.Enabled).OrderBy(x => x.RoomName);
             }
             return t;
         }
