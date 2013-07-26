@@ -65,21 +65,6 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        //public void DeleteConnectionRecord(ConnectionRecordRoom r)
-        //{
-        //    var t = GetConnectionRecordRoom(r.ConnectionRecordId, r.RoomId);
-        //    DeleteConnectionRecord(t);
-        //}
-
-        //public void DeleteConnectionRecord(ConnectionRecord t)
-        //{
-        //    using (IDataContext ctx = DataContext.Instance())
-        //    {
-        //        var rep = ctx.GetRepository<ConnectionRecord>();
-        //        rep.Delete(t);
-        //    }
-        //}
-
         //TODO: This fails if there is no record
         public IEnumerable<ConnectionRecordRoom> GetConnectionRecordRooms(int moduleId)
         {
@@ -92,7 +77,8 @@ namespace Christoc.Modules.DnnChat.Components
             return t;
         }
 
-        public ConnectionRecordRoom GetConnectionRecordRoom(int connectionRecordId, Guid roomId)
+        //method not used, fails for some reason
+        public ConnectionRecordRoom GetConnectionRecordRoom(int id, Guid roomId)
         {
             try
             {
@@ -101,11 +87,44 @@ namespace Christoc.Modules.DnnChat.Components
                 {
                     var rep = ctx.GetRepository<ConnectionRecordRoom>();
                     //TODO: something is erroring here "value can't be null"
-                    t = rep.GetById(connectionRecordId, roomId);
+                    t = rep.GetById(id, roomId);
                 }
                 return t;
             }
-            catch (Exception)
+            catch (Exception exc)
+            {
+                return null;
+            }
+        }
+
+
+
+        public ConnectionRecordRoom GetConnectionRecordRoomByConnectionRecordId(int connectionRecordId, Guid roomId)
+        {
+            try
+            {
+                ConnectionRecordRoom t;
+                using (IDataContext ctx = DataContext.Instance())
+                {
+                    var rooms = ctx.ExecuteQuery<ConnectionRecordRoom>(CommandType.Text,
+                                                           string.Format(
+                                                               "select top 1 * from {0}{1}DnnChat_ConnectionRecordRooms where ConnectionRecordId = '{2}' and RoomId = '{3}'",
+                                                               _databaseOwner,
+                                                               _objectQualifier,
+                                                              connectionRecordId, roomId)).ToList();
+
+                    if (rooms.Any())
+                    {
+                        t = rooms[0];
+                    }
+                    else
+                        return null;
+                }
+                return t;
+
+
+            }
+            catch (Exception exc)
             {
                 return null;
             }
@@ -122,7 +141,9 @@ namespace Christoc.Modules.DnnChat.Components
                                                        string.Format(
                                                            "select distinct r.* from {0}{1}DnnChat_ConnectionRecordRooms crr join {0}{1}DnnChat_ConnectionRecords cr on (cr.ConnectionRecordId = crr.ConnectionRecordId)" +
                                                            " join {0}{1}DnnChat_Rooms r on (r.RoomId = crr.RoomId)" +
-                                                           " where cr.UserId = '{2}' and crr.DepartedDate is null order by r.roomName asc",
+                                                           " where cr.UserId = '{2}' and crr.DepartedDate is null " +
+                                                           " and cr.ConnectionRecordId in (select top 1 ConnectionRecordId from {0}{1}DnnChat_ConnectionRecords where  {1}DnnChat_ConnectionRecords.UserId ='{2}' order by {1}DnnChat_ConnectionRecords.ConnectionRecordId desc) " +
+                                                           " order by r.roomName asc ",
                                                            _databaseOwner,
                                                            _objectQualifier,
                                                           userId)).ToList();
@@ -138,7 +159,7 @@ namespace Christoc.Modules.DnnChat.Components
             return t;
         }
 
-        public void UpdateConnectionRecord(ConnectionRecordRoom t)
+        public void UpdateConnectionRecordRoom(ConnectionRecordRoom t)
         {
             using (IDataContext ctx = DataContext.Instance())
             {

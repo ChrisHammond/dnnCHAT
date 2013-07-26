@@ -1,13 +1,19 @@
 ﻿//Below is a list of todo items that still need to be completed before release
 
-//TODO: 7/23/2013   enter key binding not working for anonymous users...
-//TODO: 7/23/2013   user counts aren't working
-//TODO: 7/23/2013   check on disconnections and leaving a room
 //TODO: 7/24/2013   should we automatically add a DNN7.1 URL binding in the SQL script?
 
 //older todo items
 //TODO: the connection fails with websockets and no fall back
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
+
+//disable the enter key, knockout rebinds it later
+$(function() {
+    $("#Form").bind("keypress", function(e) {
+        if (e.keyCode == 13) {
+            return false;
+        }
+    });
+});
 
 function DnnChat($, ko, settings) {
 
@@ -168,6 +174,13 @@ function DnnChat($, ko, settings) {
         
         this.messages = ko.observableArray([]);
         this.connectionRecords = ko.observableArray([]);
+
+        this.userCount = ko.computed(function () {
+            //count connectionRecords
+            return this.connectionRecords().length;
+        }, this);
+
+
 
         this.awayMessageCount = ko.observable(0);
         this.awayMentionCount = ko.observable(0);
@@ -490,16 +503,10 @@ function DnnChat($, ko, settings) {
 
         //update the online user count
         //TODO: user counts aren't working
-        $('#currentCount').text(data.length);
+        //$('#currentCount').text(data.length);
     };
 
     //TODO: handle these click events with knockout
-
-    //TODO: userlist should be per room
-    //TODO: wire up user list click to the text box
-    $('#userList').on('click', '.UserListUser', function () {
-        $('#msg').val($('#msg').val() + ' @' + $(this).text() + ' ').focus();
-    });
 
     //todo: this is still being used at the Page level notifications, but not for the Room counts
     function updateUnread(mentioned) {

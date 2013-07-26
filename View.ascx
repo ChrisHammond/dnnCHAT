@@ -94,7 +94,7 @@
             <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
 
             <div class="dnnRight usersOnline">
-                <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div id="currentCount" class="dnnRight">1</div>
+                <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
             </div>
             <div id="ChatStatus" class="chatStatus dnnClear">
             </div>

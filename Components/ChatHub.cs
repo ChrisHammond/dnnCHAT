@@ -61,14 +61,14 @@ namespace Christoc.Modules.DnnChat.Components
                 // parse message before use
                 if (Clients.Caller.username != null && Clients.Caller.username.Trim() != "phantom")
                 {
-                    var parsedMessage = ParseMessage(message,roomId);
+                    var parsedMessage = ParseMessage(message, roomId);
                     if (parsedMessage != string.Empty)
                     {
                         int moduleId;
                         //int.TryParse(Clients.Caller.moduleid, out moduleId);
                         moduleId = Convert.ToInt32(Clients.Caller.moduleid);
 
-                        
+
                         var m = new Message
                                     {
                                         ConnectionId = Context.ConnectionId,
@@ -138,26 +138,41 @@ namespace Christoc.Modules.DnnChat.Components
 
         private void DisconnectUser(string connectionId)
         {
+            if (connectionId == null)
+                return;
             //TODO: remove user from all rooms
             var crc = new ConnectionRecordController();
+            var crrc = new ConnectionRecordRoomController();
             var id = connectionId;
             var cr = crc.GetConnectionRecordByConnectionId(id);
-            var crId = cr.ConnectionRecordId;
-
-            if (id == null)
-                return;
-            var roomList = Users.FindAll(c => (c.Id == crId));
-
-            foreach (UserListRecords rr in roomList)
+            if (cr != null)
             {
-                Users.Remove(rr);
-                Clients.Others.removeUserFromList(cr);
+                var roomList = Users.FindAll(c => (c.ConnectionId == connectionId));
+
+                //disconnect each room
+                foreach (UserListRecords rr in roomList)
+                {
+                    Users.Remove(rr);
+                    Clients.Others.removeUserFromList((ConnectionRecord)rr);
+
+                    //TODO: we don't want to set the departed date, because if we do, the rooms they were last connected to don't open.
+                    //var connectionRoom = crrc.GetConnectionRecordRoomByConnectionRecordId(rr.ConnectionRecordId, rr.RoomId);
+                    //if (connectionRoom != null)
+                    //{
+                        
+                    //    connectionRoom.DepartedDate = DateTime.UtcNow;
+                    //    crrc.UpdateConnectionRecordRoom(connectionRoom);
+                    //}
+
+                    //TODO: handle ROOMID, not currently using below
+                    Clients.Group(rr.RoomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName), RoomId = rr.RoomId });
+                    Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(c => (c.RoomId == rr.RoomId)));
+                }
+                //disconnect the connectionrecord
                 cr.DisConnectedDate = DateTime.UtcNow;
+
                 crc.UpdateConnectionRecord(cr);
 
-                //TODO: handle ROOMID, not currently using below
-                Clients.Group(rr.RoomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName), RoomId = rr.RoomId });
-                Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(c => (c.RoomId == rr.RoomId)));
             }
         }
 
@@ -165,7 +180,7 @@ namespace Christoc.Modules.DnnChat.Components
         private ConnectionRecord SetupConnectionRecord()
         {
             string username = Clients.Caller.username;
-            
+
 
             //if (string.IsNullOrEmpty(username))
             //{
@@ -193,7 +208,6 @@ namespace Christoc.Modules.DnnChat.Components
             var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId);
             if (c != null)
             {
-
                 c.UserName = username;
                 //Users.Add(c);
                 crc.UpdateConnectionRecord(c);
@@ -235,12 +249,10 @@ namespace Christoc.Modules.DnnChat.Components
 
             IEnumerable<Room> myRooms = null;
 
-            //TODO: don't allow connecting to the same room twice
             if (Convert.ToInt32(Clients.Caller.userid) > 0)
             {
                 myRooms = crrc.GetConnectionRecordRoomsByUserId((int)Clients.Caller.userid);
             }
-
 
             //TODO: the default room doesn't have a moduleid associated with it
             //if myRooms is empty, what to do (pass default room)
@@ -252,6 +264,7 @@ namespace Christoc.Modules.DnnChat.Components
                 myRooms = myRooms.Concat(new[] { r });
             }
 
+            //get all the active rooms and send it back for the Lobby
             var allRooms = rc.GetRooms(moduleId);
 
             //we are passing in a list of All rooms, and the current user's rooms
@@ -265,9 +278,9 @@ namespace Christoc.Modules.DnnChat.Components
             var rc = new RoomController();
 
             var allRooms = rc.GetRooms(moduleId);
-            Clients.Caller.FillLobby(allRooms);            
+            Clients.Caller.FillLobby(allRooms);
         }
-        
+
         /*
          * When a user connects we need to populate their user information, we default the username to be Anonymous + a #
          */
@@ -284,12 +297,7 @@ namespace Christoc.Modules.DnnChat.Components
 
             var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
 
-            //TODO: handle reconnections
-            //if the startMessage is empty, that means the user is a reconnection
-
-            //TODO: handle start messages
-            //lookup client room connection record, if there don't add
-            var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
+            var cr = crrc.GetConnectionRecordRoomByConnectionRecordId(c.ConnectionRecordId, roomId);
 
             if (cr == null)
             {
@@ -340,13 +348,16 @@ namespace Christoc.Modules.DnnChat.Components
             var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
 
             //lookup client room connection record, if there don't add
-            var cr = crrc.GetConnectionRecordRoom(c.ConnectionRecordId, roomId);
+            var connectionRoom = crrc.GetConnectionRecordRoomByConnectionRecordId(c.ConnectionRecordId, roomId);
 
-            if (cr != null)
+            if (connectionRoom != null)
             {
-                cr.DepartedDate = DateTime.UtcNow;
+                connectionRoom.DepartedDate = DateTime.UtcNow;
+                crrc.UpdateConnectionRecordRoom(connectionRoom);
+
+                var removeUser = Users.Find(conRec => (conRec.Id == connectionRoom.Id));
+                Users.Remove(removeUser);
             }
-            crrc.UpdateConnectionRecord(cr);
 
             //Remove the user from the SignalR Group (broadcast)
             Groups.Remove(Context.ConnectionId, roomId.ToString());
@@ -419,7 +430,7 @@ namespace Christoc.Modules.DnnChat.Components
                 var originalName = rr.UserName;
                 //set the new name on both record objects
                 rr.UserName = cr.UserName = userName;
-                
+
                 //we need to update with the connectionrecord not UserListRecord
                 crc.UpdateConnectionRecord(cr);
 
@@ -510,7 +521,7 @@ namespace Christoc.Modules.DnnChat.Components
                         {
                             r = new Room
                                 {
-                                    RoomId = Guid.NewGuid(),                                    
+                                    RoomId = Guid.NewGuid(),
                                     RoomName = roomName,
                                     RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text", "/desktopmodules/DnnChat/app_localresources/" +
                                                                          Localization.LocalSharedResourceFile),
