@@ -355,10 +355,13 @@ function DnnChat($, ko, settings) {
     //wire up the click handler for the button after the connection starts
     this.init = function (element) {
         $.connection.hub.start().done(function () {
-           //nothing to do here?
+            //nothing to do here?
         });
     };
 
+    $.connection.hub.starting(function () {
+        showStatus(stateConnected);
+    });
     //logic below based on code from Jabbr (http://jabbr.net)
     $.connection.hub.stateChanged(function (change) {
         if (change.newState === $.connection.connectionState.reconnecting) {
@@ -368,7 +371,7 @@ function DnnChat($, ko, settings) {
         else if (change.newState === $.connection.connectionState.connected) {
             if (!firstConnection) {
                 //do something on subsequent connections
-
+                alert('connected');
                 showStatus(stateReconnected);
 
             } else {
@@ -378,6 +381,7 @@ function DnnChat($, ko, settings) {
             }
         }
     });
+    
     $.connection.hub.disconnected(function () {
         showStatus(stateDisconnected);
         // Restart the connection
@@ -544,7 +548,11 @@ function DnnChat($, ko, settings) {
 
 /* used to format the counters when a room isn't active */
 function formatCount(value) {
-    return "(" + value + ")";
+    if (value > 0)
+        return "(" + value + ")";
+    else {
+        return "";
+    }
 }
 
 function showStatus(message) {

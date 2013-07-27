@@ -52,8 +52,8 @@
         <div class="ConnectedRoomTab" data-bind="id:roomName,click:setActiveRoom,css:{activeRoom:roomId == $parent.activeRoom()}">
             <div data-bind="html:roomName" class="ConnectedRoom">
             </div>
-            <div data-bind="html:formatCount(awayMessageCount()),visible:(showRoom()!=true && awayMessageCount()>0)" class="roomAwayMessageCount"></div>
-            <div data-bind="html:formatCount(awayMentionCount()),visible:(showRoom()!=true && awayMentionCount()>0)" class="roomAwayMentionCount"></div>
+            <div data-bind="html:formatCount(awayMessageCount())" class="roomAwayMessageCount"></div>
+            <div data-bind="html:formatCount(awayMentionCount())" class="roomAwayMentionCount"></div>
 
             <div data-bind="click:disconnectRoom" class="RoomClose"></div>
         </div>
@@ -95,10 +95,10 @@
             <div class="dnnRight usersOnline">
                 <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
             </div>
-            <div id="ChatStatus" class="chatStatus dnnClear">
-            </div>
         </div>
     <!-- /ko -->
 </div>
+            <div id="ChatStatus" class="chatStatus dnnClear">
+            </div>
 
 <div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>
