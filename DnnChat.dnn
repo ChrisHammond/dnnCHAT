@@ -13,7 +13,7 @@
       <license src="License.txt"></license>
       <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
       <dependencies>
-        <dependency type="CoreVersion">07.00.02</dependency>
+        <dependency type="CoreVersion">07.01.00</dependency>
         <!-- .NET 4.5 -->
         <dependency type="type">System.Reflection.ReflectionContext</dependency>
       </dependencies>

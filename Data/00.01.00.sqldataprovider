@@ -104,3 +104,47 @@ Update {databaseOwner}{objectQualifier}DnnChat_Messages
 set RoomId = (select top 1 RoomId from {databaseOwner}{objectQualifier}DnnChat_Rooms)
 where RoomId is null
 
+
+GO
+
+
+IF NOT EXISTS (SELECT * FROM {databaseOwner}[{objectQualifier}HostSettings] WHERE SettingName = 'AUM_DoNotRewriteRegEx' )
+
+	insert into {databaseOwner}{objectQualifier}hostsettings
+	(SettingName
+	, SettingValue
+	, SettingIsSecure 
+	, CreatedByUserId
+	, CreatedOnDate
+	, LastModifiedByUserId
+	, LastModifiedOnDate
+	)
+	values(
+	'AUM_DoNotRewriteRegEx'
+	,'/signalr'
+	, 0
+	, -1
+	, GETDATE()
+	, -1
+	, GETDATE()
+	)
+
+GO
+
+IF EXISTS (SELECT * FROM {databaseOwner}[{objectQualifier}HostSettings] WHERE SettingName = 'AUM_DoNotRewriteRegEx' and SettingValue not like '%/signalr%' )
+
+update {databaseOwner}{objectQualifier}hostsettings
+	set settingValue = (select settingValue + '|/signalr' from {databaseOwner}{objectQualifier}hostsettings where settingname = 'AUM_DoNotRewriteRegEx')
+where settingname = 'AUM_DoNotRewriteRegEx'
+
+
+GO
+
+
+
+
+
+
+
+
+
