@@ -132,4 +132,4 @@ DesktopModules\DnnChat\Scripts\jquery.signalR-1.0.0.js
 DesktopModules\DnnChat\Scripts\jquery.signalR-1.0.0.min.js
 DesktopModules\DnnChat\Scripts\jquery.signalR-1.0.1.js
 DesktopModules\DnnChat\Scripts\jquery.signalR-1.0.1.min.js
-DesktopModules\DnnChat\Scripts\00.00.08.txt
+DesktopModules\DnnChat\00.00.08.txt

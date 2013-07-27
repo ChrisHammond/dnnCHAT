@@ -144,34 +144,21 @@ namespace Christoc.Modules.DnnChat.Components
             if (cr != null)
             {
                 var roomList = Users.FindAll(c => (c.ConnectionId == connectionId));
-
-                //disconnect each room
+                //disconnect from each room the user was connected to
                 foreach (UserListRecords rr in roomList)
                 {
                     Users.Remove(rr);
-                    Clients.Others.removeUserFromList((ConnectionRecord)rr);
-
-                    //TODO: we don't want to set the departed date, because if we do, the rooms they were last connected to don't open.
-                    //var connectionRoom = crrc.GetConnectionRecordRoomByConnectionRecordId(rr.ConnectionRecordId, rr.RoomId);
-                    //if (connectionRoom != null)
-                    //{
-
-                    //    connectionRoom.DepartedDate = DateTime.UtcNow;
-                    //    crrc.UpdateConnectionRecordRoom(connectionRoom);
-                    //}
-
-                    //TODO: handle ROOMID, not currently using below
+                    
                     Clients.Group(rr.RoomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName), RoomId = rr.RoomId });
-                    Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(c => (c.RoomId == rr.RoomId)));
+
+                    //Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(c => (c.RoomId == rr.RoomId)));
+                    Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(uc => (uc.RoomId == rr.RoomId)), rr.RoomId);
                 }
                 //disconnect the connectionrecord
                 cr.DisConnectedDate = DateTime.UtcNow;
-
                 crc.UpdateConnectionRecord(cr);
-
             }
         }
-
 
         private ConnectionRecord SetupConnectionRecord()
         {
@@ -442,7 +429,8 @@ namespace Christoc.Modules.DnnChat.Components
 
                 var nameChange = String.Format(Localization.GetString("NameChange.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), originalName,
            rr.UserName);
-                Clients.All.updateUserList(Users, rr.RoomId);
+                Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(uc => (uc.RoomId == rr.RoomId)), rr.RoomId);
+
 
                 var m = new Message
                 {
