@@ -16,6 +16,13 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwn
 DROP TABLE {databaseOwner}[{objectQualifier}DnnChat_Messages]
 GO
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_Rooms]') AND type in (N'U'))
+	drop table {databaseOwner}{objectQualifier}DnnChat_Rooms
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_ConnectionRecordRooms]') AND type in (N'U'))
+	drop table {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms
+GO
 
 
 /************************************************************/

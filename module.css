@@ -1,6 +1,6 @@
 .srcWindow
 {
-    width: 95%;
+    width: 100%;
 }
 
 .ChatWindow
@@ -121,22 +121,27 @@
     padding: 5px;
 }
 
-.RoomListTab {
+.ConnectedRoomTab {
     border: solid 1px #000;
-    width: 200px;
+    min-width: 50px;
     float: left;
     padding: 5px 5px 0 5px;
     margin-right: 5px;
+    border-bottom: 0;
 }
 
-.RoomListRoom {
+.ConnectedRoom {
     float: left;
+    padding-right: 5px;
+    padding-bottom: 5px;
 }
 .RoomClose {
     background-image: url('../../images/close-icn.png');
     width: 24px;
     height: 24px;
     float: right;
+    right: -5px;
+    top: -5px;
 }
 
 .RoomContainer
@@ -150,4 +155,8 @@
 .activeRoom {
     background: #dbdbdb;
     font-weight: bold;
+}
+
+.ShowRoomListButton {
+    float: right;
 }

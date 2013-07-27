@@ -86,7 +86,7 @@ namespace Christoc.Modules.DnnChat
                 {
                     //if we don't have a setting. go get the default room from the database.
                     var rc = new RoomController();
-                    var r = rc.GetRoom("Default Room");
+                    var r = rc.GetRoom("Lobby");
                     if (r == null || (r.ModuleId > 0 && r.ModuleId != ModuleId))
                     {
                         //todo: if there isn't a room we need display a message about creating one

@@ -82,10 +82,10 @@ Insert {databaseOwner}{objectQualifier}DnnChat_Rooms
 values
 	(
 		NEWID()
-		, 'Default Room'
+		, 'Lobby'
 		, 1
-		, 'Default Room for the dnnCHAT module.'
-		, 'Welcome to the Default Chat Room'
+		, 'This is the Lobby, the default room for the dnnCHAT module.'
+		, 'Welcome to the Lobby! You can join other rooms by clicking on the Show Room List button.'
 		, 0
 		, Null
 		, GETDATE()
@@ -99,11 +99,9 @@ values
 GO
 /* updated the RoomID for existing messages that don't have a room */
 
-
 Update {databaseOwner}{objectQualifier}DnnChat_Messages
 set RoomId = (select top 1 RoomId from {databaseOwner}{objectQualifier}DnnChat_Rooms)
 where RoomId is null
-
 
 GO
 

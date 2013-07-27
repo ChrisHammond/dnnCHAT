@@ -34,7 +34,7 @@ namespace Christoc.Modules.DnnChat.Components
 
         //set the default room based on name (probably should change this somehow for languages)
         //TODO: this only works for a single instance of the module, another instance and all hell might break loose
-        private static Guid DefaultRoomId = new Guid(new RoomController().GetRoom("Default Room").RoomId.ToString());
+        private static Guid DefaultRoomId = new Guid(new RoomController().GetRoom("Lobby").RoomId.ToString());
 
         /*
          * This method is used to send messages to all connected clients.

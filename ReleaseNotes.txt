@@ -14,6 +14,14 @@
 	<h3>About the dnnCHAT Module</h3>
 
 	<p class="Owner">
+		<b>Version 00.01.00</b><br /><br />
+	</p>
+	<p>	
+	<ul>
+		<li>Added Room functionality.</li>
+	</ul>
+	</p>
+	<p class="Owner">
 		<b>Version 00.00.09</b><br /><br />
 	</p>
 	<p>	

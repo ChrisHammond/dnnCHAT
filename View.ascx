@@ -33,24 +33,24 @@
     
 </script>
 
-<div class="RoomList" id="roomList">
+<div class="LobbyArea dnnClear" id="roomList">
 
-    <div class="ChatRooms" data-bind="click:$root.ShowLobby">
-        <%=Localization.GetString("lobbyName.Text",LocalResourceFile) %>
+    <div class="ShowRoomListButton dnnPrimaryAction" data-bind="click:$root.ShowRoomList">
+        <%=Localization.GetString("showRoomList.text",LocalResourceFile) %>
     </div>
-    <div class="LobbyRoomList" style="display: none;" title="<%=Localization.GetString("lobbyTitle.Text",LocalResourceFile) %>">
+    <div class="RoomList" style="display: none;" title="<%=Localization.GetString("joinARoom.Text",LocalResourceFile) %>">
         <!-- ko foreach: rooms -->
-        <div data-bind="html:roomName,click:joinRoom" class="LobbyRoom">
+        <div data-bind="html:roomName,click:joinRoom" class="RoomListRoom">
         </div>
         <!-- /ko -->
     </div>
 </div>
 
-<div class="RoomList" id="userRoomList">
+<div class="ConnectedRoomList" id="userRoomList">
     <!-- ko foreach: rooms -->
     <div class="ChatRooms">
-        <div class="RoomListTab" data-bind="id:roomName,click:setActiveRoom,css:{activeRoom:roomId == $parent.activeRoom()}">
-            <div data-bind="html:roomName" class="RoomListRoom">
+        <div class="ConnectedRoomTab" data-bind="id:roomName,click:setActiveRoom,css:{activeRoom:roomId == $parent.activeRoom()}">
+            <div data-bind="html:roomName" class="ConnectedRoom">
             </div>
             <div data-bind="html:formatCount(awayMessageCount()),visible:(showRoom()!=true && awayMessageCount()>0)" class="roomAwayMessageCount"></div>
             <div data-bind="html:formatCount(awayMentionCount()),visible:(showRoom()!=true && awayMentionCount()>0)" class="roomAwayMentionCount"></div>

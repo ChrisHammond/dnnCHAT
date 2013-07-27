@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="DnnChat" type="Module" version="00.00.09">
+    <package name="DnnChat" type="Module" version="00.01.00">
       <friendlyName>DnnChat</friendlyName>
       <description>A Chat module for DotNetNuke using SignalR</description>
       <iconFile>Images/icon_extensions.gif</iconFile>
@@ -41,10 +41,15 @@
               <name>00.00.08.SqlDataProvider</name>
               <version>00.00.08</version>
             </script>
+            <script type="Install">
+              <path>Data</path>
+              <name>00.01.00.SqlDataProvider</name>
+              <version>00.01.00</version>
+            </script>
             <script type="UnInstall">
               <path>Data</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>00.00.08</version>
+              <version>00.01.00</version>
             </script>
           </scripts>
         </component>
@@ -134,7 +139,7 @@
             </assembly>
           </assemblies>
         </component>
-        <component type="Cleanup" version="00.00.08" fileName="00.00.08.txt" />
+        <component type="Cleanup" version="00.01.00" fileName="00.01.00.txt" />
       </components>
     </package>
   </packages>

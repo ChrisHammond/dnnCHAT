@@ -121,7 +121,7 @@
     <value>DnnChat Settings</value>
   </data>
   <data name="lblDefaultRoom.Help" xml:space="preserve">
-    <value>Choose a default room that users will connect to. Anonymous users can only connect to this room.</value>
+    <value>Choose a default room that users will connect to. Anonymous users can only connect to this room. It will most likely by the Lobby.</value>
   </data>
   <data name="lblDefaultRoom.Text" xml:space="preserve">
     <value>Default Room</value>

@@ -1,8 +1,4 @@
 ﻿//Below is a list of todo items that still need to be completed before release
-
-//TODO: 7/24/2013   should we automatically add a DNN7.1 URL binding in the SQL script?
-
-
 //older todo items
 //TODO: the connection fails with websockets and no fall back
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
@@ -143,19 +139,19 @@ function DnnChat($, ko, settings) {
     //used for the list of rooms
     var roomModel = {
         rooms: ko.observableArray([]),
-        ShowLobby: function () {
+        ShowRoomList: function () {
             //get an updated list of rooms for the Lobby
             chatHub.server.getLobby();
             
             //open the lobby dialog
-            $(".LobbyRoomList").dialog({
+            $(".RoomList").dialog({
                 width: '600px',
                 modal: true
                 , dialogClass: "dnnFormPopup"
             });
         },
         HideLobby: function () {
-            $(".LobbyRoomList").hide();
+            $(".RoomList").hide();
         }
     };
 
@@ -295,14 +291,14 @@ function DnnChat($, ko, settings) {
                         chatHub.server.getRoomInfo(this.roomId, moduleid);
                         this.setActiveRoom();
                     }
-                    $(".LobbyRoomList").dialog('close');
+                    $(".RoomList").dialog('close');
                 } else {
                     alert(alreadyInRoom);
-                    $(".LobbyRoomList").dialog('close');
+                    $(".RoomList").dialog('close');
                 }
             } else {
                 alert(anonUsersRooms);
-                $(".LobbyRoomList").dialog('close');
+                $(".RoomList").dialog('close');
             }
         };
     }
