@@ -119,7 +119,7 @@ IF NOT EXISTS (SELECT * FROM {databaseOwner}[{objectQualifier}HostSettings] WHER
 	)
 	values(
 	'AUM_DoNotRewriteRegEx'
-	,'/signalr'
+	,'/DesktopModules/|/Providers|/LinkClick\.aspx|/SignalR'
 	, 0
 	, -1
 	, GETDATE()
