@@ -1,4 +1,7 @@
 ﻿//Below is a list of todo items that still need to be completed before release
+//TODO: 7/29/2013 - In production reconnections to rooms you were part of don't happen properly, I think timing/delay is an issue
+//TODO: 7/29/2013 - In production the 'close' dialog options below throw JS errors at first connection
+
 //older todo items
 //TODO: the connection fails with websockets and no fall back
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
@@ -159,6 +162,7 @@ function DnnChat($, ko, settings) {
     var userRoomModel = {
         rooms: ko.observableArray([])
         , activeRoom: ko.observable(activeRoomId)
+        , sortRoomsAscending: function () {this.rooms(this.rooms().sort(function(a, b) { return a.roomName == b.roomName ? 0 : (a.roomName.toLowerCase() < b.roomName.toLowerCase() ? -1 : 1); })); }
     };
     
     //Room mapping function
@@ -171,6 +175,9 @@ function DnnChat($, ko, settings) {
         
         this.messages = ko.observableArray([]);
         this.connectionRecords = ko.observableArray([]);
+        
+        this.sortRoomUsersAscending = function () {this.connectionRecords(this.connectionRecords().sort(function (a, b) {return a.authorName == b.authorName ? 0 : (a.authorName.toLowerCase() < b.authorName.toLowerCase() ? -1 : 1);}));
+        };
 
         this.userCount = ko.computed(function () {
             //count connectionRecords to see how many users are in a Room
@@ -280,6 +287,7 @@ function DnnChat($, ko, settings) {
             userRoomModel.rooms.remove(this);
             //TODO: should we send them to a different room?
             userRoomModel.activeRoom(defaultRoomId);
+            
         };
 
         this.joinRoom = function () {
@@ -300,6 +308,7 @@ function DnnChat($, ko, settings) {
                 alert(anonUsersRooms);
                 $(".RoomList").dialog('close');
             }
+            userRoomModel.sortRoomsAscending();
         };
     }
 
@@ -408,11 +417,10 @@ function DnnChat($, ko, settings) {
         $.each(myRooms, function (i, item) {
             var r = new Room(item);
             r.joinRoom();
+            r.sortRoomUsersAscending();
         });
-
-        userRoomModel.rooms.sort(function (left, right) { return left.roomName == right.roomName ? 0 : (left.roomName.toLowerCase() < right.roomName.toLowerCase() ? -1 : 1); });
-
         chatHub.state.startMessage = "";
+        userRoomModel.sortRoomsAscending();
     };
     
 
@@ -499,8 +507,8 @@ function DnnChat($, ko, settings) {
         }
 
         //sort the list of users
-        usersViewModel.connectionRecords.sort(function (left, right) { return left.authorName == right.authorName ? 0 : (left.authorName.toLowerCase() < right.authorName.toLowerCase() ? -1 : 1); });
-
+        //usersViewModel.connectionRecords.sort(function (left, right) { return left.authorName == right.authorName ? 0 : (left.authorName.toLowerCase() < right.authorName.toLowerCase() ? -1 : 1); });
+        curRoom.sortRoomUsersAscending();
         //update the online user count
         //TODO: user counts aren't working
         //$('#currentCount').text(data.length);

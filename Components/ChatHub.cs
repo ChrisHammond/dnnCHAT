@@ -352,7 +352,6 @@ namespace Christoc.Modules.DnnChat.Components
 
             //Remove the user from the SignalR Group (broadcast)
             Groups.Remove(Context.ConnectionId, roomId.ToString());
-            //TODO: Remove the user from the RoomUserList
 
             return Clients.Group(roomId.ToString()).updateUserList(Users.FindAll(cc => (cc.RoomId == roomId)), roomId);
 
