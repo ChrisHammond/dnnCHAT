@@ -74,6 +74,7 @@ function DnnChat($, ko, settings) {
             var foundRoom = findRoom(this.roomId);
             if (foundRoom) {
                 foundRoom.newMessageText(foundRoom.newMessageText() + ' @' + this.authorName + ' ');
+                foundRoom.setTextFocus();
             }
         };
     }
@@ -162,7 +163,7 @@ function DnnChat($, ko, settings) {
     var userRoomModel = {
         rooms: ko.observableArray([])
         , activeRoom: ko.observable(activeRoomId)
-        , sortRoomsAscending: function () {this.rooms(this.rooms().sort(function(a, b) { return a.roomName == b.roomName ? 0 : (a.roomName.toLowerCase() < b.roomName.toLowerCase() ? -1 : 1); })); }
+        , sortRoomsAscending: function () { this.rooms(this.rooms().sort(function (a, b) { return a.roomName == b.roomName ? 0 : (a.roomName.toLowerCase() < b.roomName.toLowerCase() ? -1 : 1); })); }
     };
     
     //Room mapping function
@@ -254,9 +255,17 @@ function DnnChat($, ko, settings) {
             return this.roomId === userRoomModel.activeRoom();
         }, this);
 
+        this.textFocus = ko.observable(false);
+
         //clear out the message text to start
         this.newMessageText = ko.observable("");
+        
+        this.setTextFocus = function() {
+            this.textFocus(true);
+            //TODO: In IE10, the cursor position shows up before the username on the first time in, after that it works fine.
+        };
 
+        
         this.sendMessage = function () {
             //remove all HTML tags first for safety
             var msgSend = $.trim(this.newMessageText().replace(/(<([^>]+)>)/ig, ""));
