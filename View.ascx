@@ -1,9 +1,8 @@
-﻿
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="Christoc.Modules.DnnChat.View" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="Christoc.Modules.DnnChat.View" %>
 <%@ Register TagPrefix="dnn" Namespace="DotNetNuke.Web.Client.ClientResourceManagement" Assembly="DotNetNuke.Web.Client" %>
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
 
-<dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-1.1.2.min.js" Priority="10" />
+<dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-1.1.3.min.js" Priority="10" />
 <dnn:DnnJsInclude runat="server" FilePath="~/signalr/hubs" Priority="100" />
 
 
@@ -22,10 +21,12 @@
             stateReconnected:'<%=Localization.GetString("StateReconnected.Text",LocalResourceFile)%>',
             stateConnected:'<%=Localization.GetString("StateConnected.Text",LocalResourceFile)%>',
             stateDisconnected:'<%=Localization.GetString("StateDisconnected.Text",LocalResourceFile)%>',
+            stateConnectionSlow:'<%=Localization.GetString("StateConnectionSlow.Text",LocalResourceFile)%>',
             emoticonsUrl:'<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>',
             alreadyInRoom:'<%=Localization.GetString("AlreadyInRoom.Text",LocalResourceFile)%>',
             anonUsersRooms:'<%=Localization.GetString("AnonymousJoinDenied.Text",LocalResourceFile)%>',
             messageMissingRoom: '<%=Localization.GetString("MessageMissingRoom.Text",LocalResourceFile)%>',
+            errorSendingMessage:'<%=Localization.GetString("ErrorSendingMessage.Text",LocalResourceFile)%>',
             defaultRoomId:'<%=DefaultRoomId %>'
             
         });

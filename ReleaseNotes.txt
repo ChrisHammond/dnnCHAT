@@ -14,6 +14,15 @@
 	<h3>About the dnnCHAT Module</h3>
 
 	<p class="Owner">
+		<b>Version 01.00.01</b><br /><br /> 
+	</p>
+	<p>	
+	<ul>
+		<li>Updated to SignalR 1.1.3</li>
+	</ul>
+	</p>
+	
+	<p class="Owner">
 		<b>Version 01.00.00</b><br /><br /> First official DNNChat release replacing the old DNN Chat module.
 	</p>
 	<p>	

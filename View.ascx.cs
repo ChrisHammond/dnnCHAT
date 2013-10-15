@@ -90,6 +90,7 @@ namespace Christoc.Modules.DnnChat
                     if (r == null || (r.ModuleId > 0 && r.ModuleId != ModuleId))
                     {
                         //todo: if there isn't a room we need display a message about creating one
+                        
 
                     }
                     else
@@ -101,8 +102,7 @@ namespace Christoc.Modules.DnnChat
                         }
                         rc.UpdateRoom(r);
                     }
-                    DefaultRoomId = r.RoomId.ToString();
-
+                    if (r != null) DefaultRoomId = r.RoomId.ToString();
                 }
             }
             catch (Exception exc) //Module failed to load

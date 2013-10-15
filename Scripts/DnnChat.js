@@ -7,8 +7,8 @@
 //TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
 
 //disable the enter key, knockout rebinds it later
-$(function() {
-    $("#Form").bind("keypress", function(e) {
+$(function () {
+    $("#Form").bind("keypress", function (e) {
         if (e.keyCode == 13) {
             return false;
         }
@@ -21,18 +21,20 @@ function DnnChat($, ko, settings) {
     var userid = settings.userId;
     var username = settings.userName;
     var startmessage = settings.startMessage;
-    var sendMessageReconnecting = settings.sendMessageReconnecting;
+    var sendMessageReconnecting = settings.sendMessageReconnecting; //no longer used, 10-14-2013 cjh
     var stateReconnecting = settings.stateReconnecting;
-
     var stateReconnected = settings.stateReconnected;
     var stateConnected = settings.stateConnected;
     var stateDisconnected = settings.stateDisconnected;
+    var stateConnectionSlow = settings.stateConnectionSlow;
     var alreadyInRoom = settings.alreadyInRoom;
     var anonUsersRooms = settings.anonUsersRooms;
     var messageMissingRoom = settings.MessageMissingRoom;
 
     var defaultRoomId = settings.defaultRoomId;
-    
+
+    var errorSendingMessage = settings.errorSendingMessage;
+
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
 
     var focus = true;
@@ -69,7 +71,7 @@ function DnnChat($, ko, settings) {
         this.disconnectedDate = u.DisconnectedDate;
         this.ipAddress = u.IpAddress;
         this.roomId = u.RoomId;
-        
+
         this.targetMessageAuthor = function () {
             var foundRoom = findRoom(this.roomId);
             if (foundRoom) {
@@ -125,12 +127,13 @@ function DnnChat($, ko, settings) {
         if (m.AuthorName === chatHub.state.username) {
             this.cssName += " ChatSelf";
         }
-        
+
         this.targetMessageAuthor = function () {
             //todo: is there a more efficient way to find the message entry for this room?
             var foundRoom = findRoom(this.roomId);
             if (foundRoom) {
                 foundRoom.newMessageText(foundRoom.newMessageText() + ' @' + this.authorName + ' ');
+                foundRoom.setTextFocus();
             }
         };
     }
@@ -146,7 +149,7 @@ function DnnChat($, ko, settings) {
         ShowRoomList: function () {
             //get an updated list of rooms for the Lobby
             chatHub.server.getLobby();
-            
+
             //open the lobby dialog
             $(".RoomList").dialog({
                 width: '600px',
@@ -165,7 +168,7 @@ function DnnChat($, ko, settings) {
         , activeRoom: ko.observable(activeRoomId)
         , sortRoomsAscending: function () { this.rooms(this.rooms().sort(function (a, b) { return a.roomName == b.roomName ? 0 : (a.roomName.toLowerCase() < b.roomName.toLowerCase() ? -1 : 1); })); }
     };
-    
+
     //Room mapping function
     function Room(r) {
         this.roomId = r.RoomId;
@@ -173,18 +176,19 @@ function DnnChat($, ko, settings) {
         this.roomDescription = r.RoomDescription;
         //this is used to be able to "scroll" properly when a new message comes in, need to be able to know what the outer div is, it is this id
         this.roomNameId = "room-" + r.RoomId;
-        
+
         this.messages = ko.observableArray([]);
         this.connectionRecords = ko.observableArray([]);
-        
-        this.sortRoomUsersAscending = function () {this.connectionRecords(this.connectionRecords().sort(function (a, b) {return a.authorName == b.authorName ? 0 : (a.authorName.toLowerCase() < b.authorName.toLowerCase() ? -1 : 1);}));
+
+        this.sortRoomUsersAscending = function () {
+            this.connectionRecords(this.connectionRecords().sort(function (a, b) { return a.authorName == b.authorName ? 0 : (a.authorName.toLowerCase() < b.authorName.toLowerCase() ? -1 : 1); }));
         };
 
         this.userCount = ko.computed(function () {
             //count connectionRecords to see how many users are in a Room
             return this.connectionRecords().length;
         }, this);
-        
+
 
         this.awayMessageCount = ko.observable(0);
         this.awayMentionCount = ko.observable(0);
@@ -196,7 +200,7 @@ function DnnChat($, ko, settings) {
         this.formattedAwayMentionCount = ko.computed(function () {
             return '(' + this.awayMentionCount + ')';
         }, this);
-        
+
         //add a message without parsing
         this.addSystemMessage = function (m) {
             this.messages.push(m);
@@ -222,7 +226,7 @@ function DnnChat($, ko, settings) {
                     $(parentDiv).scrollTop($(parentDiv)[0].scrollHeight);
                 }
 
-            }            
+            }
         }.bind(this);
 
         this.addConnectionRecord = function (cr) {
@@ -259,13 +263,13 @@ function DnnChat($, ko, settings) {
 
         //clear out the message text to start
         this.newMessageText = ko.observable("");
-        
-        this.setTextFocus = function() {
+
+        this.setTextFocus = function () {
             this.textFocus(true);
             //TODO: In IE10, the cursor position shows up before the username on the first time in, after that it works fine.
         };
 
-        
+
         this.sendMessage = function () {
             //remove all HTML tags first for safety
             var msgSend = $.trim(this.newMessageText().replace(/(<([^>]+)>)/ig, ""));
@@ -279,14 +283,10 @@ function DnnChat($, ko, settings) {
                     chatHub.server.send(msgSend, this.roomId);
                     //clear the textbox for the next message
                     this.newMessageText('');
-
                     showStatus(stateConnected);
-                } else if ($.connection.hub.state === $.connection.connectionState.reconnecting) {
-                    chatHub.state.moduleid = moduleid;
-                    chatHub.state.userid = userid;
-                    chatHub.state.username = username;
-                    //start the connection again -should handle this better
-                    showStatus(sendMessageReconnecting);
+                } else {
+                    alert(errorSendingMessage);
+                    showStatus(errorSendingMessage);
                 }
             }
         };
@@ -296,7 +296,7 @@ function DnnChat($, ko, settings) {
             userRoomModel.rooms.remove(this);
             //TODO: should we send them to a different room?
             userRoomModel.activeRoom(defaultRoomId);
-            
+
         };
 
         this.joinRoom = function () {
@@ -353,7 +353,7 @@ function DnnChat($, ko, settings) {
         if (focus === false) {
             //handle new messages if window isn't in focus
             updateUnread(checkMention(m.messageText, chatHub.state.username));
-        } 
+        }
     };
 
     chatHub.client.newMessageNoParse = function (data) {
@@ -386,20 +386,23 @@ function DnnChat($, ko, settings) {
             //do something on reconnect   
             showStatus(stateReconnecting);
         }
+
+        else if (change.newState === $.connection.connectionState.disconnected) {
+            showStatus(stateDisconnected);
+        }
+
         else if (change.newState === $.connection.connectionState.connected) {
             if (!firstConnection) {
                 //do something on subsequent connections
-                alert('connected');
                 showStatus(stateReconnected);
 
             } else {
-
                 //do something else on first connection
                 showStatus(stateConnected);
             }
         }
     });
-    
+
     $.connection.hub.disconnected(function () {
         showStatus(stateDisconnected);
         // Restart the connection
@@ -408,6 +411,10 @@ function DnnChat($, ko, settings) {
         }, 5000);
     });
 
+
+    $.connection.hub.connectionSlow(function () {
+        showStatus(stateConnectionSlow);
+    });
 
     chatHub.client.join = function () {
         //fire the connection back to ChatHub that allows us to access the state, and join rooms
@@ -420,7 +427,7 @@ function DnnChat($, ko, settings) {
             var r = new Room(item);
             roomModel.rooms.push(r);
         });
-        
+
         //usersViewModel.connectionRecords.removeAll();
         userRoomModel.rooms.removeAll();
         $.each(myRooms, function (i, item) {
@@ -431,7 +438,7 @@ function DnnChat($, ko, settings) {
         chatHub.state.startMessage = "";
         userRoomModel.sortRoomsAscending();
     };
-    
+
 
     chatHub.client.fillLobby = function (allRooms) {
         roomModel.rooms.removeAll();
@@ -519,7 +526,7 @@ function DnnChat($, ko, settings) {
         //usersViewModel.connectionRecords.sort(function (left, right) { return left.authorName == right.authorName ? 0 : (left.authorName.toLowerCase() < right.authorName.toLowerCase() ? -1 : 1); });
         curRoom.sortRoomUsersAscending();
         //update the online user count
-        //TODO: user counts aren't working
+        
         //$('#currentCount').text(data.length);
     };
 
@@ -535,7 +542,6 @@ function DnnChat($, ko, settings) {
         }
     }
 
-    //TODO: modify the titles of the tabs for each room with notifications
     function SetTitle() {
         if (focus == false) {
             document.title = "(" + unread + ") " + "(" + mentions + ") " + pageTitle;

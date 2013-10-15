@@ -160,4 +160,10 @@
   <data name="MessageMissingRoom.Text" xml:space="preserve">
     <value>You have recieved a message for a room you are not connected to, it will not be displayed.</value>
   </data>
+  <data name="ErrorSendingMessage.Text" xml:space="preserve">
+    <value>There was a problem sending your message, you might need to refresh your browser to reconnect.</value>
+  </data>
+  <data name="StateConnectionSlow.Text" xml:space="preserve">
+    <value>chat connection is poor, you might lose connection soon</value>
+  </data>
 </root>
