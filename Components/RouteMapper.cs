@@ -28,8 +28,8 @@ namespace Christoc.Modules.DnnChat.Components
     {
         public void RegisterRoutes(IMapRoute mapRouteManager)
         {
-            
-            RouteTable.Routes.MapHubs();
+            //RouteTable.Routes.MapHubs(); //removed for SignalR 2.0.0
+
         }
     }
 }

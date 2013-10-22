@@ -580,7 +580,10 @@ namespace Christoc.Modules.DnnChat.Components
 
         protected string GetIpAddress()
         {
-            var env = Get<IDictionary<string, object>>(Context.Request.Items, "owin.environment");
+
+            
+            //var env = Get<IDictionary<string, object>>(Context.Request.Environment, "owin.environment");
+            var env = Context.Request.Environment;
             if (env == null)
             {
                 return null;
