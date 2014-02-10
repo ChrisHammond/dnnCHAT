@@ -122,7 +122,7 @@
               <path>bin</path>
             </assembly>
             <assembly>
-              <name>Microsoft.AspNet.SignalR.Owin.dll</name>
+              <name>Microsoft.Owin.dll</name>
               <path>bin</path>
             </assembly>
             <assembly>
@@ -135,6 +135,10 @@
             </assembly>
             <assembly>
               <name>Microsoft.Owin.Host.SystemWeb.dll</name>
+              <path>bin</path>
+            </assembly>
+            <assembly>
+              <name>Microsoft.Owin.Security.dll</name>
               <path>bin</path>
             </assembly>
           </assemblies>
