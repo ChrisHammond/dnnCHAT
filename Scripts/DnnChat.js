@@ -1,6 +1,6 @@
 ﻿//Below is a list of todo items that still need to be completed before release
-//TODO: 7/29/2013 - In production reconnections to rooms you were part of don't happen properly, I think timing/delay is an issue
-//TODO: 7/29/2013 - In production the 'close' dialog options below throw JS errors at first connection
+//TODO: 7/29/2014 - In production reconnections to rooms you were part of don't happen properly, I think timing/delay is an issue
+//TODO: 7/29/2014 - In production the 'close' dialog options below throw JS errors at first connection
 
 //older todo items
 //TODO: the connection fails with websockets and no fall back
@@ -21,7 +21,7 @@ function DnnChat($, ko, settings) {
     var userid = settings.userId;
     var username = settings.userName;
     var startmessage = settings.startMessage;
-    var sendMessageReconnecting = settings.sendMessageReconnecting; //no longer used, 10-14-2013 cjh
+    var sendMessageReconnecting = settings.sendMessageReconnecting; //no longer used, 10-14-2014 cjh
     var stateReconnecting = settings.stateReconnecting;
     var stateReconnected = settings.stateReconnected;
     var stateConnected = settings.stateConnected;
@@ -225,9 +225,9 @@ function DnnChat($, ko, settings) {
                 } else {
                     $(parentDiv).scrollTop($(parentDiv)[0].scrollHeight);
                 }
-
             }
         }.bind(this);
+
 
         this.addConnectionRecord = function (cr) {
             this.connectionRecords.push(cr);
@@ -254,7 +254,6 @@ function DnnChat($, ko, settings) {
             this.awayMentionCount(0);
         };
 
-
         this.showRoom = ko.computed(function () {
             return this.roomId === userRoomModel.activeRoom();
         }, this);
@@ -268,7 +267,6 @@ function DnnChat($, ko, settings) {
             this.textFocus(true);
             //TODO: In IE10, the cursor position shows up before the username on the first time in, after that it works fine.
         };
-
 
         this.sendMessage = function () {
             //remove all HTML tags first for safety
@@ -375,6 +373,7 @@ function DnnChat($, ko, settings) {
         $.connection.hub.start().done(function () {
             //nothing to do here?
         });
+
     };
 
     $.connection.hub.starting(function () {
@@ -462,6 +461,11 @@ function DnnChat($, ko, settings) {
         }
     };
 
+    chatHub.client.scrollBottom = function (roomId) {
+        var parentDiv = "#room-" + roomId;
+        $(parentDiv).scrollTop($(parentDiv)[0].scrollHeight);
+    };
+
     //this method get's called from the Hub when you update your 
     //name using the /nick SOMETHING call in the text window
     chatHub.client.updateName = function (newName) {
@@ -506,7 +510,6 @@ function DnnChat($, ko, settings) {
         });
 
         //check for long string of characters
-
         return message;
     }
 
@@ -526,7 +529,7 @@ function DnnChat($, ko, settings) {
         //usersViewModel.connectionRecords.sort(function (left, right) { return left.authorName == right.authorName ? 0 : (left.authorName.toLowerCase() < right.authorName.toLowerCase() ? -1 : 1); });
         curRoom.sortRoomUsersAscending();
         //update the online user count
-        
+
         //$('#currentCount').text(data.length);
     };
 
@@ -561,11 +564,9 @@ function DnnChat($, ko, settings) {
 
     //for autocomplete of usernames look at 
     //http://stackoverflow.com/questions/7537002/autocomplete-combobox-with-knockout-js-template-jquery 
-
-
+    
     ko.applyBindings(userRoomModel, document.getElementById('userRoomList'));
     ko.applyBindings(userRoomModel, document.getElementById('roomView'));
-
     ko.applyBindings(roomModel, document.getElementById('roomList'));
 }
 

@@ -1,5 +1,5 @@
 ﻿/*
-' Copyright (c) 2013  Christoc.com Software Solutions
+' Copyright (c) 2014 Christoc.com Software Solutions
 '  All rights reserved.
 ' 
 ' Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
@@ -319,6 +319,8 @@ namespace Christoc.Modules.DnnChat.Components
                     RoomId = roomId
                 });
                 Clients.Group(roomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName), RoomId = roomId });
+
+                Clients.Caller.scrollBottom(r.RoomId);
 
                 return Clients.Group(roomId.ToString()).updateUserList(Users.FindAll(uc => (uc.RoomId == r.RoomId)), roomId);
             }

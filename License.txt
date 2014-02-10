@@ -2,7 +2,7 @@
 	<h3>License</h3>
 	<p class="Owner">
 		Christoc.com Software Solutions  <a href=http://www.christoc.com>http://www.christoc.com</a></br>
-		Copyright (c) 2013</br>	
+		Copyright (c) 2014</br>	
 		by Christoc.com Software Solutions</br>
 	</p>
     <p>
