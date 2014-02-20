@@ -73,8 +73,13 @@ namespace Christoc.Modules.DnnChat.Components
         ///</summary>
         public string IpAddress { get; set; }
 
+        ///<summary>
+        /// A string with user's avatar url
+        ///</summary>
+        //public string PhotoUrl { get { return string.Format("/profilepic.ashx?userId={0}&h=32&w=32", UserId); } }
+
         public ConnectionRecord()
-        {}
+        { }
 
         public ConnectionRecord(ConnectionRecord cr)
         {

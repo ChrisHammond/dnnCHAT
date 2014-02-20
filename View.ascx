@@ -80,7 +80,7 @@
                 <!-- ko foreach: connectionRecords -->
                 <div class="ChatUsers">
                     <!-- ko if: userId>0 -->
-                    <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn">
+                    <div><img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto"/><div data-bind="    html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
                     </div>
                     <!-- /ko -->
                     <!-- ko if: userId<1 -->

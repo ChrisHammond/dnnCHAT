@@ -163,3 +163,5 @@
 .ShowRoomListButton {
     float: right;
 }
+
+.UserListPhoto{ border: solid 1px #000;width: 16px;float: left;height: 16px;}

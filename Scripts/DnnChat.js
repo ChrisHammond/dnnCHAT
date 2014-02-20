@@ -12,6 +12,7 @@ $(function () {
         if (e.keyCode == 13) {
             return false;
         }
+        return true;
     });
 });
 
@@ -71,6 +72,7 @@ function DnnChat($, ko, settings) {
         this.disconnectedDate = u.DisconnectedDate;
         this.ipAddress = u.IpAddress;
         this.roomId = u.RoomId;
+        this.photoUrl = "/profilepic.ashx?userId="+ u.UserId +"&h=32&w=32";
 
         this.targetMessageAuthor = function () {
             var foundRoom = findRoom(this.roomId);
@@ -437,7 +439,6 @@ function DnnChat($, ko, settings) {
         chatHub.state.startMessage = "";
         userRoomModel.sortRoomsAscending();
     };
-
 
     chatHub.client.fillLobby = function (allRooms) {
         roomModel.rooms.removeAll();
