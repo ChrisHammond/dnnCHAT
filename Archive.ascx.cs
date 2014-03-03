@@ -51,6 +51,8 @@ namespace Christoc.Modules.DnnChat
         {
             try
             {
+
+                //TODO: be sure to check for permissions when enabled
                 if (!Page.IsPostBack)
                 {
                     var sd = Request.QueryString["sd"];
