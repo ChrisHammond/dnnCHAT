@@ -146,6 +146,13 @@
     <Compile Include="Settings.ascx.designer.cs">
       <DependentUpon>Settings.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Archive.ascx.cs">
+      <DependentUpon>Archive.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Archive.ascx.designer.cs">
+      <DependentUpon>Archive.ascx</DependentUpon>
+    </Compile>
     <Compile Include="View.ascx.cs">
       <DependentUpon>View.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -221,6 +228,7 @@
     <Content Include="Scripts\jquery.signalR-2.0.2.min.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Settings.ascx" />
+    <Content Include="Archive.ascx" />
     <Content Include="View.ascx" />
     <Content Include="Data\00.00.05.sqldataprovider" />
     <None Include="Data\00.00.06.sqldataprovider" />
@@ -247,7 +255,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_LocalResources\Edit.ascx.resx" />
+    <Content Include="App_LocalResources\Archive.ascx.resx" />
     <Content Include="App_LocalResources\Settings.ascx.resx">
       <SubType>Designer</SubType>
     </Content>

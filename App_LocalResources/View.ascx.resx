@@ -166,4 +166,7 @@
   <data name="StateConnectionSlow.Text" xml:space="preserve">
     <value>chat connection is poor, you might lose connection soon</value>
   </data>
+  <data name="Archives.Text" xml:space="preserve">
+    <value>Chat Archives</value>
+  </data>
 </root>

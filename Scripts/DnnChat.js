@@ -35,6 +35,7 @@ function DnnChat($, ko, settings) {
     var defaultRoomId = settings.defaultRoomId;
 
     var errorSendingMessage = settings.errorSendingMessage;
+    var roomArchiveLink = settings.roomArchiveLink;
 
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
 
@@ -72,7 +73,9 @@ function DnnChat($, ko, settings) {
         this.disconnectedDate = u.DisconnectedDate;
         this.ipAddress = u.IpAddress;
         this.roomId = u.RoomId;
-        this.photoUrl = "/profilepic.ashx?userId="+ u.UserId +"&h=32&w=32";
+        this.photoUrl = "/profilepic.ashx?userId=" + u.UserId + "&h=32&w=32";
+        //this.profileUrl = "/Activity-Feed/userid/" + u.UserId; //http://www.dnnchat.com/Activity-Feed/userId/1
+
 
         this.targetMessageAuthor = function () {
             var foundRoom = findRoom(this.roomId);
@@ -178,6 +181,7 @@ function DnnChat($, ko, settings) {
         this.roomDescription = r.RoomDescription;
         //this is used to be able to "scroll" properly when a new message comes in, need to be able to know what the outer div is, it is this id
         this.roomNameId = "room-" + r.RoomId;
+        this.roomArchiveLink = roomArchiveLink.slice(0, -1) + r.RoomId;
 
         this.messages = ko.observableArray([]);
         this.connectionRecords = ko.observableArray([]);

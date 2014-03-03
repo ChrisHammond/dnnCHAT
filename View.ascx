@@ -27,6 +27,7 @@
             anonUsersRooms:'<%=Localization.GetString("AnonymousJoinDenied.Text",LocalResourceFile)%>',
             messageMissingRoom: '<%=Localization.GetString("MessageMissingRoom.Text",LocalResourceFile)%>',
             errorSendingMessage:'<%=Localization.GetString("ErrorSendingMessage.Text",LocalResourceFile)%>',
+            roomArchiveLink: '<%=EditUrl(string.Empty,string.Empty,"Archive","&roomid=0") %>',
             defaultRoomId:'<%=DefaultRoomId %>'
             
         });
@@ -65,42 +66,44 @@
 
 <div class="RoomContainer dnnClear" id="roomView">
     <!-- ko foreach: rooms -->
-        <!-- the display of the rooms that a user is connected -->
-        <div class="srcWindow" data-bind="visible:showRoom">
-            <div class="ChatWindow" data-bind="attr:{id: roomNameId}">
-                <!-- ko foreach: messages -->
-                <div data-bind="attr:{class:cssName}">
-                    <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthor"></div>
-                    <div data-bind="html:messageText" class="MessageText"></div>
-                    <div data-bind="dateString: messageDate" class="MessageTime"></div>
-                </div>
-                <!-- /ko -->
+    <!-- the display of the rooms that a user is connected -->
+    <div class="srcWindow" data-bind="visible:showRoom">
+        <div class="ChatWindow" data-bind="attr:{id: roomNameId}">
+            <!-- ko foreach: messages -->
+            <div data-bind="attr:{class:cssName}">
+                <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthor"></div>
+                <div data-bind="html:messageText" class="MessageText"></div>
+                <div data-bind="dateString: messageDate" class="MessageTime"></div>
             </div>
-            <div class="UsersList" id="userList">
-                <!-- ko foreach: connectionRecords -->
-                <div class="ChatUsers">
-                    <!-- ko if: userId>0 -->
-                    <div><img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto"/><div data-bind="    html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
-                    </div>
-                    <!-- /ko -->
-                    <!-- ko if: userId<1 -->
-                    <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserNotLoggedIn">
-                    </div>
-                    <!-- /ko -->
-                </div>
-                <!-- /ko -->
-            </div>
-
-            <input type="text" data-bind="value:newMessageText, hasfocus: textFocus, enterKey: sendMessage" class="msg" />
-            <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
-
-            <div class="dnnRight usersOnline">
-                <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
-            </div>
+            <!-- /ko -->
         </div>
+        <div class="UsersList" id="userList">
+            <!-- ko foreach: connectionRecords -->
+            <div class="ChatUsers">
+                <!-- ko if: userId>0 -->
+                <div>
+                    <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" /><div data-bind="    html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
+                </div>
+                <!-- /ko -->
+                <!-- ko if: userId<1 -->
+                <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserNotLoggedIn">
+                </div>
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+
+        <input type="text" data-bind="value:newMessageText, hasfocus: textFocus, enterKey: sendMessage" class="msg" />
+        <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
+
+        <div class="dnnRight usersOnline">
+            <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
+            <div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
+
+        </div>
+    </div>
     <!-- /ko -->
 </div>
-            <div id="ChatStatus" class="chatStatus dnnClear">
-            </div>
-
+<div id="ChatStatus" class="chatStatus dnnClear">
+</div>
 <div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>

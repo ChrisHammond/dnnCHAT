@@ -76,6 +76,9 @@ namespace Christoc.Modules.DnnChat
         {
             try
             {
+                //link for the Chat Archives
+                //hlArchive.NavigateUrl = EditUrl("Archive",);
+
                 StartMessage = Settings.Contains("StartMessage") ? Settings["StartMessage"].ToString() : Localization.GetString("DefaultStartMessage", LocalResourceFile);
 
                 if (Settings.Contains("DefaultRoomId"))
@@ -89,8 +92,7 @@ namespace Christoc.Modules.DnnChat
                     var r = rc.GetRoom("Lobby");
                     if (r == null || (r.ModuleId > 0 && r.ModuleId != ModuleId))
                     {
-                        //todo: if there isn't a room we need display a message about creating one
-                        
+                        //todo: if there isn't a room we need display a message about creating one                        
 
                     }
                     else

@@ -19,12 +19,29 @@
 */
 
 
+using System;
 using DotNetNuke.Entities.Modules;
 
 namespace Christoc.Modules.DnnChat
 {
     public class DnnChatModuleBase : PortalModuleBase
     {
-        
+
+        public Guid RoomId
+        {
+            get
+            {
+                var roomId = Request.QueryString["roomid"]; 
+                
+                if(roomId == null)
+                {
+                    if (Settings.Contains("DefaultRoomId"))
+                    {
+                        return new Guid(Settings["DefaultRoomId"].ToString());
+                    }
+                }
+                return new Guid(roomId);
+            }
+        }
     }
 }
