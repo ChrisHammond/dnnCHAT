@@ -71,5 +71,10 @@ namespace Christoc.Modules.DnnChat.Components
         /// Gets or sets the RoomId for a message
         /// </summary>
         public Guid RoomId { get; set; }
+
+        /// <summary>
+        /// The IsDeleted flag for Messages
+        /// </summary>
+        public bool IsDeleted { get; set; }
     }
 }

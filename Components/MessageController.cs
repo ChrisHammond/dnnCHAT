@@ -43,14 +43,18 @@ namespace Christoc.Modules.DnnChat.Components
         public void DeleteMessage(int messageId, int moduleId)
         {
             var t = this.GetMessage(messageId, moduleId);
-            this.DeleteMessage(t);
+            //this.DeleteMessage(t); //we aren't hard deleting messages anymore, only soft deletes
+            t.IsDeleted = true;
+            UpdateMessage(t);
         }
 
         public void DeleteMessage(Message t)
         {
+            //not currently being used, but still available
             using (var ctx = DataContext.Instance())
             {
                 var rep = ctx.GetRepository<Message>();
+                
                 rep.Delete(t);
             }
         }
@@ -72,7 +76,7 @@ namespace Christoc.Modules.DnnChat.Components
 
         public IEnumerable<Message> GetRecentMessages(int moduleId, int hoursBackInTime, int maxRecords, Guid roomId)
         {
-            var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime select a).Take(maxRecords).Reverse();
+            var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime && a.IsDeleted==false select a).Take(maxRecords).Reverse();
 
             return messages.Any() ? messages : null;
         }

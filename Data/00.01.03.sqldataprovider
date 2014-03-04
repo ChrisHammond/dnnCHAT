@@ -1,0 +1,10 @@
+/*
+	This script is used to provide the ability to soft delete a message
+*/
+
+if not exists(select * from sys.columns 
+	where Name = N'IsDeleted' and Object_ID = Object_ID(N'{databaseOwner}{objectQualifier}DnnChat_Messages'))  
+
+ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_Messages ADD
+	IsDeleted bit NULL
+GO

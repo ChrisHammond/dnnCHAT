@@ -1,4 +1,6 @@
-﻿/*
+﻿//TODO: 3-4-2014 Need to wire up the Delete functionality on Messages, already in MessageController, need to add it to the HUB and to the JS
+
+/*
 ' Copyright (c) 2014 Christoc.com Software Solutions
 '  All rights reserved.
 ' 

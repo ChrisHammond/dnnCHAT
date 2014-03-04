@@ -21,6 +21,7 @@
 		<li>Updated to SignalR 2.0.2</li>
 		<li>Added a Chat Archives page</li>
 		<li>Added user avatar to the User List on the chat page, only for logged in user</li>
+		<li>Added soft delete flag (IsDeleted) to the Messages table </li>
 	</ul>
 	</p>
 
