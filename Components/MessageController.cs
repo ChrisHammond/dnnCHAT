@@ -83,7 +83,7 @@ namespace Christoc.Modules.DnnChat.Components
 
         public IEnumerable<Message> GetMessagesByDate(int moduleId, DateTime startDate, DateTime endDate, Guid roomId)
         {
-            var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate <= endDate && a.MessageDate>= startDate select a).Reverse();
+            var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate <= endDate && a.MessageDate >= startDate && a.IsDeleted == false select a).Reverse();
             return messages.Any() ? messages : null;
         }
 
