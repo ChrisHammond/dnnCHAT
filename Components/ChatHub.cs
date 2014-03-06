@@ -1,6 +1,4 @@
-﻿//TODO: 3-4-2014 Need to wire up the Delete functionality on Messages, already in MessageController, need to add it to the HUB and to the JS
-
-/*
+﻿/*
 ' Copyright (c) 2014 Christoc.com Software Solutions
 '  All rights reserved.
 ' 
@@ -22,8 +20,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Configuration;
+using DotNetNuke.Entities.Users;
+using DotNetNuke.Security;
 using DotNetNuke.Services.Localization;
 using Microsoft.AspNet.SignalR;
 
@@ -41,6 +43,7 @@ namespace Christoc.Modules.DnnChat.Components
         /*
          * This method is used to send messages to all connected clients.
          */
+
 
         //for clients that may call the old method, send to the default room
         public void Send(string message)
@@ -150,7 +153,7 @@ namespace Christoc.Modules.DnnChat.Components
                 foreach (UserListRecords rr in roomList)
                 {
                     Users.Remove(rr);
-                    
+
                     Clients.Group(rr.RoomId.ToString()).newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), cr.UserName), RoomId = rr.RoomId });
 
                     //Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(c => (c.RoomId == rr.RoomId)));
@@ -399,7 +402,6 @@ namespace Christoc.Modules.DnnChat.Components
             }
         }
 
-        //TODO: update name in all rooms
 
         /*
          * This method gets called when someone updates their name. We need to store the change in the ConnectionRecord
@@ -456,8 +458,6 @@ namespace Christoc.Modules.DnnChat.Components
             //else return nothing
             return string.Empty;
         }
-
-        //TODO: Create method for leaving one room
 
         //check to see if there is a string in the message that is too many characters put together
         private string ParseMessage(string message, Guid roomId)
@@ -577,15 +577,44 @@ namespace Christoc.Modules.DnnChat.Components
             return message;
         }
 
-
-
         //get IP address of the client
         //from: http://stackoverflow.com/questions/13889463/get-client-ip-address-in-self-hosted-signalr-hub
 
+        //delete message, need to control 
+        public void DeleteMessage(int messageId, int moduleId)
+        {
+            //todo: look to see if we should get user information from DNN somehow - CJH 3/5/2014
+            var section = (MachineKeySection)ConfigurationManager.GetSection("system.web/machineKey");
+            var validationKey = section.ValidationKey;
+
+            var listOfRoles = (string)Clients.Caller.userroles;
+
+            if (listOfRoles != null)
+            {
+                var roles = listOfRoles.Split(',');
+
+                var pc = new PortalSecurity();
+
+                foreach (var r in roles)
+                {
+                    var thisRole = pc.Decrypt(validationKey, r);
+                    //TODO: need to remove the hard coded administrators role here, make this a module setting - CJH 3/6/2014
+                    if (thisRole == "Administrators" || thisRole == "SuperUser")
+                    {
+                        var mc = new MessageController();
+                        mc.DeleteMessage(messageId, moduleId);
+
+                        //get the message and send it back so that we can remove it from the proper room
+                        var m = mc.GetMessage(messageId, moduleId);
+                        Clients.Group(m.RoomId.ToString()).deleteMessage(m);
+                    }
+                }
+            }
+        }
+
+
         protected string GetIpAddress()
         {
-
-            
             //var env = Get<IDictionary<string, object>>(Context.Request.Environment, "owin.environment");
             var env = Context.Request.Environment;
             if (env == null)

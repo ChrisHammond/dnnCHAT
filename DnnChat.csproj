@@ -221,6 +221,7 @@
     <None Include="Data\00.00.03.sqldataprovider" />
     <Content Include="Data\Uninstall.sqldataprovider" />
     <Content Include="Scripts\DnnChat.js" />
+    <Content Include="Data\00.01.03.sqldataprovider" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />

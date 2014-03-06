@@ -22,7 +22,7 @@ function DnnChat($, ko, settings) {
     var userid = settings.userId;
     var username = settings.userName;
     var startmessage = settings.startMessage;
-    var sendMessageReconnecting = settings.sendMessageReconnecting; //no longer used, 10-14-2014 cjh
+    var sendMessageReconnecting = settings.sendMessageReconnecting; //no longer used, 10-14-2013 cjh
     var stateReconnecting = settings.stateReconnecting;
     var stateReconnected = settings.stateReconnected;
     var stateConnected = settings.stateConnected;
@@ -31,14 +31,13 @@ function DnnChat($, ko, settings) {
     var alreadyInRoom = settings.alreadyInRoom;
     var anonUsersRooms = settings.anonUsersRooms;
     var messageMissingRoom = settings.MessageMissingRoom;
-
     var defaultRoomId = settings.defaultRoomId;
-
     var errorSendingMessage = settings.errorSendingMessage;
+    
     var roomArchiveLink = settings.roomArchiveLink;
-
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
-
+    var userroles = settings.roles;
+    var messageDeleteConfirmation = settings.messageDeleteConfirmation;
     var focus = true;
     var pageTitle = document.title;
     var unread = 0;
@@ -141,6 +140,11 @@ function DnnChat($, ko, settings) {
                 foundRoom.setTextFocus();
             }
         };
+
+        this.deleteMessage = function () {
+            if (confirm(messageDeleteConfirmation))
+                chatHub.server.deleteMessage(this.messageId, moduleid);
+        };
     }
 
     //this can probably be removed
@@ -216,7 +220,6 @@ function DnnChat($, ko, settings) {
             this.messages.push(replaceMessage(m));
 
             //check if this is the current room
-            //TODO: also check if focus
             if (!this.showRoom()) {
                 this.awayMessageCount(this.awayMessageCount() + 1);
                 if (checkMention(m.messageText, chatHub.state.username)) {
@@ -234,6 +237,10 @@ function DnnChat($, ko, settings) {
             }
         }.bind(this);
 
+        this.deleteMessage = function (m) {
+            this.messages.remove(function(item) {return item.messageId == m.messageId;});
+            this.messages.remove(m);
+        }.bind(this);
 
         this.addConnectionRecord = function (cr) {
             this.connectionRecords.push(cr);
@@ -340,6 +347,7 @@ function DnnChat($, ko, settings) {
     chatHub.state.username = username;
     chatHub.state.startMessage = startmessage;
     chatHub.state.defaultRoomId = defaultRoomId;
+    chatHub.state.userroles = userroles;
 
     // Declare a function to actually create a message on the chat hub so the server can invoke it
     chatHub.client.newMessage = function (data) {
@@ -369,6 +377,15 @@ function DnnChat($, ko, settings) {
         } else {
             //If the room isn't found display an alert
             alert(messageMissingRoom);
+        }
+    };
+
+
+    chatHub.client.deleteMessage = function (data) {
+        var m = new Message(data);
+        var curRoom = findRoom(m.roomId);
+        if (curRoom) {
+            curRoom.deleteMessage(m);
         }
     };
 
@@ -569,7 +586,7 @@ function DnnChat($, ko, settings) {
 
     //for autocomplete of usernames look at 
     //http://stackoverflow.com/questions/7537002/autocomplete-combobox-with-knockout-js-template-jquery 
-    
+
     ko.applyBindings(userRoomModel, document.getElementById('userRoomList'));
     ko.applyBindings(userRoomModel, document.getElementById('roomView'));
     ko.applyBindings(roomModel, document.getElementById('roomList'));

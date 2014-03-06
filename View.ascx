@@ -28,8 +28,10 @@
             messageMissingRoom: '<%=Localization.GetString("MessageMissingRoom.Text",LocalResourceFile)%>',
             errorSendingMessage:'<%=Localization.GetString("ErrorSendingMessage.Text",LocalResourceFile)%>',
             roomArchiveLink: '<%=EditUrl(string.Empty,string.Empty,"Archive","&roomid=0") %>',
-            defaultRoomId:'<%=DefaultRoomId %>'
-            
+            defaultRoomId:'<%=DefaultRoomId %>',
+            roles:'<%=EncryptedRoles%>',
+            //todo: we should populate a different messagedeleteconfirm if you don't have permissions to delete
+            messageDeleteConfirmation: '<%=Localization.GetString("MessageDeleteConfirm.Text",LocalResourceFile)%>',
         });
         md.init('#messages');
     });
@@ -73,7 +75,7 @@
             <div data-bind="attr:{class:cssName}">
                 <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthor"></div>
                 <div data-bind="html:messageText" class="MessageText"></div>
-                <div data-bind="dateString: messageDate" class="MessageTime"></div>
+                <div data-bind="dateString: messageDate, click:deleteMessage" class="MessageTime"></div>
             </div>
             <!-- /ko -->
         </div>
@@ -82,7 +84,7 @@
             <div class="ChatUsers">
                 <!-- ko if: userId>0 -->
                 <div>
-                    <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" /><div data-bind="    html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
+                    <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" /><div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
                 </div>
                 <!-- /ko -->
                 <!-- ko if: userId<1 -->

@@ -169,4 +169,7 @@
   <data name="Archives.Text" xml:space="preserve">
     <value>Chat Archives</value>
   </data>
+  <data name="MessageDeleteConfirm.Text" xml:space="preserve">
+    <value>Are you sure you want to delete this message?</value>
+  </data>
 </root>

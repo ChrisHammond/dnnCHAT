@@ -18,7 +18,12 @@
 ' 
 */
 
+using System.Configuration;
+using System.Web.Configuration;
 using Christoc.Modules.DnnChat.Components;
+using DotNetNuke.Common.Utilities;
+using DotNetNuke.Security;
+using DotNetNuke.UI.UserControls;
 
 namespace Christoc.Modules.DnnChat
 {
@@ -47,6 +52,7 @@ namespace Christoc.Modules.DnnChat
     {
         public string StartMessage = string.Empty;
         public string DefaultRoomId = string.Empty;
+        public string EncryptedRoles = string.Empty;
         public string ChatNick
         {
             get
@@ -105,6 +111,21 @@ namespace Christoc.Modules.DnnChat
                         rc.UpdateRoom(r);
                     }
                     if (r != null) DefaultRoomId = r.RoomId.ToString();
+                }
+
+                //encrypt the user's roles so we can ensure security 
+                var curRoles = UserInfo.Roles;
+
+                var section = (MachineKeySection)ConfigurationManager.GetSection("system.web/machineKey");
+
+                var pc = new PortalSecurity();
+                foreach (var c in curRoles)
+                {
+                    EncryptedRoles += pc.Encrypt(section.ValidationKey, c) + ",";
+                }
+                if (UserInfo.IsSuperUser)
+                {
+                    EncryptedRoles += pc.Encrypt(section.ValidationKey, "SuperUser");
                 }
             }
             catch (Exception exc) //Module failed to load
