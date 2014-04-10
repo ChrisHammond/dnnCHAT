@@ -127,7 +127,7 @@
     <value>Users Online: </value>
   </data>
   <data name="ProjectMessage.Text" xml:space="preserve">
-    <value>&lt;a href="http://www.christoc.com/Projects/DnnChatModule.aspx" target="_blank"&gt;Powered by the  dnnCHAT module for DotNetNuke, from Christoc.com&lt;/a&gt;</value>
+    <value>&lt;a href="http://cjh.am/dnnchat" target="_blank"&gt;Powered by the  dnnCHAT module for DotNetNuke, from Christoc.com&lt;/a&gt;</value>
   </data>
   <data name="btnLoad.Text" xml:space="preserve">
     <value>Load Users</value>
