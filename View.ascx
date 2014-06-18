@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="dnn" Namespace="DotNetNuke.Web.Client.ClientResourceManagement" Assembly="DotNetNuke.Web.Client" %>
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
 
-<dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-2.0.2.min.js" Priority="10" />
+<dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-2.1.0.min.js" Priority="10" />
 <dnn:DnnJsInclude runat="server" FilePath="~/signalr/hubs" Priority="100" />
 
 
