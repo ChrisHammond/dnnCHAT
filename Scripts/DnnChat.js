@@ -33,6 +33,8 @@ function DnnChat($, ko, settings) {
     var messageMissingRoom = settings.MessageMissingRoom;
     var defaultRoomId = settings.defaultRoomId;
     var errorSendingMessage = settings.errorSendingMessage;
+
+    var allUsersNotification = settings.allUsersNotification;
     
     var roomArchiveLink = settings.roomArchiveLink;
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
@@ -581,6 +583,13 @@ function DnnChat($, ko, settings) {
                 return true;
             }
         }
+
+        if (String(messageText).toLowerCase().indexOf(String(allUsersNotification).toLowerCase()) !== -1) {
+            {
+                return true;
+            }
+        }
+        
         return false;
     }
 

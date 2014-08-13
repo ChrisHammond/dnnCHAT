@@ -32,6 +32,7 @@
             roles:'<%=EncryptedRoles%>',
             //todo: we should populate a different messagedeleteconfirm if you don't have permissions to delete
             messageDeleteConfirmation: '<%=Localization.GetString("MessageDeleteConfirm.Text",LocalResourceFile)%>',
+            allUsersNotification: '<%=Localization.GetString("AllUsersNotification.Text",LocalResourceFile)%>',
         });
         md.init('#messages');
     });
