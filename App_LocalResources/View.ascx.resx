@@ -173,6 +173,6 @@
     <value>Are you sure you want to delete this message?</value>
   </data>
   <data name="AllUsersNotification.Text" xml:space="preserve">
-    <value>All</value>
+    <value>@all</value>
   </data>
 </root>

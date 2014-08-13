@@ -583,7 +583,7 @@ function DnnChat($, ko, settings) {
                 return true;
             }
         }
-
+        /* this is used to see if someone said "@all" and makes sure to notify everyone */
         if (String(messageText).toLowerCase().indexOf(String(allUsersNotification).toLowerCase()) !== -1) {
             {
                 return true;
