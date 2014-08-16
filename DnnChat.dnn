@@ -3,7 +3,7 @@
     <package name="DnnChat" type="Module" version="01.01.01">
       <friendlyName>DnnChat</friendlyName>
       <description>A Chat module for DotNetNuke using SignalR</description>
-      <iconFile>/Images/icon_extensions.gif</iconFile>
+      <iconFile>/Images/icon_extensions_32px.png</iconFile>
       <owner>
         <name>Christoc.com Software Solutions</name>
         <organization>Christoc.com Software Solutions</organization>
