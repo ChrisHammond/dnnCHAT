@@ -20,6 +20,7 @@
 	<ul>
 		<li>Added @all notification check/display</li>
 		<li>Updated to SignalR 2.1.1</li>
+		<li>Updated the "Test" response to be something a little more friendly</li>
 	</ul>
 	</p>
 

@@ -117,66 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="/HELP.Text" xml:space="preserve">
-    <value>Command Options: /Help - displays help messages. /Nick allows you to change your displayed name</value>
-  </data>
-  <data name="/ROCKS.Text" xml:space="preserve">
-    <value>dnnCHAT.com rocks!</value>
-  </data>
-  <data name="/WHO.Text" xml:space="preserve">
-    <value>The list of users is on the right side of the page</value>
-  </data>
-  <data name="AnonymousJoinDenied.Text" xml:space="preserve">
-    <value>Anonymous users are not allowed to Join rooms. Please register/login to proceed.</value>
-  </data>
-  <data name="AnonymousUser.Text" xml:space="preserve">
-    <value>Anonymous{0}</value>
-  </data>
-  <data name="BadConnection.Text" xml:space="preserve">
-    <value>Unfortunately you have a bad connection. Try another browser, and make sure you don't have Fiddler running.</value>
-  </data>
-  <data name="CommandNotSupported.Text" xml:space="preserve">
-    <value>The Command you typed is not supported.</value>
-  </data>
-  <data name="Connected.Text" xml:space="preserve">
-    <value>{0} has connected.</value>
-  </data>
-  <data name="DefaultRoomDescription.Text" xml:space="preserve">
-    <value>This is the default room description, thank you for joining the room.</value>
-  </data>
-  <data name="DefaultRoomWelcome.Text" xml:space="preserve">
-    <value>Welcome to the Room!</value>
-  </data>
-  <data name="DefaultStartMessage.Text" xml:space="preserve">
-    <value>&lt;em&gt;Welcome to the Chat powered by &lt;a href="http://www.christoc.com/Projects/DnnChatModule.aspx" target="_blank"&gt;DnnChat&lt;/a&gt;&lt;br/&gt; To change your name type &lt;strong&gt;/nick New Name Here&lt;/strong&gt; and hit enter.&lt;br /&gt;&lt;/em&gt;</value>
-  </data>
-  <data name="Disconnected.Text" xml:space="preserve">
-    <value>{0} has disconnected.</value>
-  </data>
-  <data name="FailedUnknown.Text" xml:space="preserve">
-    <value>Unable to send your message because we don't know who you are. Try another browser, and see if you have a Proxy server or Firewall blocking this site.</value>
-  </data>
-  <data name="NameChange.Text" xml:space="preserve">
-    <value>is now {1}</value>
-    <comment>{0} = old username
-{1} = new username</comment>
-  </data>
-  <data name="NameToolong.Text" xml:space="preserve">
-    <value>Names must be less than 26 characters.</value>
-  </data>
-  <data name="Reconnected.Text" xml:space="preserve">
-    <value>{0} has reconnected.</value>
-  </data>
-  <data name="RoomNameTooLong.Text" xml:space="preserve">
-    <value>That Room name is too long, please keep it under 25 characters</value>
-  </data>
-  <data name="SystemName.Text" xml:space="preserve">
-    <value>System</value>
-  </data>
-  <data name="Test.Response" xml:space="preserve">
-    <value>Thank you for trying to "test" this website, while your test was succesful, you might find it more useful to type something more than just "Test".</value>
-  </data>
-  <data name="Test.Text" xml:space="preserve">
-    <value>test</value>
+  <data name="lblNothing.Text" xml:space="preserve">
+    <value>Nothing to see here yet. Move along.</value>
   </data>
 </root>

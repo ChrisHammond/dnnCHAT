@@ -8,8 +8,7 @@
 
 <script type="text/javascript">
     /*knockout setup for user*/
-    /*currently we are getting the list of initial users, but no updates for adding/removing*/
-
+    
     jQuery(document).ready(function ($) {
         var md = new DnnChat($, ko, {
             moduleId:<% = ModuleId %>,
