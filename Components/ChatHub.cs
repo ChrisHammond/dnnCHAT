@@ -131,10 +131,10 @@ namespace Christoc.Modules.DnnChat.Components
         }
 
         //lookup who just disconnected, and store the disconnect/time from the ConnectionRecord but not each room, remove them from the count for each room
-        public override Task OnDisconnected()
+        public override Task OnDisconnected(bool stopCalled)
         {
             if (Context.ConnectionId != null) DisconnectUser(Context.ConnectionId);
-            return base.OnDisconnected();
+            return base.OnDisconnected(stopCalled);
         }
 
         private void DisconnectUser(string connectionId)

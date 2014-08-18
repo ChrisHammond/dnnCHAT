@@ -19,6 +19,7 @@
 	<p>	
 	<ul>
 		<li>Added @all notification check/display</li>
+		<li>Updated to SignalR 2.1.1</li>
 	</ul>
 	</p>
 
