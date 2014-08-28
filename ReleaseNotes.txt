@@ -21,6 +21,7 @@
 		<li>Added @all notification check/display</li>
 		<li>Updated to SignalR 2.1.1</li>
 		<li>Updated the "Test" response to be something a little more friendly</li>
+		<li>Added the ability to use the Edit control to manage "Rooms" in the module.</li>
 	</ul>
 	</p>
 
