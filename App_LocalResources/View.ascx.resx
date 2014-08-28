@@ -121,7 +121,7 @@
     <value>Submit</value>
   </data>
   <data name="EditModule.Text" xml:space="preserve">
-    <value>Edit Module</value>
+    <value>Manage Rooms</value>
   </data>
   <data name="usersOnline.Text" xml:space="preserve">
     <value>Users Online: </value>

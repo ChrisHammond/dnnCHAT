@@ -91,6 +91,17 @@ namespace Christoc.Modules.DnnChat.Components
             return t;
         }
 
+        public IEnumerable<Room> GetAllRooms(int moduleId)
+        {
+            IEnumerable<Room> t;
+            using (var ctx = DataContext.Instance())
+            {
+                var rep = ctx.GetRepository<Room>();
+                t = rep.Get(moduleId).OrderBy(x => x.RoomName);
+            }
+            return t;
+        }
+
         public Room GetRoom(Guid roomId, int moduleId)
         {
             Room t;

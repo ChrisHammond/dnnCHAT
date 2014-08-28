@@ -117,7 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="btnSaveRoom.Text" xml:space="preserve">
+    <value>Save Room</value>
+  </data>
+  <data name="ChooseRoom.Text" xml:space="preserve">
+    <value>Choose a Room</value>
+  </data>
+  <data name="lbAddRoom.Text" xml:space="preserve">
+    <value>Add Room</value>
+  </data>
   <data name="lblNothing.Text" xml:space="preserve">
     <value>Nothing to see here yet. Move along.</value>
+  </data>
+  <data name="lblPrivateRoom.Help" xml:space="preserve">
+    <value>Setting to control whether a room should require a password or not.</value>
+  </data>
+  <data name="lblPrivateRoom.Text" xml:space="preserve">
+    <value>Private (not used)</value>
+  </data>
+  <data name="lblRoomDescription.Help" xml:space="preserve">
+    <value>Provide a description for your room.</value>
+  </data>
+  <data name="lblRoomDescription.Text" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="lblRoomEnabled.Help" xml:space="preserve">
+    <value>To disable a room, uncheck this box, the room will no longer be available.</value>
+  </data>
+  <data name="lblRoomEnabled.Text" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="lblRoomList.Help" xml:space="preserve">
+    <value>Choose a room to Edit</value>
+  </data>
+  <data name="lblRoomList.Text" xml:space="preserve">
+    <value>Choose a Room</value>
+  </data>
+  <data name="lblRoomName.Help" xml:space="preserve">
+    <value>The Name of the Room you are editing/adding.</value>
+  </data>
+  <data name="lblRoomName.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="lblRoomPassword.Help" xml:space="preserve">
+    <value>If room is private, what is the password?</value>
+  </data>
+  <data name="lblRoomPassword.Text" xml:space="preserve">
+    <value>Password (not used)</value>
+  </data>
+  <data name="lblRoomWelcome.Help" xml:space="preserve">
+    <value>Message displayed to visitors when they join a room.</value>
+  </data>
+  <data name="lblRoomWelcome.Text" xml:space="preserve">
+    <value>Welcome Message</value>
+  </data>
+  <data name="RoomList.Text" xml:space="preserve">
+    <value>Room List</value>
+  </data>
+  <data name="RoomSettings.Text" xml:space="preserve">
+    <value>Room Settings</value>
   </data>
 </root>

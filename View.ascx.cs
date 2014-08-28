@@ -72,7 +72,7 @@ namespace Christoc.Modules.DnnChat
             DotNetNuke.Framework.jQuery.RequestUIRegistration();
             ClientResourceManager.RegisterScript(Parent.Page, "~/Resources/Shared/scripts/knockout.js");
             ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/moment.min.js");
-            ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/DnnChat.js",150);
+            ClientResourceManager.RegisterScript(Parent.Page, "~/desktopmodules/DnnChat/scripts/DnnChat.js", 150);
 
             base.OnInit(e);
         }
@@ -138,14 +138,13 @@ namespace Christoc.Modules.DnnChat
         {
             get
             {
-                var actions = new ModuleActionCollection();
-                //we don't have any actions currently
-                //{
-                //    {
-                //        GetNextActionID(), Localization.GetString("EditModule", LocalResourceFile), "", "", "",
-                //        EditUrl(), false, SecurityAccessLevel.Edit, true, false
-                //    }
-                //};
+                var actions = new ModuleActionCollection()
+                {
+                    {
+                        GetNextActionID(), Localization.GetString("EditModule", LocalResourceFile), "", "", "",
+                        EditUrl(), false, SecurityAccessLevel.Edit, true, false
+                    }
+                };
                 return actions;
             }
         }
