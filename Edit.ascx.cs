@@ -134,6 +134,9 @@ namespace Christoc.Modules.DnnChat
         protected void lbAddRoom_Click(object sender, EventArgs e)
         {
             divRoomSettings.Visible = true;
+            txtRoomDescription.Text =
+                txtRoomId.Text = txtRoomName.Text = txtRoomPassword.Text = txtRoomWelcome.Text = string.Empty;
+            chkEnabled.Checked = chkPrivateRoom.Checked = false;
         }
     }
 }
