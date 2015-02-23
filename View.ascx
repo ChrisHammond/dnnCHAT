@@ -41,14 +41,24 @@
 
 <div class="LobbyArea dnnClear" id="roomList">
 
-    <div class="ShowRoomListButton dnnPrimaryAction" data-bind="click:$root.ShowRoomList">
+    <div class="ShowRoomListButton dnnPrimaryAction" data-toggle="modal" data-target="#RoomListModal">
         <%=Localization.GetString("showRoomList.text",LocalResourceFile) %>
     </div>
-    <div class="RoomList" style="display: none;" title="<%=Localization.GetString("joinARoom.Text",LocalResourceFile) %>">
-        <!-- ko foreach: rooms -->
-        <div data-bind="html:roomName,click:joinRoom" class="RoomListRoom">
+    <div class="modal RoomList" style="display: none;" id="RoomListModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><%=Localization.GetString("joinARoom.Text",LocalResourceFile) %></h4>
+                </div>
+                <div class="modal-body">
+                    <!-- ko foreach: rooms -->
+                    <div data-bind="html:roomName,click:joinRoom" class="RoomListRoom row" data-dismiss="modal">
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
         </div>
-        <!-- /ko -->
     </div>
 </div>
 
@@ -96,8 +106,8 @@
         <div class="UsersList col-lg-2 container" id="userList">
             <div class="row usersOnline">
                 <div class="col-xs-12">
-                <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
-                    </div>
+                    <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
+                </div>
             </div>
             <!-- ko foreach: connectionRecords -->
             <div class="ChatUsers row">
@@ -125,8 +135,8 @@
         <div id="ChatStatus" class="chatStatus col-lg-12">
         </div>
     </div>
-    
-<div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
-<div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>
+
+    <div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
+    <div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>
 </div>
 

@@ -166,7 +166,7 @@ function DnnChat($, ko, settings) {
 
             //open the lobby dialog
             $(".RoomList").dialog({
-                width: '600px',
+                width: '100%',
                 modal: true
                 , dialogClass: "dnnFormPopup"
             });
