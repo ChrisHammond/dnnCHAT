@@ -20,6 +20,7 @@
 		<li>Updated to SignalR 2.1.2</li>
 		<li>Updated the "Test" response to be something a little more friendly</li>
 		<li>Added the ability to use the Edit control to manage "Rooms" in the module.</li>
+		<li>Added user Avatars to the Message object, storing UserID for each message now as well.</li>
 	</ul>
 	<p class="Owner">
 		<b>Version 01.01.00</b><br /><br /> 

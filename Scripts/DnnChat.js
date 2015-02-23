@@ -33,7 +33,7 @@ function DnnChat($, ko, settings) {
     var messageMissingRoom = settings.MessageMissingRoom;
     var defaultRoomId = settings.defaultRoomId;
     var errorSendingMessage = settings.errorSendingMessage;
-
+    var defaultAvatarUrl = settings.defaultAvatarUrl;
     var allUsersNotification = settings.allUsersNotification;
     
     var roomArchiveLink = settings.roomArchiveLink;
@@ -122,7 +122,10 @@ function DnnChat($, ko, settings) {
         this.messageText = m.MessageText;
         this.messageDate = m.MessageDate;
         this.authorName = m.AuthorName;
+        this.authorUserId = m.AuthorUserId;
         this.roomId = m.RoomId;
+        this.defaultAvatarUrl = defaultAvatarUrl;
+        this.photoUrl = "/profilepic.ashx?userId=" + m.AuthorUserId + "&h=32&w=32";
 
         //this.cssName = m.MessageText.toLowerCase().indexOf(chatHub.state.username.toLowerCase()) !== -1 ? "ChatMessage ChatMentioned dnnClear" : "ChatMessage dnnClear";
         //patch from @briandukes to highlight your own posts

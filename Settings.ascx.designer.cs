@@ -47,5 +47,23 @@ namespace Christoc.Modules.DnnChat {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlDefaultRoom;
+        
+        /// <summary>
+        /// lblDefaultAvatarUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DotNetNuke.UI.UserControls.LabelControl lblDefaultAvatarUrl;
+        
+        /// <summary>
+        /// txtDefaultAvatarUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDefaultAvatarUrl;
     }
 }

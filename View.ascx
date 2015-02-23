@@ -8,13 +8,14 @@
 
 <script type="text/javascript">
     /*knockout setup for user*/
-    
     jQuery(document).ready(function ($) {
+        
         var md = new DnnChat($, ko, {
             moduleId:<% = ModuleId %>,
             userId:<%=UserId%>,
             userName:'<%=UserInfo.DisplayName%>',
             startMessage:'<%=StartMessage%>',
+            defaultAvatarUrl:'<%=DefaultAvatarUrl%>',
             sendMessageReconnecting:'<%=Localization.GetString("SendMessageReconnecting.Text",LocalResourceFile)%>',
             stateReconnecting:'<%=Localization.GetString("StateReconnecting.Text",LocalResourceFile)%>',
             stateReconnected:'<%=Localization.GetString("StateReconnected.Text",LocalResourceFile)%>',
@@ -66,17 +67,25 @@
     <!-- /ko -->
 </div>
 
-<div class="RoomContainer dnnClear container" id="roomView">
+<div class="RoomContainer container" id="roomView">
     <!-- ko foreach: rooms -->
     <!-- the display of the rooms that a user is connected -->
     <div class="srcWindow row" data-bind="visible:showRoom">
-        <div class="col-md-10 ">
+        <div class="col-lg-10 container chatWrap">
             <div class="ChatWindow" data-bind="attr:{id: roomNameId}">
                 <!-- ko foreach: messages -->
-                <div data-bind="attr:{class:cssName}">
-                    <div data-bind="html:authorName,click:targetMessageAuthor" class="col-md-2 MessageAuthor"></div>
-                    <div data-bind="html:messageText" class="col-md-9 MessageText "></div>
-                    <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-md-1 MessageTime"></div>
+                <div data-bind="attr:{class:cssName}" class="row">
+                    <div class="col-lg-2 MessageAuthor dnnClear">
+                        <!-- ko if: authorUserId>0 -->
+                        <img data-bind="attr: {src:photoUrl,alt:authorName},click:targetMessageAuthor" class="MessageAuthorPhoto" />
+                        <!-- /ko -->
+                        <!-- ko if: authorUserId<1 -->
+                        <img data-bind="attr: {src:defaultAvatarUrl,alt:authorName},click:targetMessageAuthor" class="MessageAuthorPhoto" />
+                        <!-- /ko -->
+                        <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthorText"></div>
+                    </div>
+                    <div data-bind="html:messageText" class="col-lg-9 MessageText "></div>
+                    <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-lg-1 MessageTime"></div>
                 </div>
                 <!-- /ko -->
             </div>
@@ -84,31 +93,40 @@
             <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
         </div>
 
-        <div class="UsersList col-md-2" id="userList">
+        <div class="UsersList col-lg-2 container" id="userList">
             <div class="row usersOnline">
-            <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div></div>
+                <div class="col-xs-12">
+                <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
+                    </div>
+            </div>
             <!-- ko foreach: connectionRecords -->
             <div class="ChatUsers row">
                 <!-- ko if: userId>0 -->
-                <div>
+                <div class="col-xs-12">
                     <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" /><div data-bind="    html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
                 </div>
                 <!-- /ko -->
                 <!-- ko if: userId<1 -->
-                <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserNotLoggedIn">
+                <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserNotLoggedIn col-xs-12">
                 </div>
                 <!-- /ko -->
             </div>
             <!-- /ko -->
-            
-            
+
+
         </div>
 
-        
+
     </div>
     <!-- /ko -->
 </div>
-<div id="ChatStatus" class="chatStatus row">
-</div>
+<div class="container">
+    <div class="row">
+        <div id="ChatStatus" class="chatStatus col-lg-12">
+        </div>
+    </div>
+    
 <div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
 <div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>
+</div>
+

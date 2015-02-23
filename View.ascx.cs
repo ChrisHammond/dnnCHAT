@@ -51,6 +51,7 @@ namespace Christoc.Modules.DnnChat
     public partial class View : DnnChatModuleBase, IActionable
     {
         public string StartMessage = string.Empty;
+        public string DefaultAvatarUrl = string.Empty;
         public string DefaultRoomId = string.Empty;
         public string EncryptedRoles = string.Empty;
         public string ChatNick
@@ -86,6 +87,8 @@ namespace Christoc.Modules.DnnChat
                 //hlArchive.NavigateUrl = EditUrl("Archive",);
 
                 StartMessage = Settings.Contains("StartMessage") ? Settings["StartMessage"].ToString() : Localization.GetString("DefaultStartMessage", LocalResourceFile);
+
+                DefaultAvatarUrl = Settings.Contains("DefaultAvatarUrl") ? Settings["DefaultAvatarUrl"].ToString() : Localization.GetString("DefaultAvatarUrl", LocalResourceFile);
 
                 if (Settings.Contains("DefaultRoomId"))
                 {

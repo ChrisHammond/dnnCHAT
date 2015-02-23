@@ -67,6 +67,7 @@ namespace Christoc.Modules.DnnChat
                     
                     txtStartMessage.Text = Settings.Contains("StartMessage") ? Settings["StartMessage"].ToString() : Localization.GetString("DefaultStartMessage", "/DesktopModules/DnnChat/App_LocalResources/SharedResources.resx");
 
+                    txtDefaultAvatarUrl.Text = Settings.Contains("DefaultAvatarUrl") ? Settings["DefaultAvatarUrl"].ToString() : Localization.GetString("DefaultAvatarUrl", "/DesktopModules/DnnChat/App_LocalResources/SharedResources.resx");
 
                     var rc = new RoomController();
 
@@ -100,6 +101,8 @@ namespace Christoc.Modules.DnnChat
                 modules.UpdateModuleSetting(ModuleId, "StartMessage", txtStartMessage.Text);
 
                 modules.UpdateModuleSetting(ModuleId, "DefaultRoomId", ddlDefaultRoom.SelectedValue);
+                modules.UpdateModuleSetting(ModuleId, "DefaultAvatarUrl", txtDefaultAvatarUrl.Text);
+                
             }
             catch (Exception exc) //Module failed to load
             {

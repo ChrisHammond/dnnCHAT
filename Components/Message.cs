@@ -63,6 +63,11 @@ namespace Christoc.Modules.DnnChat.Components
         public string AuthorName { get; set; }
 
         /// <summary>
+        /// Gets or sets the AuthorUserId.
+        /// </summary>
+        public int AuthorUserId { get; set; }
+
+        /// <summary>
         /// Gets or sets the module id.
         /// </summary>
         public int ModuleId { get; set; }

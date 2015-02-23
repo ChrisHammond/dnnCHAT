@@ -27,10 +27,7 @@
 
 .UsersList {
     border: solid 1px #000;
-    display: inline-block;
-    min-height: 500px;
     overflow: auto;
-    padding: 0 0 0 5px;
 }
 
 .ArchiveDates {
@@ -48,13 +45,32 @@
 }
 
 .messageRow {
-   
 }
 
 .MessageAuthor {
     font-weight: bold;
     height: 100%;
     text-align: right;
+    font-size: .9em;
+}
+
+@media (min-width: 1200px) {
+    .MessageAuthor {
+        padding-right: 5px !important;
+    }
+}
+
+.MessageAuthorPhoto {
+    float: left;
+    margin: 5px 0 5px 5px;
+    border: solid 1px #000;
+    width: 25px;
+    float: left;
+    height: 25px;
+}
+
+.MessageAuthorText {
+    margin-top: 5px;
 }
 
 .MessageText {
@@ -67,14 +83,19 @@
     -moz-hyphens: auto;
     hyphens: auto;
     border-left: solid 1px #dbdbdb;
+}
 
+@media (min-width: 1200px) {
+    .MessageText {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
 }
 
 .MessageTime {
     font-size: .8em;
     float: right;
     text-wrap: none;
-    
     text-align: right;
     padding: 5px 15px 0 0 !important;
 }
@@ -100,9 +121,7 @@
 
 .chatStatus {
     color: silver;
-    width: 100%;
     border: solid 1px silver;
-    padding: 5px;
 }
 
 .ConnectedRoomTab {
@@ -177,4 +196,7 @@
 
 .ui-datepicker-year, .ui-datepicker-month {
     font-weight: bold;
+}
+@media (max-width:992px){
+.chatWrap{ padding: 0 !important;}
 }

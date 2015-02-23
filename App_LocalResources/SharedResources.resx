@@ -141,6 +141,9 @@
   <data name="Connected.Text" xml:space="preserve">
     <value>{0} has connected.</value>
   </data>
+  <data name="DefaultAvatarUrl.Text" xml:space="preserve">
+    <value>/desktopmodules/dnnchat/images/defaultAvatar.png</value>
+  </data>
   <data name="DefaultRoomDescription.Text" xml:space="preserve">
     <value>This is the default room description, thank you for joining the room.</value>
   </data>

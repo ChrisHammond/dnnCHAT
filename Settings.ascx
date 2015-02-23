@@ -13,6 +13,13 @@
 
         <asp:DropDownList runat="server" ID="ddlDefaultRoom" DataTextField="RoomName" DataValueField="RoomId"/>
     </div>
+    
+    <div class="dnnFormItem">
+        <dnn:Label ID="lblDefaultAvatarUrl" runat="server" />
+
+        <asp:TextBox ID="txtDefaultAvatarUrl" runat="server" />
+    </div>
+
 </fieldset>
 
 

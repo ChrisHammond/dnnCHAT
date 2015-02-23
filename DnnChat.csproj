@@ -162,7 +162,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="01.01.01.txt" />
+    <Content Include="01.01.02.txt" />
     <Content Include="Data\SignalRChat-To-DnnChat.txt" />
     <Content Include="Edit.ascx" />
     <Content Include="images\emoticons\simple\angel.png" />
@@ -222,6 +222,7 @@
     <Content Include="Data\Uninstall.sqldataprovider" />
     <Content Include="Scripts\DnnChat.js" />
     <Content Include="Data\01.00.03.sqldataprovider" />
+    <Content Include="Data\01.01.02.sqldataprovider" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
