@@ -126,7 +126,7 @@ function DnnChat($, ko, settings) {
 
         //this.cssName = m.MessageText.toLowerCase().indexOf(chatHub.state.username.toLowerCase()) !== -1 ? "ChatMessage ChatMentioned dnnClear" : "ChatMessage dnnClear";
         //patch from @briandukes to highlight your own posts
-        this.cssName = "ChatMessage dnnClear";
+        this.cssName = "row messageRow ChatMessage";
         if (checkMention(m.MessageText, chatHub.state.username)) {
             this.cssName += " ChatMentioned";
         }

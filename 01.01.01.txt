@@ -150,3 +150,7 @@ DesktopModules\DnnChat\Scripts\jquery.signalR-2.0.2.js
 DesktopModules\DnnChat\Scripts\jquery.signalR-2.0.2.min.js
 DesktopModules\DnnChat\Scripts\jquery.signalR-2.1.0.js
 DesktopModules\DnnChat\Scripts\jquery.signalR-2.1.0.min.js
+DesktopModules\DnnChat\Scripts\jquery.signalR-2.1.1.js
+DesktopModules\DnnChat\Scripts\jquery.signalR-2.1.1.min.js
+DesktopModules\DnnChat\Scripts\jquery.signalR-2.1.2.js
+DesktopModules\DnnChat\Scripts\jquery.signalR-2.1.2.min.js

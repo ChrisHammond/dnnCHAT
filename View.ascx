@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="dnn" Namespace="DotNetNuke.Web.Client.ClientResourceManagement" Assembly="DotNetNuke.Web.Client" %>
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
 
-<dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-2.1.1.min.js" Priority="10" />
+<dnn:DnnJsInclude runat="server" FilePath="~/desktopmodules/DnnChat/Scripts/jquery.signalR-2.2.0.min.js" Priority="10" />
 <dnn:DnnJsInclude runat="server" FilePath="~/signalr/hubs" Priority="100" />
 
 
@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<div class="ConnectedRoomList" id="userRoomList">
+<div class="ConnectedRoomList container" id="userRoomList">
     <!-- ko foreach: rooms -->
     <div class="ChatRooms">
         <div class="ConnectedRoomTab" data-bind="id:roomName,click:setActiveRoom,css:{activeRoom:roomId == $parent.activeRoom()}">
@@ -66,25 +66,32 @@
     <!-- /ko -->
 </div>
 
-<div class="RoomContainer dnnClear" id="roomView">
+<div class="RoomContainer dnnClear container" id="roomView">
     <!-- ko foreach: rooms -->
     <!-- the display of the rooms that a user is connected -->
-    <div class="srcWindow" data-bind="visible:showRoom">
-        <div class="ChatWindow" data-bind="attr:{id: roomNameId}">
-            <!-- ko foreach: messages -->
-            <div data-bind="attr:{class:cssName}">
-                <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthor"></div>
-                <div data-bind="html:messageText" class="MessageText"></div>
-                <div data-bind="dateString: messageDate, click:deleteMessage" class="MessageTime"></div>
+    <div class="srcWindow row" data-bind="visible:showRoom">
+        <div class="col-md-10 ">
+            <div class="ChatWindow" data-bind="attr:{id: roomNameId}">
+                <!-- ko foreach: messages -->
+                <div data-bind="attr:{class:cssName}">
+                    <div data-bind="html:authorName,click:targetMessageAuthor" class="col-md-2 MessageAuthor"></div>
+                    <div data-bind="html:messageText" class="col-md-9 MessageText "></div>
+                    <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-md-1 MessageTime"></div>
+                </div>
+                <!-- /ko -->
             </div>
-            <!-- /ko -->
+            <input type="text" data-bind="value:newMessageText, hasfocus: textFocus, enterKey: sendMessage" class="msg" />
+            <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
         </div>
-        <div class="UsersList" id="userList">
+
+        <div class="UsersList col-md-2" id="userList">
+            <div class="row usersOnline">
+            <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div></div>
             <!-- ko foreach: connectionRecords -->
-            <div class="ChatUsers">
+            <div class="ChatUsers row">
                 <!-- ko if: userId>0 -->
                 <div>
-                    <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" /><div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
+                    <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" /><div data-bind="    html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
                 </div>
                 <!-- /ko -->
                 <!-- ko if: userId<1 -->
@@ -93,19 +100,15 @@
                 <!-- /ko -->
             </div>
             <!-- /ko -->
+            
+            
         </div>
 
-        <input type="text" data-bind="value:newMessageText, hasfocus: textFocus, enterKey: sendMessage" class="msg" />
-        <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
-
-        <div class="dnnRight usersOnline">
-            <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
-            <div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
-
-        </div>
+        
     </div>
     <!-- /ko -->
 </div>
-<div id="ChatStatus" class="chatStatus dnnClear">
+<div id="ChatStatus" class="chatStatus row">
 </div>
+<div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
 <div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>

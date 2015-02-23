@@ -1,45 +1,36 @@
-.srcWindow
-{
+.srcWindow {
     width: 100%;
 }
 
-.ChatWindow
-{
-    height: 500px;
+.ChatWindow {
+    max-height: 500px;
     overflow: auto;
     border: solid 1px #000;
     vertical-align: baseline;
     padding: 0;
-    display: inline-block;
-    width: 80%;
+    overflow-x: hidden;
 }
 
-.msg
-{
+.msg {
     width: 70%;
 }
 
-.usersOnline
-{
-    width: 120px;
+.usersOnline {
+    font-weight: bold;
 }
 
-.projectMessage
-{
+.projectMessage {
     width: 100%;
     font-size: 11px;
     text-align: center;
 }
 
-.UsersList
-{
+.UsersList {
     border: solid 1px #000;
     display: inline-block;
-    height: 500px;
+    min-height: 500px;
     overflow: auto;
     padding: 0 0 0 5px;
-    float: right;
-    width: 15%;
 }
 
 .ArchiveDates {
@@ -50,33 +41,24 @@
     width: 15%;
 }
 
-.ChatMessage
-{
-    padding-bottom: 3px;
-    border-left: 150px solid #dbdbdb;
+.ChatMessage {
     border-bottom: 1px solid #dbdbdb;
     position: relative;
+    overflow: hidden;
 }
 
-.MessageAuthor
-{
+.messageRow {
+   
+}
+
+.MessageAuthor {
     font-weight: bold;
-    font-size: .9em;
-    float: left;
-    padding: 5px;
-    width: 140px;
-    overflow: hidden;
-    margin-left: -150px;
+    height: 100%;
     text-align: right;
 }
 
-.MessageText
-{
-    margin-right: 95px;
-    padding-top: 5px;
-    padding-left: 5px;
+.MessageText {
     word-wrap: normal;
-    float: left;
     -ms-word-break: break-all;
     word-break: break-all;
     /* Non standard for webkit */
@@ -84,45 +66,39 @@
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto;
+    border-left: solid 1px #dbdbdb;
+
 }
 
-.MessageTime
-{
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 85px;
-    padding: 5px 5px 0 0;
-    font-size: .9em;
-    text-transform: uppercase;
+.MessageTime {
+    font-size: .8em;
+    float: right;
+    text-wrap: none;
+    
+    text-align: right;
+    padding: 5px 15px 0 0 !important;
 }
 
-.ChatMentioned
-{
+.ChatMentioned {
     color: #f00;
 }
 
-.ChatSelf
-{
+.ChatSelf {
     color: #00f;
 }
 
-.UserListUser
-{
+.UserListUser {
     font-size: .9em;
 }
 
-.UserLoggedIn
-{
+.UserLoggedIn {
     font-weight: bold;
 }
 
-.UserNotLoggedIn
-{
+.UserNotLoggedIn {
 }
 
-.chatStatus
-{
+.chatStatus {
     color: silver;
     width: 100%;
     border: solid 1px silver;
@@ -136,7 +112,7 @@
     padding: 5px 5px 0 5px;
     margin-right: 5px;
     border-bottom: 0;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .ConnectedRoom {
@@ -144,6 +120,7 @@
     padding-right: 5px;
     padding-bottom: 5px;
 }
+
 .RoomClose {
     background-image: url('../../images/close-icn.png');
     width: 24px;
@@ -153,12 +130,12 @@
     top: -5px;
 }
 
-.RoomContainer
-{}
+.RoomContainer {
+}
 
-.roomAwayMessageCount,.roomAwayMentionCount {
+.roomAwayMessageCount, .roomAwayMentionCount {
     padding: 0 3px 0 3px;
-    min-width:10px;
+    min-width: 10px;
     float: left;
     display: inline;
 }
@@ -172,19 +149,32 @@
     float: right;
 }
 
-.UserListPhoto{ border: solid 1px #000;width: 16px;float: left;height: 16px;}
+.UserListPhoto {
+    border: solid 1px #000;
+    width: 16px;
+    float: left;
+    height: 16px;
+}
 
 .ChatArchive .MessageTime {
-padding: 2px;
-font-size: .7em;
+    padding: 2px;
+    font-size: .7em;
 }
 
-.archiveLink
-{ clear: both;}
+.archiveLink {
+    clear: both;
+}
 
 .ui-datepicker {
-    background: #fff;border: #000 solid 1px;
+    background: #fff;
+    border: #000 solid 1px;
     padding: 5px;
 }
-.ui-datepicker-next{ float: right;}
-.ui-datepicker-year,.ui-datepicker-month{ font-weight: bold;}
+
+.ui-datepicker-next {
+    float: right;
+}
+
+.ui-datepicker-year, .ui-datepicker-month {
+    font-weight: bold;
+}
