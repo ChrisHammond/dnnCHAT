@@ -4,6 +4,7 @@
 
 
     <div class="ChatWindow ChatArchive col-md-9 container">
+        <h2><asp:Label runat="server" ID="lblArchiveTitle" runat="server"></asp:Label></h2>
         <asp:Repeater ID="rptMessages" runat="server" OnItemDataBound="rptMessages_OnItemDataBound">
             <ItemTemplate>
                 <div class="ChatMessage dnnClear row">

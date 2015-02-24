@@ -86,7 +86,8 @@ namespace Christoc.Modules.DnnChat
                     var r = rc.GetRoom(RoomId, ModuleId);
                     var tp = (CDefault)Page;
                     var t = new TabController().GetTab(TabId, PortalId, false);
-                    tp.Title += string.Format(Localization.GetString("ChatArchiveTitle.Text", LocalResourceFile), t.TabName, r.RoomName, startDate, endDate);
+                    tp.Title += string.Format(Localization.GetString("ChatArchiveTitle.Text", LocalResourceFile), t.TabName, r.RoomName, startDate.ToShortDateString(), endDate.ToShortDateString());
+                    lblArchiveTitle.Text = string.Format(Localization.GetString("ChatArchiveContentTitle.Text", LocalResourceFile), r.RoomName, startDate.ToShortDateString(), endDate.ToShortDateString());
                 }
             }
             catch (Exception exc) //Module failed to load

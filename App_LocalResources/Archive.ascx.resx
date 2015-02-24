@@ -156,4 +156,7 @@
   <data name="lbYesterday.Text" xml:space="preserve">
     <value>Yesterday</value>
   </data>
+  <data name="ChatArchiveContentTitle.Text" xml:space="preserve">
+    <value>{0} - Archives {1} - {2}</value>
+  </data>
 </root>
