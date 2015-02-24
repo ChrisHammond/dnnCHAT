@@ -154,5 +154,17 @@ namespace Christoc.Modules.DnnChat
                 }
             }
         }
+
+        public string GetPhotoUrl(object authorUserId)
+        {
+            var userId = Convert.ToInt64(authorUserId);
+            if (userId > 0)
+            {
+                return "/profilepic.ashx?userId=" + userId + "&h=32&w=32";
+            }
+            return Settings.Contains("DefaultAvatarUrl") ? Settings["DefaultAvatarUrl"].ToString() : Localization.GetString("DefaultAvatarUrl", LocalResourceFile); ;
+
+        }
+
     }
 }

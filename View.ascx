@@ -128,6 +128,9 @@
 
 
     </div>
+    
+    
+    <div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
     <!-- /ko -->
 </div>
 <div class="container">
@@ -135,8 +138,6 @@
         <div id="ChatStatus" class="chatStatus col-lg-12">
         </div>
     </div>
-
-    <div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
     <div class="projectMessage"><%= Localization.GetString("ProjectMessage.Text",LocalResourceFile)%></div>
 </div>
 

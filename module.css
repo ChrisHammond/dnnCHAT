@@ -200,3 +200,6 @@
 @media (max-width:992px){
 .chatWrap{ padding: 0 !important;}
 }
+
+.lblEndDate{ clear: both;}
+.endDate,.startDate { float: right;}
