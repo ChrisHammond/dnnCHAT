@@ -162,7 +162,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="01.01.02.txt" />
+    <Content Include="02.00.00.txt" />
     <Content Include="Data\SignalRChat-To-DnnChat.txt" />
     <Content Include="Edit.ascx" />
     <Content Include="images\emoticons\simple\angel.png" />
