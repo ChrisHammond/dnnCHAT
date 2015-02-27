@@ -1,0 +1,59 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_ConnectionRecords]') AND type in (N'U'))
+
+CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords
+    (
+    ConnectionRecordId int NOT NULL IDENTITY (1, 1),
+    ConnectionId nvarchar(MAX) NOT NULL,
+    UserName nvarchar(MAX) NOT NULL,
+    UserId int NULL,
+    ModuleId int NOT NULL,
+    ConnectedDate datetime NOT NULL,
+	DisConnectedDate datetime NULL,
+    )  
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}SignalRChat_ConnectionRecords' )
+
+ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords ADD CONSTRAINT
+    PK_{objectQualifier}SignalRChat_ConnectionRecords PRIMARY KEY CLUSTERED 
+    (
+    ConnectionRecordId
+    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SignalRChat_Messages]') AND type in (N'U'))
+
+CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages
+    (
+    MessageId int NOT NULL IDENTITY (1, 1),
+    ConnectionId nvarchar(MAX) NOT NULL,
+    MessageText nvarchar(MAX) NOT NULL,
+	MessageDate datetime NOT NULL
+    )  
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}SignalRChat_Messages' )
+ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages ADD CONSTRAINT
+    PK_{objectQualifier}SignalRChat_Messages PRIMARY KEY CLUSTERED 
+    (
+    MessageId
+    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+
+GO
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/
+GO
