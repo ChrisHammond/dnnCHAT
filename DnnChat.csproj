@@ -165,6 +165,7 @@
     <Content Include="02.00.00.txt" />
     <Content Include="Data\SignalRChat-To-DnnChat.txt" />
     <Content Include="Edit.ascx" />
+    <Content Include="images\defaultAvatar.png" />
     <Content Include="images\emoticons\simple\angel.png" />
     <Content Include="images\emoticons\simple\angry.png" />
     <Content Include="images\emoticons\simple\aww.png" />
@@ -215,6 +216,7 @@
     <Content Include="images\emoticons\simple\winking.png" />
     <Content Include="images\emoticons\simple\winking_grinning.png" />
     <Content Include="images\emoticons\simple\winking_tongue_out.png" />
+    <Content Include="images\icon_extensions_32px.png" />
     <Content Include="License.txt" />
     <Content Include="module.css" />
     <Content Include="ReleaseNotes.txt" />
