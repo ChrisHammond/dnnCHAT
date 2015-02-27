@@ -25,8 +25,8 @@ CREATE TABLE {databaseOwner}{objectQualifier}DnnChat_Rooms(
 	CONSTRAINT [PK_{objectQualifier}DnnChat_Rooms] PRIMARY KEY CLUSTERED 
 	(
 		[RoomId] ASC
-	)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-	) ON [PRIMARY]
+	)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) 
+	) 
 
 
 	ALTER TABLE {databaseOwner}[{objectQualifier}DnnChat_Rooms] ADD  CONSTRAINT [DF_{objectQualifier}DnnChat_Rooms_RoomId]  DEFAULT (newid()) FOR [RoomId]
@@ -44,14 +44,13 @@ IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{database
 		RoomId uniqueidentifier NOT NULL,
 		JoinDate datetime NOT NULL,
 		DepartedDate datetime NULL
-		)  ON [PRIMARY]
+		)  
 	ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms ADD CONSTRAINT
 		PK_{objectQualifier}DnnChat_ConnectionRecordRooms PRIMARY KEY CLUSTERED 
 		(
 		id
-		) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+		) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 
-	ALTER TABLE {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms SET (LOCK_ESCALATION = TABLE)
 GO
 
 

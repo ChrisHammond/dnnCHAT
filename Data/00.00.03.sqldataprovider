@@ -19,8 +19,7 @@ CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords
     ModuleId int NOT NULL,
     ConnectedDate datetime NOT NULL,
 	DisConnectedDate datetime NULL,
-    )  ON [PRIMARY]
-     TEXTIMAGE_ON [PRIMARY]
+    )  
 GO
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}SignalRChat_ConnectionRecords' )
@@ -29,7 +28,7 @@ ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords ADD CO
     PK_{objectQualifier}SignalRChat_ConnectionRecords PRIMARY KEY CLUSTERED 
     (
     ConnectionRecordId
-    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 
 GO
 
@@ -41,8 +40,7 @@ CREATE TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages
     ConnectionId nvarchar(MAX) NOT NULL,
     MessageText nvarchar(MAX) NOT NULL,
 	MessageDate datetime NOT NULL
-    )  ON [PRIMARY]
-     TEXTIMAGE_ON [PRIMARY]
+    )  
 GO
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' AND TABLE_NAME = '{objectQualifier}SignalRChat_Messages' )
@@ -50,7 +48,7 @@ ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages ADD CONSTRAINT
     PK_{objectQualifier}SignalRChat_Messages PRIMARY KEY CLUSTERED 
     (
     MessageId
-    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 
 GO
 
