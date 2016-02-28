@@ -1,5 +1,4 @@
-﻿bin\SignalRChat.dll
-DesktopModules\SignalRChat\App_LocalResources
+﻿DesktopModules\SignalRChat\App_LocalResources
 DesktopModules\SignalRChat\App_LocalResources\Edit.ascx.resx
 DesktopModules\SignalRChat\App_LocalResources\Settings.ascx.resx
 DesktopModules\SignalRChat\App_LocalResources\SharedResources.resx

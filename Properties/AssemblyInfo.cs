@@ -1,5 +1,5 @@
 ﻿/*
-' Copyright (c) 2015 Christoc.com Software Solutions
+' Copyright (c) 2016 Christoc.com Software Solutions
 '  All rights reserved.
 ' 
 ' Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
@@ -50,5 +50,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("02.00.00.*")]
-[assembly: AssemblyFileVersion("02.00.00.*")]
+[assembly: AssemblyVersion("02.01.00.*")]
+[assembly: AssemblyFileVersion("02.01.00.*")]

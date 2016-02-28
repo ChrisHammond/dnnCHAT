@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="DnnChat" type="Module" version="02.00.00">
+    <package name="DnnChat" type="Module" version="02.01.00">
       <friendlyName>DnnChat</friendlyName>
       <description>A Chat module for DotNetNuke using SignalR</description>
       <iconFile>/Images/icon_extensions_32px.png</iconFile>
@@ -14,7 +14,7 @@
       <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
       <azureCompatible>true</azureCompatible>
       <dependencies>
-        <dependency type="CoreVersion">07.01.00</dependency>
+        <dependency type="CoreVersion">08.00.00</dependency>
         <!-- .NET 4.5 -->
         <dependency type="type">System.Reflection.ReflectionContext</dependency>
       </dependencies>
@@ -60,7 +60,7 @@
             <script type="UnInstall">
               <path>Data</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>02.00.00</version>
+              <version>02.01.00</version>
             </script>           
           </scripts>
         </component>
@@ -162,22 +162,16 @@
               <name>Microsoft.Owin.Security.dll</name>
               <path>bin</path>
             </assembly>
-            <assembly>
-              <name>NewtonSoft.Json.dll</name>
-              <path>bin\dnnchat</path>
-              <sourceFileName>bin\dnnchat\NewtonSoft.Json.dll</sourceFileName>
-              <version>6.0.0.0</version>
-            </assembly>
           </assemblies>
         </component>
         <component type="Cleanup" version="02.00.00" fileName="02.00.00.txt" />
-        <component type="Config">
+        <!--<component type="Config">
           <config>
             <configFile>web.config</configFile>
             <install>
               <configuration>
                 <nodes>
-                  <!-- add assembly redirect for Newtonsoft.Json v6.0.0.0-->                
+                  --><!-- add assembly redirect for Newtonsoft.Json v6.0.0.0--><!--                
                   <node path="/configuration/runtime/ab:assemblyBinding" action="update"
                         targetpath="/configuration/runtime/ab:assemblyBinding[ab:dependentAssembly/ab:assemblyIdentity/@name='Newtonsoft.Json']"
                         collision="ignore" nameSpace="urn:schemas-microsoft-com:asm.v1" nameSpacePrefix="ab">
@@ -195,7 +189,7 @@
               </configuration>
             </uninstall>
           </config>
-        </component>
+        </component>-->
       </components>
     </package>
   </packages>
