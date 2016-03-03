@@ -4,11 +4,12 @@
 
 .ChatWindow {
     max-height: 500px;
-    overflow: auto;
-    border: solid 1px #000;
+    overflow-y: auto;
+    /*border: solid 1px #000;
     vertical-align: baseline;
-    padding: 0;
+    padding: 0;*/
     overflow-x: hidden;
+    width: 100%;
 }
 
 .msg {
@@ -26,8 +27,9 @@
 }
 
 .UsersList {
-    border: solid 1px #000;
+    /*border: solid 1px #000;*/
     overflow: auto;
+    min-height: 300px;
 }
 
 .ArchiveDates {
@@ -39,7 +41,7 @@
 }
 
 .ChatMessage {
-    border-bottom: 1px solid #dbdbdb;
+
     position: relative;
     overflow: hidden;
 }
@@ -52,11 +54,13 @@
     height: 100%;
     text-align: right;
     font-size: .9em;
-}
+    }
 
 @media (min-width: 1200px) {
     .MessageAuthor {
         padding-right: 5px !important;
+        border-right: solid #dddddd 1px;
+        border-bottom: none;
     }
 }
 
@@ -65,7 +69,6 @@
     margin: 5px 0 5px 5px;
     border: solid 1px #000;
     width: 25px;
-    float: left;
     height: 25px;
 }
 
@@ -82,7 +85,7 @@
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto;
-    border-left: solid 1px #dbdbdb;
+    /*border-left: solid 1px #dbdbdb;*/
 }
 
 @media (min-width: 1200px) {
@@ -141,7 +144,7 @@
 }
 
 .RoomClose {
-    background-image: url('../../images/close-icn.png');
+    /*background-image: url('../../images/close-icn.png');*/
     width: 24px;
     height: 24px;
     float: right;
@@ -203,3 +206,25 @@
 
 .lblEndDate{ clear: both;}
 .endDate,.startDate { float: right;}
+
+.nav-tabs{ border-bottom: none !important;}
+
+.ChatWindow .list-group {
+    width: 85%;
+}
+
+@media (min-width: 760px) {
+
+.ChatWindow .list-group {
+    width: 90%;
+}}
+
+
+@media (min-width: 969px) {
+
+.ChatWindow .list-group {
+    width: 96%;
+}}
+
+
+.ChatWindow li.list-group-item{ padding-top: 0!important;padding-bottom: 0 !important;}

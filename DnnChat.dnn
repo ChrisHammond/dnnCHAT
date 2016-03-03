@@ -164,32 +164,7 @@
             </assembly>
           </assemblies>
         </component>
-        <component type="Cleanup" version="02.00.00" fileName="02.00.00.txt" />
-        <!--<component type="Config">
-          <config>
-            <configFile>web.config</configFile>
-            <install>
-              <configuration>
-                <nodes>
-                  --><!-- add assembly redirect for Newtonsoft.Json v6.0.0.0--><!--                
-                  <node path="/configuration/runtime/ab:assemblyBinding" action="update"
-                        targetpath="/configuration/runtime/ab:assemblyBinding[ab:dependentAssembly/ab:assemblyIdentity/@name='Newtonsoft.Json']"
-                        collision="ignore" nameSpace="urn:schemas-microsoft-com:asm.v1" nameSpacePrefix="ab">
-                    <dependentAssembly xmlns="urn:schemas-microsoft-com:asm.v1">
-                      <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" />
-                      <codeBase version="6.0.0.0" href="bin\dnnchat\Newtonsoft.Json.dll" />
-                    </dependentAssembly>
-                  </node>
-                </nodes>
-              </configuration>
-            </install>
-            <uninstall>
-              <configuration>
-                <nodes />
-              </configuration>
-            </uninstall>
-          </config>
-        </component>-->
+        <component type="Cleanup" version="02.01.00" fileName="02.01.00.txt" />
       </components>
     </package>
   </packages>

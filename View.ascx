@@ -62,42 +62,46 @@
     </div>
 </div>
 
-<div class="ConnectedRoomList container" id="userRoomList">
+<ul class="nav nav-tabs col-lg-10" id="userRoomList">
     <!-- ko foreach: rooms -->
-    <div class="ChatRooms">
-        <div class="ConnectedRoomTab" data-bind="id:roomName,click:setActiveRoom,css:{activeRoom:roomId == $parent.activeRoom()}">
+    <li class="ChatRooms" data-bind="id:roomName,click:setActiveRoom,css:{'active':roomId == $parent.activeRoom()}" role="presentation">
+        <a href="#">
             <div data-bind="html:roomName" class="ConnectedRoom">
             </div>
             <div data-bind="html:formatCount(awayMessageCount())" class="roomAwayMessageCount"></div>
             <div data-bind="html:formatCount(awayMentionCount())" class="roomAwayMentionCount"></div>
-
-            <div data-bind="click:disconnectRoom" class="RoomClose"></div>
-        </div>
-    </div>
+            &nbsp;
+            <div data-bind="click:disconnectRoom" class="RoomClose glyphicon glyphicon-remove"></div>
+        </a>
+    </li>
     <!-- /ko -->
-</div>
+</ul>
 
 <div class="RoomContainer container" id="roomView">
     <!-- ko foreach: rooms -->
     <!-- the display of the rooms that a user is connected -->
-    <div class="srcWindow row" data-bind="visible:showRoom">
+    <div class="row" data-bind="visible:showRoom">
         <div class="col-lg-10 container chatWrap">
             <div class="ChatWindow" data-bind="attr:{id: roomNameId}">
-                <!-- ko foreach: messages -->
-                <div data-bind="attr:{class:cssName}" class="row">
-                    <div class="col-lg-2 MessageAuthor dnnClear">
-                        <!-- ko if: authorUserId>0 -->
-                        <img data-bind="attr: {src:photoUrl,alt:authorName},click:targetMessageAuthor" class="MessageAuthorPhoto" />
-                        <!-- /ko -->
-                        <!-- ko if: authorUserId<1 -->
-                        <img data-bind="attr: {src:defaultAvatarUrl,alt:authorName},click:targetMessageAuthor" class="MessageAuthorPhoto" />
-                        <!-- /ko -->
-                        <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthorText"></div>
-                    </div>
-                    <div data-bind="html:messageText" class="col-lg-9 MessageText "></div>
-                    <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-lg-1 MessageTime"></div>
-                </div>
-                <!-- /ko -->
+                <ul class="list-group">
+                    <!-- ko foreach: messages -->
+                    <li class="list-group-item row">
+                        <div data-bind="attr:{class:cssName}">
+                            <div class="col-lg-2 MessageAuthor dnnClear">
+                                <!-- ko if: authorUserId>0 -->
+                                <img data-bind="attr: {src:photoUrl,alt:authorName},click:targetMessageAuthor" class="MessageAuthorPhoto" />
+                                <!-- /ko -->
+                                <!-- ko if: authorUserId<1 -->
+                                <img data-bind="attr: {src:defaultAvatarUrl,alt:authorName},click:targetMessageAuthor" class="MessageAuthorPhoto" />
+                                <!-- /ko -->
+                                <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthorText"></div>
+                            </div>
+                            <div data-bind="html:messageText" class="col-lg-9 MessageText "></div>
+                            <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-lg-1 MessageTime"></div>
+                        </div>
+                    </li>
+                    <!-- /ko -->
+                </ul>
             </div>
             <input type="text" data-bind="value:newMessageText, hasfocus: textFocus, enterKey: sendMessage" class="msg" />
             <input class="dnnPrimaryAction" type="button" value="<%= Localization.GetString("btnSubmit.Text",LocalResourceFile)%>" data-bind="click:sendMessage" />
@@ -128,9 +132,9 @@
 
 
     </div>
-    
-    
-    <div><a data-bind="attr:{href: roomArchiveLink}" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
+
+    <div><a data-bind="attr:{href: roomArchiveLink},visible:showRoom" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
+
     <!-- /ko -->
 </div>
 <div class="container">
