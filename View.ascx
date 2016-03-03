@@ -70,8 +70,9 @@
             </div>
             <div data-bind="html:formatCount(awayMessageCount())" class="roomAwayMessageCount"></div>
             <div data-bind="html:formatCount(awayMentionCount())" class="roomAwayMentionCount"></div>
-            &nbsp;
             <div data-bind="click:disconnectRoom" class="RoomClose glyphicon glyphicon-remove"></div>
+            &nbsp;
+            
         </a>
     </li>
     <!-- /ko -->
