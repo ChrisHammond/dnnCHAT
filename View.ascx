@@ -88,7 +88,7 @@
                     <!-- ko foreach: messages -->
                     <li class="list-group-item row">
                         <div data-bind="attr:{class:cssName}">
-                            <div class="col-lg-2 MessageAuthor dnnClear">
+                            <div class="col-lg-2 MessageAuthor smallPad dnnClear ">
                                 <!-- ko if: authorUserId>0 -->
                                 <img data-bind="attr: {src:photoUrl,alt:authorName},click:targetMessageAuthor" class="MessageAuthorPhoto" />
                                 <!-- /ko -->
@@ -97,8 +97,8 @@
                                 <!-- /ko -->
                                 <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthorText"></div>
                             </div>
-                            <div data-bind="html:messageText" class="col-lg-9 MessageText "></div>
-                            <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-lg-1 MessageTime"></div>
+                            <div data-bind="html:messageText" class="col-lg-9 MessageText smallPad "></div>
+                            <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-lg-1 MessageTime smallPad"></div>
                         </div>
                     </li>
                     <!-- /ko -->
@@ -114,20 +114,22 @@
                     <%= Localization.GetString("usersOnline.Text",LocalResourceFile)%><div data-bind="html:userCount" class="dnnRight"></div>
                 </div>
             </div>
-            <!-- ko foreach: connectionRecords -->
-            <div class="ChatUsers row">
-                <!-- ko if: userId>0 -->
-                <div class="col-xs-12">
-                    <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" /><div data-bind="    html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
-                </div>
+            <ul class="list-group chatUsers">
+                <!-- ko foreach: connectionRecords -->
+                
+                    <!-- ko if: userId>0 -->
+                    <li class="list-group-item smallPad">
+                        <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" />
+                        <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
+                    </li>
+                    <!-- /ko -->
+                    <!-- ko if: userId<1 -->
+                    <li data-bind="html:authorName,click:targetMessageAuthor" class="list-group-item UserListUser UserNotLoggedIn smallPad">
+                    </li>
+                    <!-- /ko -->
+                
                 <!-- /ko -->
-                <!-- ko if: userId<1 -->
-                <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserNotLoggedIn col-xs-12">
-                </div>
-                <!-- /ko -->
-            </div>
-            <!-- /ko -->
-
+            </ul>
 
         </div>
 
