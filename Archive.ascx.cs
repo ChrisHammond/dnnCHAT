@@ -24,6 +24,7 @@ using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
 using Christoc.Modules.DnnChat.Components;
 using DotNetNuke.Entities.Tabs;
+using DotNetNuke.Entities.Users;
 using DotNetNuke.Framework;
 using DotNetNuke.Services.Localization;
 
@@ -158,10 +159,12 @@ namespace Christoc.Modules.DnnChat
 
         public string GetPhotoUrl(object authorUserId)
         {
-            var userId = Convert.ToInt64(authorUserId);
+            var userId = Convert.ToInt32(authorUserId);
             if (userId > 0)
             {
-                return "/profilepic.ashx?userId=" + userId + "&h=32&w=32";
+
+                return UserController.Instance.GetUserProfilePictureUrl(userId, 32, 32);
+
             }
             return Settings.Contains("DefaultAvatarUrl") ? Settings["DefaultAvatarUrl"].ToString() : Localization.GetString("DefaultAvatarUrl", LocalResourceFile); ;
 

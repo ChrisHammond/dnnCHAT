@@ -81,5 +81,16 @@ namespace Christoc.Modules.DnnChat.Components
         /// The IsDeleted flag for Messages
         /// </summary>
         public bool IsDeleted { get; set; }
+
+        ///<summary>
+        /// A string with user's avatar url
+        ///</summary>
+        [IgnoreColumn]
+        //public string PhotoUrl { get; set; }
+        public string PhotoUrl
+        {
+            get { return ChatHub.GetPhotoUrl(AuthorUserId); }
+        }
+
     }
 }

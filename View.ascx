@@ -52,10 +52,12 @@
                     <h4 class="modal-title" id="myModalLabel"><%=Localization.GetString("joinARoom.Text",LocalResourceFile) %></h4>
                 </div>
                 <div class="modal-body">
+                    <ul class="list-group">
                     <!-- ko foreach: rooms -->
-                    <div data-bind="html:roomName,click:joinRoom" class="RoomListRoom row" data-dismiss="modal">
-                    </div>
+                    <li data-bind="html:roomName,click:joinRoom" class="list-group-item RoomListRoom" data-dismiss="modal">
+                    </li>
                     <!-- /ko -->
+                        </ul>
                 </div>
             </div>
         </div>

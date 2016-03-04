@@ -74,7 +74,8 @@ function DnnChat($, ko, settings) {
         this.disconnectedDate = u.DisconnectedDate;
         this.ipAddress = u.IpAddress;
         this.roomId = u.RoomId;
-        this.photoUrl = "/profilepic.ashx?userId=" + u.UserId + "&h=32&w=32";
+        this.photoUrl = u.PhotoUrl;
+        // "/profilepic.ashx?userId=" + u.UserId + "&h=32&w=32";
         //this.profileUrl = "/Activity-Feed/userid/" + u.UserId; //http://www.dnnchat.com/Activity-Feed/userId/1
 
 
@@ -125,7 +126,8 @@ function DnnChat($, ko, settings) {
         this.authorUserId = m.AuthorUserId;
         this.roomId = m.RoomId;
         this.defaultAvatarUrl = defaultAvatarUrl;
-        this.photoUrl = "/profilepic.ashx?userId=" + m.AuthorUserId + "&h=32&w=32";
+        this.photoUrl = m.PhotoUrl;
+        //this.photoUrl = "/profilepic.ashx?userId=" + m.AuthorUserId + "&h=32&w=32";
 
         //this.cssName = m.MessageText.toLowerCase().indexOf(chatHub.state.username.toLowerCase()) !== -1 ? "ChatMessage ChatMentioned dnnClear" : "ChatMessage dnnClear";
         //patch from @briandukes to highlight your own posts

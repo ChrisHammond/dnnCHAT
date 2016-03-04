@@ -229,8 +229,8 @@
 
 .ChatWindow li.list-group-item{ padding-top: 0!important;padding-bottom: 0 !important;}
 
-
 .chatUsers{ margin: 0;}
 
 .RoomContainer .smallPad{ padding-left: 5px ;padding-right: 5px;}
+.LobbyArea .list-group{ margin: 0;}
 

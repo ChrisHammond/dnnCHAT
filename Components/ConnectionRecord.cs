@@ -21,6 +21,7 @@
 using System;
 using System.Web.Caching;
 using DotNetNuke.ComponentModel.DataAnnotations;
+using DotNetNuke.Data.PetaPoco;
 
 namespace Christoc.Modules.DnnChat.Components
 {
@@ -32,6 +33,7 @@ namespace Christoc.Modules.DnnChat.Components
     [Cacheable("ConnectionRecords", CacheItemPriority.Default, 20)]
     //scope the objects to the ModuleId of a module on a page (or copy of a module on a page)
     [Scope("ModuleId")]
+    
     public class ConnectionRecord
     {
         ///<summary>
@@ -76,7 +78,12 @@ namespace Christoc.Modules.DnnChat.Components
         ///<summary>
         /// A string with user's avatar url
         ///</summary>
+        [IgnoreColumn]
         //public string PhotoUrl { get { return string.Format("/profilepic.ashx?userId={0}&h=32&w=32", UserId); } }
+        public string PhotoUrl {
+            get { return ChatHub.GetPhotoUrl(UserId); }
+        }
+
 
         public ConnectionRecord()
         { }

@@ -101,7 +101,7 @@ namespace Christoc.Modules.DnnChat.Components
                                     AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
                                     AuthorUserId = -1,
                                     RoomId = DefaultRoomId
-                                };
+                    };
                     Clients.Caller.newMessage(m);
                 }
             }
@@ -216,7 +216,6 @@ namespace Christoc.Modules.DnnChat.Components
             if (c != null)
             {
                 c.UserName = username;
-                //Users.Add(c);
                 crc.UpdateConnectionRecord(c);
             }
             else
@@ -307,6 +306,8 @@ namespace Christoc.Modules.DnnChat.Components
                 var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
 
                 var cr = crrc.GetConnectionRecordRoomByConnectionRecordId(c.ConnectionRecordId, roomId);
+
+                
 
                 if (cr == null)
                 {
@@ -423,6 +424,9 @@ namespace Christoc.Modules.DnnChat.Components
                     foreach (var msg in messages)
                     {
                         //TODO: we need to figure out how to make sure it goes to the right room
+
+                        //msg.PhotoUrl = GetPhotoUrl(msg.AuthorUserId);
+
                         Clients.Caller.newMessageNoParse(msg);
                     }
                 }
@@ -657,6 +661,18 @@ namespace Christoc.Modules.DnnChat.Components
             var ipAddress = Get<string>(env, "server.RemoteIpAddress");
             return ipAddress;
         }
+
+        public static string GetPhotoUrl(int userId)
+        {
+            if (userId > 0)
+            {
+
+                return UserController.Instance.GetUserProfilePictureUrl(userId, 32, 32);
+
+            }
+            return "";
+        }
+
 
         private static T Get<T>(IDictionary<string, object> env, string key)
         {
