@@ -1,0 +1,170 @@
+<dotnetnuke type="Package" version="5.0">
+  <packages>
+    <package name="DnnChat" type="Module" version="03.00.00">
+      <friendlyName>DnnChat</friendlyName>
+      <description>A Chat module for DotNetNuke using SignalR</description>
+      <iconFile>/Images/icon_extensions_32px.png</iconFile>
+      <owner>
+        <name>Christoc.com Software Solutions</name>
+        <organization>Christoc.com Software Solutions</organization>
+        <url>http://www.christoc.com</url>
+        <email>modules@christoc.com</email>
+      </owner>
+      <license src="License.txt"></license>
+      <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+      <azureCompatible>true</azureCompatible>
+      <dependencies>
+        <dependency type="CoreVersion">08.00.00</dependency>
+        <!-- .NET 4.5 -->
+        <dependency type="type">System.Reflection.ReflectionContext</dependency>
+      </dependencies>
+      <components>
+        <component type="Script">
+          <scripts>
+            <basePath>DesktopModules\DnnChat</basePath>
+            <script type="Install">
+              <path>Data</path>
+              <name>00.00.03.SqlDataProvider</name>
+              <version>00.00.03</version>
+            </script>
+            <script type="Install">
+              <path>Data</path>
+              <name>00.00.05.SqlDataProvider</name>
+              <version>00.00.05</version>
+            </script>
+            <script type="Install">
+              <path>Data</path>
+              <name>00.00.06.SqlDataProvider</name>
+              <version>00.00.06</version>
+            </script>
+            <script type="Install">
+              <path>Data</path>
+              <name>00.00.08.SqlDataProvider</name>
+              <version>00.00.08</version>
+            </script>
+            <script type="Install">
+              <path>Data</path>
+              <name>00.01.00.SqlDataProvider</name>
+              <version>00.01.00</version>
+            </script>
+            <script type="Install">
+              <path>Data</path>
+              <name>01.00.03.SqlDataProvider</name>
+              <version>01.00.03</version>
+            </script>
+            <script type="Install">
+              <path>Data</path>
+              <name>01.01.02.SqlDataProvider</name>
+              <version>01.01.02</version>
+            </script>
+            <script type="UnInstall">
+              <path>Data</path>
+              <name>Uninstall.SqlDataProvider</name>
+              <version>02.01.00</version>
+            </script>           
+          </scripts>
+        </component>
+        <component type="ResourceFile">
+          <resourceFiles>
+            <basePath>DesktopModules/DnnChat</basePath>
+            <resourceFile>
+              <name>Resources.zip</name>
+            </resourceFile>
+          </resourceFiles>
+        </component>
+
+        <component type="Module">
+          <desktopModule>
+            <moduleName>DnnChat</moduleName>
+            <foldername>DnnChat</foldername>
+            <businessControllerClass />
+            <supportedFeatures />
+            <moduleDefinitions>
+              <moduleDefinition>
+                <friendlyName>DnnChat</friendlyName>
+                <defaultCacheTime>0</defaultCacheTime>
+                <moduleControls>
+                  <moduleControl>
+                    <controlKey />
+                    <controlSrc>DesktopModules/DnnChat/View.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle />
+                    <controlType>View</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Archive</controlKey>
+                    <controlSrc>DesktopModules/DnnChat/Archive.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Chat Archive</controlTitle>
+                    <controlType>View</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>False</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Edit</controlKey>
+                    <controlSrc>DesktopModules/DnnChat/Edit.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Edit Content</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Settings</controlKey>
+                    <controlSrc>DesktopModules/DnnChat/Settings.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>DnnChat Settings</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                  </moduleControl>
+                </moduleControls>
+              </moduleDefinition>
+            </moduleDefinitions>
+          </desktopModule>
+        </component>
+        <component type="Assembly">
+          <assemblies>
+            <basePath>bin</basePath>
+            <assembly>
+              <name>DnnChat.dll</name>
+              <path>bin</path>
+            </assembly>
+            <assembly>
+              <name>Microsoft.AspNet.SignalR.Core.dll</name>
+              <path>bin</path>
+            </assembly>
+            <assembly>
+              <name>Microsoft.Owin.dll</name>
+              <path>bin</path>
+            </assembly>
+            <assembly>
+              <name>Microsoft.AspNet.SignalR.SystemWeb.dll</name>
+              <path>bin</path>
+            </assembly>
+            <assembly>
+              <name>Owin.dll</name>
+              <path>bin</path>
+            </assembly>
+            <assembly>
+              <name>Microsoft.Owin.Host.SystemWeb.dll</name>
+              <path>bin</path>
+            </assembly>
+            <assembly>
+              <name>Microsoft.Owin.Security.dll</name>
+              <path>bin</path>
+            </assembly>
+          </assemblies>
+        </component>
+      </components>
+    </package>
+  </packages>
+</dotnetnuke>

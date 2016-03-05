@@ -1,0 +1,11 @@
+﻿
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{objectQualifier}SignalRChat_ConnectionRecords' AND COLUMN_NAME = 'IpAddress')
+	ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_ConnectionRecords ADD
+		IpAddress nvarchar(15) NULL
+GO
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{objectQualifier}SignalRChat_Messages' AND COLUMN_NAME = 'AuthorName')
+ALTER TABLE {databaseOwner}{objectQualifier}SignalRChat_Messages ADD
+	AuthorName nvarchar(25) NULL
+GO

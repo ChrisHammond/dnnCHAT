@@ -1,0 +1,30 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_ConnectionRecords]') AND type in (N'U'))
+DROP TABLE {databaseOwner}[{objectQualifier}DnnChat_ConnectionRecords]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_Messages]') AND type in (N'U'))
+DROP TABLE {databaseOwner}[{objectQualifier}DnnChat_Messages]
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_Rooms]') AND type in (N'U'))
+	drop table {databaseOwner}{objectQualifier}DnnChat_Rooms
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DnnChat_ConnectionRecordRooms]') AND type in (N'U'))
+	drop table {databaseOwner}{objectQualifier}DnnChat_ConnectionRecordRooms
+GO
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/
