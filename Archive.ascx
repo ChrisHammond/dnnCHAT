@@ -2,23 +2,26 @@
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
 <div class="container row">
 
-
+    <h2>
+        <asp:Label runat="server" ID="lblArchiveTitle" runat="server"></asp:Label></h2>
     <div class="ChatWindow ChatArchive col-md-9 container">
-        <h2><asp:Label runat="server" ID="lblArchiveTitle" runat="server"></asp:Label></h2>
-        <asp:Repeater ID="rptMessages" runat="server" OnItemDataBound="rptMessages_OnItemDataBound">
-            <ItemTemplate>
-                <div class="ChatMessage dnnClear row">
-                    <div class="MessageAuthor col-md-2">
-                        
-                        <img src="<%# GetPhotoUrl(DataBinder.Eval(Container.DataItem,"authorUserId")) %>" class="MessageAuthorPhoto" />
-                        <div class="MessageAuthorText"><%# DataBinder.Eval(Container.DataItem,"authorName") %></div>
-                    </div>
-                    <div class="MessageText col-md-9"><%# ActivateLinksInText(DataBinder.Eval(Container.DataItem,"MessageText").ToString()) %></div>
-                    <div class="MessageTime col-md-1"><%# DataBinder.Eval(Container.DataItem,"messageDate") %></div>
-                </div>
-            </ItemTemplate>
 
-        </asp:Repeater>
+        <ul class="list-group">
+            <asp:Repeater ID="rptMessages" runat="server" OnItemDataBound="rptMessages_OnItemDataBound">
+                <ItemTemplate>
+                    <li class="list-group-item row">
+                        <div class="messageRow ChatMessage">
+                            <div class="MessageAuthor col-md-2 smallPad">
+                                <img src="<%# GetPhotoUrl(DataBinder.Eval(Container.DataItem,"authorUserId")) %>" class="MessageAuthorPhoto" />
+                                <div class="MessageAuthorText"><%# DataBinder.Eval(Container.DataItem,"authorName") %></div>
+                            </div>
+                            <div class="MessageText col-md-9"><%# ActivateLinksInText(DataBinder.Eval(Container.DataItem,"MessageText").ToString()) %></div>
+                            <div class="MessageTime col-md-1 smallPad"><%# DataBinder.Eval(Container.DataItem,"messageDate") %></div>
+                        </div>
+                    </li>
+                </ItemTemplate>
+            </asp:Repeater>
+        </ul>
         <asp:Label runat="server" ID="lblNoResults" resourcekey="lblNoResults"></asp:Label>
     </div>
 

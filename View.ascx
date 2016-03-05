@@ -129,17 +129,11 @@
                     <li data-bind="html:authorName,click:targetMessageAuthor" class="list-group-item UserListUser UserNotLoggedIn smallPad">
                     </li>
                     <!-- /ko -->
-                
                 <!-- /ko -->
             </ul>
-
         </div>
-
-
     </div>
-
     <div><a data-bind="attr:{href: roomArchiveLink},visible:showRoom" target="_blank"><%=Localization.GetString("Archives.Text",LocalResourceFile) %></a></div>
-
     <!-- /ko -->
 </div>
 <div class="container">

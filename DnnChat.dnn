@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="DnnChat" type="Module" version="02.01.00">
+    <package name="DnnChat" type="Module" version="03.00.00">
       <friendlyName>DnnChat</friendlyName>
       <description>A Chat module for DotNetNuke using SignalR</description>
       <iconFile>/Images/icon_extensions_32px.png</iconFile>
@@ -164,7 +164,6 @@
             </assembly>
           </assemblies>
         </component>
-        <component type="Cleanup" version="02.01.00" fileName="02.01.00.txt" />
       </components>
     </package>
   </packages>

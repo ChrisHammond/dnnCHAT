@@ -41,12 +41,14 @@
 }
 
 .ChatMessage {
-
     position: relative;
     overflow: hidden;
 }
 
 .messageRow {
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 0;
 }
 
 .MessageAuthor {
@@ -54,7 +56,7 @@
     height: 100%;
     text-align: right;
     font-size: .9em;
-    }
+}
 
 @media (min-width: 1200px) {
     .MessageAuthor {
@@ -152,9 +154,6 @@
     top: -5px;
 }
 
-.RoomContainer {
-}
-
 .roomAwayMessageCount, .roomAwayMentionCount {
     padding: 0 3px 0 3px;
     min-width: 10px;
@@ -200,14 +199,24 @@
 .ui-datepicker-year, .ui-datepicker-month {
     font-weight: bold;
 }
-@media (max-width:992px){
-.chatWrap{ padding: 0 !important;}
+
+@media (max-width:992px) {
+    .chatWrap {
+        padding: 0 !important;
+    }
 }
 
-.lblEndDate{ clear: both;}
-.endDate,.startDate { float: right;}
+.lblEndDate {
+    clear: both;
+}
 
-.nav-tabs{ border-bottom: none !important;}
+.endDate, .startDate {
+    float: right;
+}
+
+.nav-tabs {
+    border-bottom: none !important;
+}
 
 .ChatWindow .list-group {
     width: 85%;
@@ -215,22 +224,34 @@
 
 @media (min-width: 760px) {
 
-.ChatWindow .list-group {
-    width: 90%;
-}}
+    .ChatWindow .list-group {
+        width: 90%;
+    }
+}
 
 
 @media (min-width: 969px) {
 
-.ChatWindow .list-group {
-    width: 96%;
-}}
+    .ChatWindow .list-group {
+        width: 96%;
+    }
+}
 
 
-.ChatWindow li.list-group-item{ padding-top: 0!important;padding-bottom: 0 !important;}
+.ChatWindow li.list-group-item {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
 
-.chatUsers{ margin: 0;}
+.chatUsers {
+    margin: 0;
+}
 
-.RoomContainer .smallPad{ padding-left: 5px ;padding-right: 5px;}
-.LobbyArea .list-group{ margin: 0;}
+.RoomContainer .smallPad {
+    padding-left: 5px;
+    padding-right: 5px;
+}
 
+.LobbyArea .list-group {
+    margin: 0;
+}
