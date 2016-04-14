@@ -35,7 +35,7 @@ function DnnChat($, ko, settings) {
     var errorSendingMessage = settings.errorSendingMessage;
     var defaultAvatarUrl = settings.defaultAvatarUrl;
     var allUsersNotification = settings.allUsersNotification;
-    
+
     var roomArchiveLink = settings.roomArchiveLink;
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
     var userroles = settings.roles;
@@ -245,7 +245,7 @@ function DnnChat($, ko, settings) {
         }.bind(this);
 
         this.deleteMessage = function (m) {
-            this.messages.remove(function(item) {return item.messageId == m.messageId;});
+            this.messages.remove(function (item) { return item.messageId == m.messageId; });
             this.messages.remove(m);
         }.bind(this);
 
@@ -326,14 +326,20 @@ function DnnChat($, ko, settings) {
                         chatHub.server.getRoomInfo(this.roomId, moduleid);
                         this.setActiveRoom();
                     }
-                    $(".RoomList").dialog('close');
+                    if ($(".RoomList").hasClass('ui-dialog-content')) {
+                        $(".RoomList").dialog('close');
+                    }
                 } else {
                     alert(alreadyInRoom);
-                    $(".RoomList").dialog('close');
+                    if ($(".RoomList").hasClass('ui-dialog-content')) {
+                        $(".RoomList").dialog('close');
+                    }
                 }
             } else {
                 alert(anonUsersRooms);
-                $(".RoomList").dialog('close');
+                if ($(".RoomList").hasClass('ui-dialog-content')) {
+                    $(".RoomList").dialog('close');
+                }
             }
             userRoomModel.sortRoomsAscending();
         };
@@ -594,7 +600,7 @@ function DnnChat($, ko, settings) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
