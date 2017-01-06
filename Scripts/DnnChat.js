@@ -163,10 +163,10 @@ function DnnChat($, ko, settings) {
     var roomModel = {
         rooms: ko.observableArray([]),
         ShowRoomList: function () {
-            //get an updated list of rooms for the Lobby
-            chatHub.server.getLobby();
+            //get an updated list of rooms for the roomlist
+            chatHub.server.getRoomList();
 
-            //open the lobby dialog
+            //open the roomlist dialog
             $(".RoomList").dialog({
                 width: '100%',
                 modal: true
@@ -182,7 +182,7 @@ function DnnChat($, ko, settings) {
     var userRoomModel = {
         rooms: ko.observableArray([])
         , activeRoom: ko.observable(activeRoomId)
-        , sortRoomsAscending: function () { this.rooms(this.rooms().sort(function (a, b) { return a.roomName == b.roomName ? 0 : (a.roomName.toLowerCase() < b.roomName.toLowerCase() ? -1 : 1); })); }
+        , sortRoomsAscending: function () { this.rooms(this.rooms().sort(function (a, b) { return a.roomName === b.roomName ? 0 : (a.roomName.toLowerCase() < b.roomName.toLowerCase() ? -1 : 1); })); }
     };
 
     //Room mapping function
@@ -319,7 +319,7 @@ function DnnChat($, ko, settings) {
 
         this.joinRoom = function () {
             //check if the userid >0 otherwise don't let them join
-            if (chatHub.state.userid > 0 || this.roomId == defaultRoomId) {
+            if (chatHub.state.userid > 0 || this.roomId === defaultRoomId) {
                 var foundRoom = findRoom(this.roomId);
                 if (!foundRoom) {
                     if (this.roomId != userRoomModel.activeRoom) {

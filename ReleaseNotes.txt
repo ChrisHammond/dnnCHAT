@@ -4,14 +4,10 @@
 	<a href="mailto:modules@christoc.com">modules@christoc.com</a><br />
 	<a href=http://www.christoc.com>http://www.christoc.com</a><br />
 	<br />
-	<br />
-		Oliver Hine <br />
-	<a href=http://www.oliverhine.com>http://www.oliverhine.com</a><br />
-
+	
 </p>
 <hr/>
 <div class="License">
-
 
 <h3>About the dnnCHAT Module</h3>
 		<p class="Owner">
@@ -19,6 +15,7 @@
 	</p>
 	<ul>
 		<li>Fix for "close" error in jquery causing issues in Internet Explorer</li>
+		<li>Upgraded to SignalR 2.2.1.0</li>
 	</ul>
 
 <h3>About the dnnCHAT Module</h3>
@@ -112,7 +109,12 @@
 		<li>Now displaying the Date a message was posted, using Moment.js for date formatting (MIT license)</li>
 		<li>Added textbox focus after selecting a user</li>
 		<li>Chat History now courtesy of Oliver Hine and William Hetherington.</li>
-		<li>Emoticon Support courtesy of Oliver Hine (using public domain images from http://simplesmileys.org/)</li>
+		<li>Emoticon Support courtesy of Oliver Hine (using public domain images from http://simplesmileys.org/)
+		<br />
+			Oliver Hine <br />
+			<a href=http://www.oliverhine.com>http://www.oliverhine.com</a><br />
+		</li>
+
 		<li>Reconnection support courtesy of Oliver Hine</li>
 		<li>Compiled against .NET 4.5</li>
 		<li>Upgraded SignalR to 1.0.1</li>

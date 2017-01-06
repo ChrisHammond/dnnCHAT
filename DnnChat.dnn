@@ -60,7 +60,7 @@
             <script type="UnInstall">
               <path>Data</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>02.01.00</version>
+              <version>03.00.01</version>
             </script>           
           </scripts>
         </component>

@@ -1,5 +1,5 @@
 ﻿/*
-' Copyright (c) 2016 Christoc.com Software Solutions
+' Copyright (c) 2017 Christoc.com Software Solutions
 '  All rights reserved.
 ' 
 ' Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("dnnCHAT")]
-[assembly: AssemblyCopyright("Copyright © Christoc.com 2016")]
+[assembly: AssemblyCopyright("Copyright © Christoc.com 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

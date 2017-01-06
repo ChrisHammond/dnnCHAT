@@ -1,5 +1,5 @@
 ﻿/*
-' Copyright (c) 2016 Christoc.com Software Solutions
+' Copyright (c) 2017 Christoc.com Software Solutions
 '  All rights reserved.
 ' 
 ' Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
@@ -97,8 +97,8 @@ namespace Christoc.Modules.DnnChat.Components
                                 {
                                     ConnectionId = Context.ConnectionId,
                                     MessageDate = DateTime.UtcNow,
-                                    MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                                    MessageText = Localization.GetString("FailedUnknown.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
+                                    AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
                                     AuthorUserId = -1,
                                     RoomId = DefaultRoomId
                     };
@@ -112,8 +112,8 @@ namespace Christoc.Modules.DnnChat.Components
                 {
                     ConnectionId = Context.ConnectionId,
                     MessageDate = DateTime.UtcNow,
-                    MessageText = Localization.GetString("FailedUnknown.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                    MessageText = Localization.GetString("FailedUnknown.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
+                    AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
                     AuthorUserId = -1,
                     RoomId = DefaultRoomId
                 };
@@ -159,7 +159,7 @@ namespace Christoc.Modules.DnnChat.Components
 
                     Clients.Group(rr.RoomId.ToString()).newMessageNoParse(new Message
                     {
-                        AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
+                        AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile)
                         ,
                         AuthorUserId = -1
                         ,
@@ -168,7 +168,7 @@ namespace Christoc.Modules.DnnChat.Components
                         ,
                         MessageId = -1
                         ,
-                        MessageText = string.Format(Localization.GetString("Disconnected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
+                        MessageText = string.Format(Localization.GetString("Disconnected.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile)
 
                             , cr.UserName)
                         ,
@@ -191,13 +191,13 @@ namespace Christoc.Modules.DnnChat.Components
 
             //if (string.IsNullOrEmpty(username))
             //{
-            //    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("BadConnection.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), "phantom") });
+            //    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = string.Format(Localization.GetString("BadConnection.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), "phantom") });
             //    return new ConnectionRecord();
             //}
 
             if (username.Trim() == "phantom" || username.Trim() == string.Empty)
             {
-                username = string.Format(Localization.GetString("AnonymousUser.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), (Users.Count + 1));
+                username = string.Format(Localization.GetString("AnonymousUser.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), (Users.Count + 1));
             }
 
             Clients.Caller.username = username;
@@ -278,7 +278,7 @@ namespace Christoc.Modules.DnnChat.Components
             return base.OnConnected();
         }
 
-        public void GetLobby()
+        public void GetRoomList()
         {
             int moduleId = Convert.ToInt32(Clients.Caller.moduleid);
             var rc = new RoomController();
@@ -336,7 +336,7 @@ namespace Christoc.Modules.DnnChat.Components
                 //lookup the Room to get the Welcome Message
                 Clients.Caller.newMessageNoParse(new Message
                 {
-                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                    AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
                     ConnectionId = "0",
                     MessageDate = DateTime.UtcNow,
                     MessageId = -1,
@@ -346,14 +346,14 @@ namespace Christoc.Modules.DnnChat.Components
                 });
                 Clients.Group(roomId.ToString()).newMessageNoParse(new Message
                 {
-                    AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile)
+                    AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile)
                     ,
                     AuthorUserId = -1
                     ,
                     ConnectionId = "0",
                     MessageDate = DateTime.UtcNow,
                     MessageId = -1,
-                    MessageText = string.Format(Localization.GetString("Connected.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), c.UserName),
+                    MessageText = string.Format(Localization.GetString("Connected.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), c.UserName),
                     RoomId = roomId
                 });
 
@@ -467,7 +467,7 @@ namespace Christoc.Modules.DnnChat.Components
 
                 Users.Add(rr);
 
-                var nameChange = String.Format(Localization.GetString("NameChange.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), originalName,
+                var nameChange = String.Format(Localization.GetString("NameChange.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), originalName,
            rr.UserName);
                 Clients.Group(rr.RoomId.ToString()).updateUserList(Users.FindAll(uc => (uc.RoomId == rr.RoomId)), rr.RoomId);
 
@@ -527,7 +527,7 @@ namespace Christoc.Modules.DnnChat.Components
                     string roomName = message.Remove(0, 5).Trim();
                     if (roomName.Length > 25)
                     {
-                        Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("RoomNameTooLong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), AuthorUserId = -1, RoomId = roomId });
+                        Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("RoomNameTooLong.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), AuthorUserId = -1, RoomId = roomId });
                         return string.Empty;
                     }
                     //create room
@@ -554,10 +554,10 @@ namespace Christoc.Modules.DnnChat.Components
                                 {
                                     RoomId = Guid.NewGuid(),
                                     RoomName = roomName,
-                                    RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text", "/desktopmodules/DnnChat/app_localresources/" +
+                                    RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text", "~/desktopmodules/DnnChat/app_localresources/" +
                                                                          Localization.LocalSharedResourceFile),
                                     RoomDescription = Localization.GetString("DefaultRoomDescription.Text",
-                                                                             "/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
+                                                                             "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
                                     ModuleId = moduleId,
                                     CreatedDate = DateTime.UtcNow,
                                     CreatedByUserId = userId,
@@ -580,8 +580,8 @@ namespace Christoc.Modules.DnnChat.Components
                     {
                         ConnectionId = Context.ConnectionId,
                         MessageDate = DateTime.UtcNow,
-                        MessageText = Localization.GetString("AnonymousJoinDenied.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
-                        AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile),
+                        MessageText = Localization.GetString("AnonymousJoinDenied.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
+                        AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
                         AuthorUserId = -1,
                         RoomId = roomId
                     };
@@ -598,7 +598,7 @@ namespace Christoc.Modules.DnnChat.Components
                 string newName = message.Remove(0, 5);
                 if (newName.Length > 25)
                 {
-                    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("NameToolong.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile), AuthorUserId = -1, RoomId = roomId });
+                    Clients.Caller.newMessageNoParse(new Message { AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), ConnectionId = "0", MessageDate = DateTime.UtcNow, MessageId = -1, MessageText = Localization.GetString("NameToolong.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile), AuthorUserId = -1, RoomId = roomId });
                     newName = newName.Remove(25);
                 }
 
@@ -606,9 +606,9 @@ namespace Christoc.Modules.DnnChat.Components
                     message = UpdateName(newName.Trim());
             }
 
-            if (message.ToLower().Trim() == Localization.GetString("Test.Text", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile))
+            if (message.ToLower().Trim() == Localization.GetString("Test.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile))
             {
-                message = Localization.GetString("Test.Response", "/desktopmodules/DnnChat/app_localresources/ " + Localization.LocalSharedResourceFile);
+                message = Localization.GetString("Test.Response", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile);
             }
 
             return message;
