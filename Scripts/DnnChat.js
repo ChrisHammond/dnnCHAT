@@ -1,10 +1,4 @@
-﻿//Below is a list of todo items that still need to be completed before release
-//TODO: 7/29/2014 - In production reconnections to rooms you were part of don't happen properly, I think timing/delay is an issue
-
-//older todo items
-//TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times, fixed with websockets
-
-//disable the enter key, knockout rebinds it later
+﻿//disable the enter key, knockout rebinds it later
 $(function () {
     $("#Form").bind("keypress", function (e) {
         if (e.keyCode == 13) {
@@ -26,7 +20,7 @@ function DnnChat($, ko, settings) {
     var stateConnectionSlow = settings.stateConnectionSlow;
     var alreadyInRoom = settings.alreadyInRoom;
     var anonUsersRooms = settings.anonUsersRooms;
-    var messageMissingRoom = settings.MessageMissingRoom;
+    var messageMissingRoom = settings.messageMissingRoom;
     var messagePasswordEntry = settings.messagePasswordEntry;
     var defaultRoomId = settings.defaultRoomId;
     var errorSendingMessage = settings.errorSendingMessage;
@@ -309,14 +303,9 @@ function DnnChat($, ko, settings) {
         this.disconnectRoom = function () {
             chatHub.server.leaveRoom(this.roomId, moduleid);
             userRoomModel.rooms.remove(this);
-            //TODO: should we send them to a different room?
             userRoomModel.activeRoom(defaultRoomId);
-
         };
-
-        
-        //Check password for JOIN
-        
+             
         this.joinRoom = function () {
             //check if the userid >0 otherwise don't let them join
             if (chatHub.state.userid > 0 || this.roomId === defaultRoomId) {
@@ -324,7 +313,7 @@ function DnnChat($, ko, settings) {
                 if (!foundRoom) {
                     if (this.roomId != userRoomModel.activeRoom) {
                         //check if a password is required for the room
-                        if (this.private) {
+                        if (this.private) { //
                             //this is firing for page refreshes as well. Need to determine how to handle that
                             var password = getPassword();
                             chatHub.server.getRoomInfo(this.roomId, moduleid, password);
@@ -415,8 +404,6 @@ function DnnChat($, ko, settings) {
         }
     };
 
-    //TODO: handle state better if a connection is lost
-
     //wire up the click handler for the button after the connection starts
     this.init = function (element) {
         $.connection.hub.start().done(function () {
@@ -506,7 +493,6 @@ function DnnChat($, ko, settings) {
         if (!foundRoom) {
             userRoomModel.rooms.push(r);
             chatHub.server.joinRoom(r.roomId, moduleid);
-
         }
     };
 

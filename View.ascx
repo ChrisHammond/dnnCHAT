@@ -59,11 +59,6 @@
                         <!-- /ko -->
                     </ul>
                     
-                    <!-- show password for private rooms -->
-                    <div>
-                         <label for="txtPassword"><%=Localization.GetString("lblPassword.Text",LocalResourceFile) %></label>
-                        <input class="form-control" id="txtPassword"/>
-                    </div>
                 </div>
             </div>
         </div>

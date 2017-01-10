@@ -142,7 +142,7 @@ namespace Christoc.Modules.DnnChat.Components
                                                            "select distinct r.* from {0}{1}DnnChat_ConnectionRecordRooms crr join {0}{1}DnnChat_ConnectionRecords cr on (cr.ConnectionRecordId = crr.ConnectionRecordId)" +
                                                            " join {0}{1}DnnChat_Rooms r on (r.RoomId = crr.RoomId)" +
                                                            " where cr.UserId = '{2}' and crr.DepartedDate is null " +
-                                                           " and r.enabled=1 " +
+                                                           " and r.enabled=1 and r.private = 0" +
                                                            " and cr.ConnectionRecordId in (select top 1 ConnectionRecordId from {0}{1}DnnChat_ConnectionRecords where  {1}DnnChat_ConnectionRecords.UserId ='{2}' order by {1}DnnChat_ConnectionRecords.ConnectionRecordId desc) " +
                                                            " order by r.roomName asc ",
                                                            _databaseOwner,
