@@ -133,7 +133,7 @@
     <value>Setting to control whether a room should require a password or not.</value>
   </data>
   <data name="lblPrivateRoom.Text" xml:space="preserve">
-    <value>Private (not used)</value>
+    <value>Private</value>
   </data>
   <data name="lblRoomDescription.Help" xml:space="preserve">
     <value>Provide a description for your room.</value>
@@ -163,7 +163,7 @@
     <value>If room is private, what is the password?</value>
   </data>
   <data name="lblRoomPassword.Text" xml:space="preserve">
-    <value>Password (not used)</value>
+    <value>Password</value>
   </data>
   <data name="lblRoomWelcome.Help" xml:space="preserve">
     <value>Message displayed to visitors when they join a room.</value>

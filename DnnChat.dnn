@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="DnnChat" type="Module" version="03.00.01">
+    <package name="DnnChat" type="Module" version="03.00.02">
       <friendlyName>DnnChat</friendlyName>
       <description>A Chat module for DotNetNuke using SignalR</description>
       <iconFile>/Images/icon_extensions_32px.png</iconFile>
