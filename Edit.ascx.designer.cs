@@ -166,6 +166,24 @@ namespace Christoc.Modules.DnnChat {
         protected global::System.Web.UI.WebControls.CheckBox chkEnabled;
         
         /// <summary>
+        /// lblShowRoom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DotNetNuke.UI.UserControls.LabelControl lblShowRoom;
+        
+        /// <summary>
+        /// chkShowRoom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkShowRoom;
+        
+        /// <summary>
         /// lbSubmit control.
         /// </summary>
         /// <remarks>

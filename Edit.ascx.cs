@@ -85,6 +85,7 @@ namespace Christoc.Modules.DnnChat
                     txtRoomWelcome.Text = r.RoomWelcome;
                     chkPrivateRoom.Checked = r.Private;
                     chkEnabled.Checked = r.Enabled;
+                    chkShowRoom.Checked = r.ShowRoom;
                 }
             }
         }
@@ -102,6 +103,7 @@ namespace Christoc.Modules.DnnChat
                 r.RoomWelcome = txtRoomWelcome.Text.Trim();
                 r.Private = chkPrivateRoom.Checked;
                 r.Enabled = chkEnabled.Checked;
+                r.ShowRoom = chkShowRoom.Checked;
                 r.LastUpdatedByUserId = UserId;
                 r.LastUpdatedDate = DateTime.UtcNow;
 
@@ -119,6 +121,7 @@ namespace Christoc.Modules.DnnChat
                     RoomWelcome = txtRoomWelcome.Text.Trim(),
                     Private = chkPrivateRoom.Checked,
                     Enabled = chkEnabled.Checked,
+                    ShowRoom = chkShowRoom.Checked,
                     CreatedByUserId = UserId,
                     CreatedDate =  DateTime.UtcNow,
                     LastUpdatedByUserId = UserId,
@@ -137,6 +140,7 @@ namespace Christoc.Modules.DnnChat
             txtRoomDescription.Text =
                 txtRoomId.Text = txtRoomName.Text = txtRoomPassword.Text = txtRoomWelcome.Text = string.Empty;
             chkEnabled.Checked = chkPrivateRoom.Checked = false;
+            chkShowRoom.Checked = true;
         }
     }
 }

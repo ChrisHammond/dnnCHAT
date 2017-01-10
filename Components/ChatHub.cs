@@ -44,7 +44,6 @@ namespace Christoc.Modules.DnnChat.Components
          * This method is used to send messages to all connected clients.
          */
 
-
         //for clients that may call the old method, send to the default room
         public void Send(string message)
         {
@@ -76,15 +75,15 @@ namespace Christoc.Modules.DnnChat.Components
                         authorUserId = Convert.ToInt32(Clients.Caller.userid);
 
                         var m = new Message
-                                    {
-                                        ConnectionId = Context.ConnectionId,
-                                        MessageDate = DateTime.UtcNow,
-                                        MessageText = parsedMessage,
-                                        AuthorName = Clients.Caller.username,
-                                        AuthorUserId = authorUserId,
-                                        ModuleId = moduleId,
-                                        RoomId = roomId
-                                    };
+                        {
+                            ConnectionId = Context.ConnectionId,
+                            MessageDate = DateTime.UtcNow,
+                            MessageText = parsedMessage,
+                            AuthorName = Clients.Caller.username,
+                            AuthorUserId = authorUserId,
+                            ModuleId = moduleId,
+                            RoomId = roomId
+                        };
 
                         new MessageController().CreateMessage(m);
                         Clients.Group(roomId.ToString()).newMessage(m);
@@ -94,13 +93,13 @@ namespace Christoc.Modules.DnnChat.Components
                 {
                     // if there is no username for the user don't let them post
                     var m = new Message
-                                {
-                                    ConnectionId = Context.ConnectionId,
-                                    MessageDate = DateTime.UtcNow,
-                                    MessageText = Localization.GetString("FailedUnknown.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
-                                    AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
-                                    AuthorUserId = -1,
-                                    RoomId = DefaultRoomId
+                    {
+                        ConnectionId = Context.ConnectionId,
+                        MessageDate = DateTime.UtcNow,
+                        MessageText = Localization.GetString("FailedUnknown.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
+                        AuthorName = Localization.GetString("SystemName.Text", "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
+                        AuthorUserId = -1,
+                        RoomId = DefaultRoomId
                     };
                     Clients.Caller.newMessage(m);
                 }
@@ -303,11 +302,16 @@ namespace Christoc.Modules.DnnChat.Components
 
             if (r.Enabled)
             {
-                var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
+                if (r.Private)
+                {
+                    //check the password
 
+                }
+
+                var c = crc.GetConnectionRecordByConnectionId(Context.ConnectionId) ?? SetupConnectionRecord();
                 var cr = crrc.GetConnectionRecordRoomByConnectionRecordId(c.ConnectionRecordId, roomId);
 
-                
+
 
                 if (cr == null)
                 {
@@ -404,6 +408,20 @@ namespace Christoc.Modules.DnnChat.Components
             var r = rc.GetRoom(roomId, moduleId);
             return Clients.Caller.joinRoom(r);
         }
+
+        public Task GetRoomInfo(Guid roomId, int moduleId, string password)
+        {
+            var rc = new RoomController();
+            //Lookup existing Rooms
+            var r = rc.GetRoom(roomId, moduleId);
+            if (r.RoomPassword == password)
+            { return Clients.Caller.joinRoom(r); }
+
+            var badPasswordResponse = Localization.GetString("BadPassword.Text",
+                "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile);
+            return Clients.Caller.badPassword(badPasswordResponse);
+        }
+
 
         /*
          * 	We need to grab the latest 50 chat messages for the channel, should make this configurable.
@@ -551,21 +569,21 @@ namespace Christoc.Modules.DnnChat.Components
                         else
                         {
                             r = new Room
-                                {
-                                    RoomId = Guid.NewGuid(),
-                                    RoomName = roomName,
-                                    RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text", "~/desktopmodules/DnnChat/app_localresources/" +
+                            {
+                                RoomId = Guid.NewGuid(),
+                                RoomName = roomName,
+                                RoomWelcome = Localization.GetString("DefaultRoomWelcome.Text", "~/desktopmodules/DnnChat/app_localresources/" +
                                                                          Localization.LocalSharedResourceFile),
-                                    RoomDescription = Localization.GetString("DefaultRoomDescription.Text",
+                                RoomDescription = Localization.GetString("DefaultRoomDescription.Text",
                                                                              "~/desktopmodules/DnnChat/app_localresources/" + Localization.LocalSharedResourceFile),
-                                    ModuleId = moduleId,
-                                    CreatedDate = DateTime.UtcNow,
-                                    CreatedByUserId = userId,
-                                    LastUpdatedByUserId = userId,
-                                    LastUpdatedDate = DateTime.UtcNow,
-                                    Enabled = true
+                                ModuleId = moduleId,
+                                CreatedDate = DateTime.UtcNow,
+                                CreatedByUserId = userId,
+                                LastUpdatedByUserId = userId,
+                                LastUpdatedDate = DateTime.UtcNow,
+                                Enabled = true
 
-                                };
+                            };
                             rc.CreateRoom(r);
                         }
 

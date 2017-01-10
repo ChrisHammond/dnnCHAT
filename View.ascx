@@ -26,6 +26,7 @@
             alreadyInRoom:'<%=Localization.GetString("AlreadyInRoom.Text",LocalResourceFile)%>',
             anonUsersRooms:'<%=Localization.GetString("AnonymousJoinDenied.Text",LocalResourceFile)%>',
             messageMissingRoom: '<%=Localization.GetString("MessageMissingRoom.Text",LocalResourceFile)%>',
+            messagePasswordEntry:'<%=Localization.GetString("MessagePasswordEntry.Text",LocalResourceFile)%>',
             errorSendingMessage:'<%=Localization.GetString("ErrorSendingMessage.Text",LocalResourceFile)%>',
             roomArchiveLink: '<%=EditUrl(string.Empty,string.Empty,"Archive","&roomid=0") %>',
             defaultRoomId:'<%=DefaultRoomId %>',
@@ -53,11 +54,16 @@
                 </div>
                 <div class="modal-body">
                     <ul class="list-group">
-                    <!-- ko foreach: rooms -->
-                    <li data-bind="html:roomName,click:joinRoom" class="list-group-item RoomListRoom" data-dismiss="modal">
-                    </li>
-                    <!-- /ko -->
-                        </ul>
+                        <!-- ko foreach: rooms -->
+                        <li data-bind="html:roomName,click:joinRoom" class="list-group-item RoomListRoom" data-dismiss="modal"></li>
+                        <!-- /ko -->
+                    </ul>
+                    
+                    <!-- show password for private rooms -->
+                    <div>
+                         <label for="txtPassword"><%=Localization.GetString("lblPassword.Text",LocalResourceFile) %></label>
+                        <input class="form-control" id="txtPassword"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -118,17 +124,16 @@
             </div>
             <ul class="list-group chatUsers">
                 <!-- ko foreach: connectionRecords -->
-                
-                    <!-- ko if: userId>0 -->
-                    <li class="list-group-item smallPad">
-                        <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" />
-                        <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
-                    </li>
-                    <!-- /ko -->
-                    <!-- ko if: userId<1 -->
-                    <li data-bind="html:authorName,click:targetMessageAuthor" class="list-group-item UserListUser UserNotLoggedIn smallPad">
-                    </li>
-                    <!-- /ko -->
+
+                <!-- ko if: userId>0 -->
+                <li class="list-group-item smallPad">
+                    <img data-bind="attr: {src:photoUrl},click:targetMessageAuthor" class="UserListPhoto" />
+                    <div data-bind="html:authorName,click:targetMessageAuthor" class="UserListUser UserLoggedIn"></div>
+                </li>
+                <!-- /ko -->
+                <!-- ko if: userId<1 -->
+                <li data-bind="html:authorName,click:targetMessageAuthor" class="list-group-item UserListUser UserNotLoggedIn smallPad"></li>
+                <!-- /ko -->
                 <!-- /ko -->
             </ul>
         </div>

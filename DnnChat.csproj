@@ -238,6 +238,7 @@
     <Content Include="Data\00.00.08.sqldataprovider" />
     <Content Include="Data\00.01.00.sqldataprovider" />
     <Content Include="web.config" />
+    <Content Include="Data\03.00.02.sqldataprovider" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

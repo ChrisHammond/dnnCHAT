@@ -177,4 +177,10 @@
   <data name="RoomSettings.Text" xml:space="preserve">
     <value>Room Settings</value>
   </data>
+  <data name="lblShowRoom.Help" xml:space="preserve">
+    <value>If the ShowRoom flag is set, the room will be available in the Room selection list.</value>
+  </data>
+  <data name="lblShowRoom.Text" xml:space="preserve">
+    <value>Show Room</value>
+  </data>
 </root>

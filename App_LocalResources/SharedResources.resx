@@ -135,6 +135,9 @@
   <data name="BadConnection.Text" xml:space="preserve">
     <value>Unfortunately you have a bad connection. Try another browser, and make sure you don't have Fiddler running.</value>
   </data>
+  <data name="BadPassword.Text" xml:space="preserve">
+    <value>That was not the correct password.</value>
+  </data>
   <data name="CommandNotSupported.Text" xml:space="preserve">
     <value>The Command you typed is not supported.</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="FailedUnknown.Text" xml:space="preserve">
     <value>Unable to send your message because we don't know who you are. Try another browser, and see if you have a Proxy server or Firewall blocking this site.</value>
+  </data>
+  <data name="MessagePasswordEntry.Text" xml:space="preserve">
+    <value>Access to this room is restricted. Please enter the Password.</value>
   </data>
   <data name="NameChange.Text" xml:space="preserve">
     <value>is now {1}</value>

@@ -79,18 +79,20 @@ namespace Christoc.Modules.DnnChat.Components
                 rep.Update(r);
             }
         }
-
+        //TODO: control whether room list includes Private rooms
         public IEnumerable<Room> GetRooms(int moduleId)
         {
             IEnumerable<Room> t;
             using (var ctx = DataContext.Instance())
             {
                 var rep = ctx.GetRepository<Room>();
-                t = rep.Get(moduleId).Where(x=>x.Enabled).OrderBy(x => x.RoomName);
+                t = rep.Get(moduleId).Where(x=>x.Enabled).Where(x=>x.ShowRoom).OrderBy(x => x.RoomName);
             }
             return t;
         }
 
+
+        //TODO: control whether room list includes Private rooms
         public IEnumerable<Room> GetAllRooms(int moduleId)
         {
             IEnumerable<Room> t;
@@ -113,6 +115,7 @@ namespace Christoc.Modules.DnnChat.Components
             return t;
         }
 
+        //TODO: control whether room list includes Private rooms
         public Room GetRoom(string roomName)
         {
             Room r;

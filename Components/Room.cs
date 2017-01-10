@@ -70,10 +70,14 @@ namespace Christoc.Modules.DnnChat.Components
         public string RoomPassword { get; set; }
 
         ///<summary>
+        /// A boolean field for if the room should be shown in the Room list or not (instant message)
+        ///</summary>
+        public bool ShowRoom { get; set; }
+        
+        ///<summary>
         /// The date the connection started
         ///</summary>
         public DateTime CreatedDate { get; set; }
-
 
         ///<summary>
         /// The ID of the user who created the record

@@ -175,4 +175,7 @@
   <data name="AllUsersNotification.Text" xml:space="preserve">
     <value>@all</value>
   </data>
+  <data name="lblPassword.Text" xml:space="preserve">
+    <value>Enter Room Password</value>
+  </data>
 </root>

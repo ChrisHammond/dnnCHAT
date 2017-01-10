@@ -1,10 +1,8 @@
 ﻿//Below is a list of todo items that still need to be completed before release
 //TODO: 7/29/2014 - In production reconnections to rooms you were part of don't happen properly, I think timing/delay is an issue
-//TODO: 7/29/2014 - In production the 'close' dialog options below throw JS errors at first connection
 
 //older todo items
-//TODO: the connection fails with websockets and no fall back
-//TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times
+//TODO: reconnections appear to keep happening for logged in users, populating the user list multiple times, fixed with websockets
 
 //disable the enter key, knockout rebinds it later
 $(function () {
@@ -17,12 +15,10 @@ $(function () {
 });
 
 function DnnChat($, ko, settings) {
-
     var moduleid = settings.moduleId;
     var userid = settings.userId;
     var username = settings.userName;
     var startmessage = settings.startMessage;
-    var sendMessageReconnecting = settings.sendMessageReconnecting; //no longer used, 10-14-2013 cjh
     var stateReconnecting = settings.stateReconnecting;
     var stateReconnected = settings.stateReconnected;
     var stateConnected = settings.stateConnected;
@@ -31,11 +27,12 @@ function DnnChat($, ko, settings) {
     var alreadyInRoom = settings.alreadyInRoom;
     var anonUsersRooms = settings.anonUsersRooms;
     var messageMissingRoom = settings.MessageMissingRoom;
+    var messagePasswordEntry = settings.messagePasswordEntry;
     var defaultRoomId = settings.defaultRoomId;
     var errorSendingMessage = settings.errorSendingMessage;
     var defaultAvatarUrl = settings.defaultAvatarUrl;
     var allUsersNotification = settings.allUsersNotification;
-
+    
     var roomArchiveLink = settings.roomArchiveLink;
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
     var userroles = settings.roles;
@@ -77,7 +74,6 @@ function DnnChat($, ko, settings) {
         this.photoUrl = u.PhotoUrl;
         // "/profilepic.ashx?userId=" + u.UserId + "&h=32&w=32";
         //this.profileUrl = "/Activity-Feed/userid/" + u.UserId; //http://www.dnnchat.com/Activity-Feed/userId/1
-
 
         this.targetMessageAuthor = function () {
             var foundRoom = findRoom(this.roomId);
@@ -127,9 +123,7 @@ function DnnChat($, ko, settings) {
         this.roomId = m.RoomId;
         this.defaultAvatarUrl = defaultAvatarUrl;
         this.photoUrl = m.PhotoUrl;
-        //this.photoUrl = "/profilepic.ashx?userId=" + m.AuthorUserId + "&h=32&w=32";
 
-        //this.cssName = m.MessageText.toLowerCase().indexOf(chatHub.state.username.toLowerCase()) !== -1 ? "ChatMessage ChatMentioned dnnClear" : "ChatMessage dnnClear";
         //patch from @briandukes to highlight your own posts
         this.cssName = "messageRow ChatMessage";
         if (checkMention(m.MessageText, chatHub.state.username)) {
@@ -192,6 +186,9 @@ function DnnChat($, ko, settings) {
         this.roomDescription = r.RoomDescription;
         //this is used to be able to "scroll" properly when a new message comes in, need to be able to know what the outer div is, it is this id
         this.roomNameId = "room-" + r.RoomId;
+
+        this.private = r.Private; //is the room private or not. If so, we should be prompting for Password
+
         this.roomArchiveLink = roomArchiveLink.slice(0, -1) + r.RoomId;
 
         this.messages = ko.observableArray([]);
@@ -317,14 +314,25 @@ function DnnChat($, ko, settings) {
 
         };
 
+        
+        //Check password for JOIN
+        
         this.joinRoom = function () {
             //check if the userid >0 otherwise don't let them join
             if (chatHub.state.userid > 0 || this.roomId === defaultRoomId) {
-                var foundRoom = findRoom(this.roomId);
+                var foundRoom = findRoom(this.roomId); //check if the user is already in this room
                 if (!foundRoom) {
                     if (this.roomId != userRoomModel.activeRoom) {
-                        chatHub.server.getRoomInfo(this.roomId, moduleid);
-                        this.setActiveRoom();
+                        //check if a password is required for the room
+                        if (this.private) {
+                            //this is firing for page refreshes as well. Need to determine how to handle that
+                            var password = getPassword();
+                            chatHub.server.getRoomInfo(this.roomId, moduleid, password);
+                            this.setActiveRoom();
+                        } else {
+                            chatHub.server.getRoomInfo(this.roomId, moduleid);
+                            this.setActiveRoom();
+                        }
                     }
                     if ($(".RoomList").hasClass('ui-dialog-content')) {
                         $(".RoomList").dialog('close');
@@ -350,6 +358,11 @@ function DnnChat($, ko, settings) {
             return room.roomId === rId;
         });
     }
+
+    function getPassword() {
+        return window.prompt(messagePasswordEntry, "");
+    };
+
 
     var chatHub = $.connection.chatHub;
     $.connection.hub.logging = false;
@@ -493,7 +506,14 @@ function DnnChat($, ko, settings) {
         if (!foundRoom) {
             userRoomModel.rooms.push(r);
             chatHub.server.joinRoom(r.roomId, moduleid);
+
         }
+    };
+
+    chatHub.client.badPassword = function (badPasswordMessage) {
+        alert(badPasswordMessage);
+        //if you entered a bad password, we'll force you to the default room
+        userRoomModel.activeRoom(defaultRoomId);
     };
 
     chatHub.client.scrollBottom = function (roomId) {

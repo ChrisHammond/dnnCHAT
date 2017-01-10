@@ -255,3 +255,9 @@
 .LobbyArea .list-group {
     margin: 0;
 }
+
+
+.dnnFormItem input[type='checkbox'] {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

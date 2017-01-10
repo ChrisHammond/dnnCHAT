@@ -10,7 +10,7 @@
         <asp:DropDownList runat="server" ID="ddlRooms" DataTextField="RoomName" DataValueField="RoomId" OnSelectedIndexChanged="ddlRooms_OnSelectedIndexChanged" AutoPostBack="True" />
     </div>
     <div class="dnnFormItem">
-        <asp:LinkButton id="lbAddRoom" runat="server" resourcekey="lbAddRoom" OnClick="lbAddRoom_Click" CssClass="dnnSecondaryAction" />
+        <asp:LinkButton ID="lbAddRoom" runat="server" resourcekey="lbAddRoom" OnClick="lbAddRoom_Click" CssClass="dnnSecondaryAction" />
 
     </div>
 
@@ -37,21 +37,32 @@
 
             <asp:TextBox runat="server" ID="txtRoomWelcome" TextMode="SingleLine" />
         </div>
+    </fieldset>
+    <fieldset>
         <div class="dnnFormItem">
             <dnn:Label ID="lblPrivateRoom" runat="server" />
 
             <asp:CheckBox runat="server" ID="chkPrivateRoom" />
         </div>
+    </fieldset>
+    <fieldset>
         <div class="dnnFormItem">
             <dnn:Label ID="lblRoomPassword" runat="server" />
 
             <asp:TextBox ID="txtRoomPassword" runat="server" TextMode="SingleLine" />
         </div>
-
+    </fieldset>
+    <fieldset>
         <div class="dnnFormItem">
             <dnn:Label ID="lblRoomEnabled" runat="server" />
 
             <asp:CheckBox runat="server" ID="chkEnabled" />
+        </div>
+    </fieldset>
+    <fieldset>
+        <div class="dnnFormItem">
+            <dnn:Label ID="lblShowRoom" runat="server" />
+            <asp:CheckBox runat="server" ID="chkShowRoom" />
         </div>
     </fieldset>
     <asp:LinkButton runat="server" ID="lbSubmit" runat="server" resourcekey="btnSaveRoom" class="dnnPrimaryAction" OnClick="lbSubmit_Click" />
