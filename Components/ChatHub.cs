@@ -247,13 +247,13 @@ namespace Christoc.Modules.DnnChat.Components
                 DefaultRoomId = settingsDefault;
             }
 
-            //TODO: reconnect to all previous rooms
             //get list of previously connected (not departed) rooms
             var crrc = new ConnectionRecordRoomController();
             var rc = new RoomController();
 
             IEnumerable<Room> myRooms = null;
 
+            //don't do this if we've got a private room loaded.
             if (Convert.ToInt32(Clients.Caller.userid) > 0)
             {
                 myRooms = crrc.GetConnectionRecordRoomsByUserId((int)Clients.Caller.userid);
@@ -267,6 +267,15 @@ namespace Christoc.Modules.DnnChat.Components
                 var r = rc.GetRoom(DefaultRoomId, moduleId);
                 myRooms = new List<Room>();
                 myRooms = myRooms.Concat(new[] { r });
+            }
+            else
+            {
+                //load the current default room to see if it is in the queue
+                var r = rc.GetRoom(DefaultRoomId, moduleId);
+                if (!myRooms.Contains(r))
+                {
+                    myRooms = myRooms.Concat(new[] { r });
+                }
             }
 
             //get all the active rooms and send it back for the Lobby

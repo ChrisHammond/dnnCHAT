@@ -26,6 +26,7 @@ function DnnChat($, ko, settings) {
     var errorSendingMessage = settings.errorSendingMessage;
     var defaultAvatarUrl = settings.defaultAvatarUrl;
     var allUsersNotification = settings.allUsersNotification;
+ 
     
     var roomArchiveLink = settings.roomArchiveLink;
     var emoticonsUrl = settings.emoticonsUrl; //<%= ResolveUrl(ControlPath + "images/emoticons/simple/") %>
@@ -288,7 +289,6 @@ function DnnChat($, ko, settings) {
 
                 // Call the chat method on the server
                 if ($.connection.hub.state === $.connection.connectionState.connected) {
-                    //console.log("connected");
                     chatHub.server.send(msgSend, this.roomId);
                     //clear the textbox for the next message
                     this.newMessageText('');
@@ -313,7 +313,7 @@ function DnnChat($, ko, settings) {
                 if (!foundRoom) {
                     if (this.roomId != userRoomModel.activeRoom) {
                         //check if a password is required for the room
-                        if (this.private) { //
+                        if (this.private && this.roomId.toUpperCase() != defaultRoomId.toUpperCase()) { //
                             //this is firing for page refreshes as well. Need to determine how to handle that
                             var password = getPassword();
                             chatHub.server.getRoomInfo(this.roomId, moduleid, password);
@@ -406,6 +406,9 @@ function DnnChat($, ko, settings) {
 
     //wire up the click handler for the button after the connection starts
     this.init = function (element) {
+
+
+
         $.connection.hub.start().done(function () {
             //nothing to do here?
         });

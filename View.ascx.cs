@@ -20,6 +20,7 @@
 
 using System.Configuration;
 using System.Web.Configuration;
+using System.Web.Services.Discovery;
 using Christoc.Modules.DnnChat.Components;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Security;
@@ -90,9 +91,20 @@ namespace Christoc.Modules.DnnChat
 
                 DefaultAvatarUrl = Settings.Contains("DefaultAvatarUrl") ? Settings["DefaultAvatarUrl"].ToString() : Localization.GetString("DefaultAvatarUrl", LocalResourceFile);
 
-                if (Settings.Contains("DefaultRoomId"))
+                var directRoom = string.Empty;
+
+                var qs = Request.QueryString["rmid"];
+                if (qs != null)
+                {
+                    directRoom = qs.ToString();}
+                
+                if (Settings.Contains("DefaultRoomId") && directRoom == string.Empty)
                 {
                     DefaultRoomId = Settings["DefaultRoomId"].ToString();
+                }
+                else if (directRoom != string.Empty)
+                { //if a guid came in, let's put the user in that room.
+                    DefaultRoomId = directRoom;
                 }
                 else
                 {
@@ -101,8 +113,7 @@ namespace Christoc.Modules.DnnChat
                     var r = rc.GetRoom("Lobby");
                     if (r == null || (r.ModuleId > 0 && r.ModuleId != ModuleId))
                     {
-                        //todo: if there isn't a room we need display a message about creating one                        
-
+                        //todo: if there isn't a room we need display a message about creating one
                     }
                     else
                     {
