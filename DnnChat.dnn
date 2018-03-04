@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="DnnChat" type="Module" version="03.00.02">
+    <package name="DnnChat" type="Module" version="03.00.03">
       <friendlyName>DnnChat</friendlyName>
       <description>A Chat module for DotNetNuke using SignalR</description>
       <iconFile>/Images/icon_extensions_32px.png</iconFile>
@@ -65,7 +65,7 @@
               <script type="UnInstall">
               <path>Data</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>03.00.02</version>
+              <version>03.00.03</version>
             </script>           
           </scripts>
         </component>

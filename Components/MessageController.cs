@@ -1,5 +1,5 @@
 ﻿/*
-' Copyright (c) 2017 Christoc.com Software Solutions
+' Copyright (c) 2018 Christoc.com Software Solutions
 '  All rights reserved.
 ' 
 ' Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
@@ -76,15 +76,34 @@ namespace Christoc.Modules.DnnChat.Components
 
         public IEnumerable<Message> GetRecentMessages(int moduleId, int hoursBackInTime, int maxRecords, Guid roomId)
         {
-            var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime && a.IsDeleted==false select a).Take(maxRecords).Reverse();
-
-            return messages.Any() ? messages : null;
+            //var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime && a.IsDeleted==false select a).Take(maxRecords).Reverse();
+            using (var ctx = DataContext.Instance())
+            {
+                var rep = ctx.GetRepository<Message>();
+                var messages = (from a in rep.Get(moduleId) where a.RoomId == roomId 
+                                && a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime 
+                                && a.IsDeleted == false
+                                select a).OrderBy(x => x.MessageDate).Take(maxRecords);
+                return messages.Any() ? messages : null;
+            }           
         }
 
         public IEnumerable<Message> GetMessagesByDate(int moduleId, DateTime startDate, DateTime endDate, Guid roomId)
         {
-            var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate <= endDate && a.MessageDate >= startDate && a.IsDeleted == false select a).Reverse();
-            return messages.Any() ? messages : null;
+            //var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate <= endDate && a.MessageDate >= startDate && a.IsDeleted == false select a).Reverse();
+
+            using (var ctx = DataContext.Instance())
+            {
+                var rep = ctx.GetRepository<Message>();
+                var messages = (from a in rep.Get(moduleId)
+                                where a.RoomId == roomId 
+                                && a.MessageDate <= endDate 
+                                && a.MessageDate >= startDate 
+                                && a.IsDeleted == false
+                                select a).OrderBy(x => x.MessageDate);
+                return messages.Any() ? messages : null;
+            }
+
         }
 
         public Message GetMessage(int messageId, int moduleId)
