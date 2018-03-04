@@ -83,7 +83,7 @@ namespace Christoc.Modules.DnnChat.Components
                 var messages = (from a in rep.Get(moduleId) where a.RoomId == roomId 
                                 && a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime 
                                 && a.IsDeleted == false
-                                select a).OrderBy(x => x.MessageDate).Take(maxRecords);
+                                select a).OrderByDescending(x => x.MessageDate).Take(maxRecords).Reverse();
                 return messages.Any() ? messages : null;
             }           
         }
@@ -100,7 +100,7 @@ namespace Christoc.Modules.DnnChat.Components
                                 && a.MessageDate <= endDate 
                                 && a.MessageDate >= startDate 
                                 && a.IsDeleted == false
-                                select a).OrderBy(x => x.MessageDate);
+                                select a).OrderByDescending(x => x.MessageDate).Reverse();
                 return messages.Any() ? messages : null;
             }
 
