@@ -23,14 +23,21 @@ namespace Christoc.Modules.DnnChat.Components
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Data;
     using DotNetNuke.Data;
+    using DotNetNuke.Framework.Providers;
 
     /*
      * This class provides the DAL2 access to the storing of Messages within the DnnChat module
      */
     public class MessageController
     {
+
+        private const string ProviderType = "data";
+        private readonly ProviderConfiguration _providerConfiguration = ProviderConfiguration.GetProviderConfiguration(ProviderType);
+        private readonly string _objectQualifier;
+        private readonly string _databaseOwner;
+
         public void CreateMessage(Message t)
         {
             using (var ctx = DataContext.Instance())
@@ -54,7 +61,7 @@ namespace Christoc.Modules.DnnChat.Components
             using (var ctx = DataContext.Instance())
             {
                 var rep = ctx.GetRepository<Message>();
-                
+
                 rep.Delete(t);
             }
         }
@@ -79,13 +86,23 @@ namespace Christoc.Modules.DnnChat.Components
             //var messages = (from a in GetMessages(moduleId, roomId) where a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime && a.IsDeleted==false select a).Take(maxRecords).Reverse();
             using (var ctx = DataContext.Instance())
             {
-                var rep = ctx.GetRepository<Message>();
-                var messages = (from a in rep.Get(moduleId) where a.RoomId == roomId 
-                                && a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime 
-                                && a.IsDeleted == false
-                                select a).OrderByDescending(x => x.MessageDate).Take(maxRecords).Reverse();
+                //var rep = ctx.GetRepository<Message>();
+                //var messages = (from a in rep.Get(moduleId) where a.RoomId == roomId 
+                //                && a.MessageDate.Subtract(DateTime.UtcNow).TotalHours <= hoursBackInTime 
+                //                && a.IsDeleted == false
+                //                select a).OrderByDescending(x => x.MessageDate).Take(maxRecords).Reverse();
+
+                
+                var messages = ctx.ExecuteQuery<Message>(CommandType.Text,
+                                                          string.Format(
+                                                              //"select top {4} * from {0}{1}DnnChat_Messages where ModuleId = '{2}' and DateDiff(hour,MessageDate,GetUtcDate())<={3} and RoomId = '{5}' and IsDeleted =false",
+                                                              "select top {4} * from {0}{1}DnnChat_Messages where ModuleId = '{2}' and RoomId = '{5}' and IsDeleted =false order by MessageId Desc",
+                                                              _databaseOwner,
+                                                              _objectQualifier,
+                                                             moduleId, hoursBackInTime, maxRecords, roomId)).Reverse().ToList();
+                
                 return messages.Any() ? messages : null;
-            }           
+            }
         }
 
         public IEnumerable<Message> GetMessagesByDate(int moduleId, DateTime startDate, DateTime endDate, Guid roomId)
@@ -94,13 +111,24 @@ namespace Christoc.Modules.DnnChat.Components
 
             using (var ctx = DataContext.Instance())
             {
-                var rep = ctx.GetRepository<Message>();
-                var messages = (from a in rep.Get(moduleId)
-                                where a.RoomId == roomId 
-                                && a.MessageDate <= endDate 
-                                && a.MessageDate >= startDate 
-                                && a.IsDeleted == false
-                                select a).OrderByDescending(x => x.MessageDate).Reverse();
+                //var rep = ctx.GetRepository<Message>();
+                //var messages = (from a in rep.Get(moduleId)
+                //                where a.RoomId == roomId
+                //                && a.MessageDate <= endDate
+                //                && a.MessageDate >= startDate
+                //                && a.IsDeleted == false
+                //                select a).OrderByDescending(x => x.MessageDate).Reverse();
+
+
+
+
+                var messages = ctx.ExecuteQuery<Message>(CommandType.Text,
+                                          string.Format(
+                                              "select * from {0}{1}DnnChat_Messages where ModuleId = '{2}' and MessageDate between {3} and {4} and RoomId = '{5}'",
+                                              _databaseOwner,
+                                              _objectQualifier,
+                                             moduleId, startDate, endDate, roomId)).ToList();
+
                 return messages.Any() ? messages : null;
             }
 
