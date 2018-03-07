@@ -124,7 +124,7 @@ namespace Christoc.Modules.DnnChat.Components
 
                 var messages = ctx.ExecuteQuery<Message>(CommandType.Text,
                                           string.Format(
-                                              "select * from {0}{1}DnnChat_Messages where ModuleId = '{2}' and MessageDate between {3} and {4} and RoomId = '{5}' and IsDeleted ='false'",
+                                              "select * from {0}{1}DnnChat_Messages where ModuleId = '{2}' and MessageDate between '{3}' and '{4}' and RoomId = '{5}' and IsDeleted ='false'",
                                               _databaseOwner,
                                               _objectQualifier,
                                              moduleId, startDate, endDate, roomId)).ToList();
