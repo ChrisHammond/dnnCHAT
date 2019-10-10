@@ -11,6 +11,13 @@
 <h3>About the dnnCHAT Module</h3>
 
 		<p class="Owner">
+		<b>Version 03.00.03</b><br /><br /> 
+	</p>
+	<ul>
+		<li>Updated SignalR nuget package to 2.4.1.</li>
+	</ul>
+
+		<p class="Owner">
 		<b>Version 03.00.02</b><br /><br /> 
 	</p>
 	<ul>
