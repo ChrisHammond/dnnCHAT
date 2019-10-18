@@ -89,9 +89,9 @@
             <div class="ChatWindow" data-bind="attr:{id: roomNameId}">
                 <ul class="list-group">
                     <!-- ko foreach: messages -->
-                    <li class="list-group-item row">
+                    <li class="list-group-item">
                         <div data-bind="attr:{class:cssName}">
-                            <div class="col-lg-2 MessageAuthor smallPad dnnClear ">
+                            <div class="col-md-2 MessageAuthor smallPad dnnClear ">
                                 <!-- ko if: authorUserId>0 -->
                                 <img data-bind="attr: {src:photoUrl,alt:authorName},click:targetMessageAuthor" class="MessageAuthorPhoto" />
                                 <!-- /ko -->
@@ -100,8 +100,8 @@
                                 <!-- /ko -->
                                 <div data-bind="html:authorName,click:targetMessageAuthor" class="MessageAuthorText"></div>
                             </div>
-                            <div data-bind="html:messageText" class="col-lg-9 MessageText smallPad "></div>
-                            <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-lg-1 MessageTime smallPad"></div>
+                            <div data-bind="html:messageText" class="col-md-9 MessageText smallPad "></div>
+                            <div data-bind="dateString: messageDate, click:deleteMessage" class=" col-md-1 MessageTime smallPad"></div>
                         </div>
                     </li>
                     <!-- /ko -->

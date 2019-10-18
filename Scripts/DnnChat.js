@@ -120,7 +120,7 @@ function DnnChat($, ko, settings) {
         this.photoUrl = m.PhotoUrl;
 
         //patch from @briandukes to highlight your own posts
-        this.cssName = "messageRow ChatMessage";
+        this.cssName = "messageRow ChatMessage row";
         if (checkMention(m.MessageText, chatHub.state.username)) {
             this.cssName += " ChatMentioned";
         }
