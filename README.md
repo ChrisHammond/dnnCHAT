@@ -5,4 +5,7 @@ A Chat module for the DotNetNuke content management system that uses SignalR for
 
 Formerly the DnnChat module for DotNetNuke (DNN).
 
-You can download the latest "release" from here on GitHub https://github.com/ChrisHammond/dnnCHAT or visit https://DnnChat.codeplex.com/
+You can download the latest "release" from on GitHub https://github.com/ChrisHammond/dnnCHAT
+
+
+
